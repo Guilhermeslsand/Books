@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Definindo documentos de erro personalizados</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch12.html" title="Capítulo 12. Apache" /><link rel="prev" href="ch12s03.html" title="Restrições de Acesso" /><link rel="next" href="ch12s05.html" title="Módulos DSO" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Definindo documentos de erro personalizados</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch12s03.html">Anterior</a> </td><th width="60%" align="center">Capítulo 12. Apache</th><td width="20%" align="right"> <a accesskey="n" href="ch12s05.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch12.html">Apache</a></span> &gt; <span class="breadcrumb-node">Definindo documentos de erro personalizados</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-apache-errordocument"></a>Definindo documentos de erro personalizados</h2></div></div></div><p>
+Documentos de erros personalizados são definidos através da diretiva
+<span class="emphasis"><em>ErrorDocument</em></span>.  É possível especificar códigos de erros
+que serão atendidos por certos documentos ou colocar esta diretiva dentro de
+blocos de controle de acesso &lt;Directory&gt;, &lt;Location&gt; ou
+&lt;VirtualHost&gt; para que tenham mensagens de erro personalizadas, ao invés
+da padrão usada pelo servidor <span class="command"><strong>httpd</strong></span>.
+</p><p>
+<code class="literal">ErrorDocument [<span class="emphasis"><em>código de erro</em></span>]
+[<span class="emphasis"><em>documento</em></span>]</code>
+</p><p>
+Onde:
+</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><span class="emphasis"><em>código de erro</em></span></span></dt><dd><p>
+Código de erro da mensagem (veja <a class="xref" href="ch12s11.html" title="Códigos HTTP">“Códigos HTTP”</a> como
+referência).  O código de erro <span class="emphasis"><em>401</em></span> deve referir-se a um
+arquivo local.
+</p></dd><dt><span class="term"><span class="emphasis"><em>documento</em></span></span></dt><dd><p>
+Documento, mensagem de erro ou redirecionamento que será usado no servidor caso
+aquele código de erro seja encontrado:
+</p></dd></dl></div><p>
+Para definir uma mensagem de erro padrão para todo servidor web, basta colocar
+a diretiva <span class="emphasis"><em>ErrorDocument</em></span> fora das diretivas que controlam
+o acesso a diretórios e virtual hosts (o inicio do arquivo
+<code class="filename">httpd.conf</code> é ideal).
+</p><p>
+Exemplos:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">ErrorDocument 404 /cgi-bin/erros404.pl</code> - Direciona para um
+script em Perl que manda um e-mail ao administrador falando sobre o link
+quebrado e envia o usuário a uma página de erro padrão.
+</p></li><li class="listitem"><p>
+<code class="literal">ErrorDocument 404 /naoencontrada.html</code> - Direciona o usuário
+para o arquivo <code class="filename">naoencontrada.html</code> (dentro de
+<span class="emphasis"><em>DocumentRoot</em></span>) quando ocorrer o erro 404.  Note que o
+diretório <code class="filename">/</code> levado em consideração é o especificado pela
+diretiva <span class="emphasis"><em>DocumentRoot</em></span>.
+</p></li><li class="listitem"><p>
+<code class="literal">ErrorDocument 500 "Erro Interno no servidor"</code> - Mostra a
+mensagem na tela quando ocorrer o erro 500.
+</p></li><li class="listitem"><p>
+<code class="literal">ErrorDocument 401 /obtendoacesso.html</code> - Direciona o usuário
+ao arquivo explicando como obter acesso ao sistema.
+</p></li><li class="listitem"><p>
+<code class="literal">ErrorDocument 503 http://www.guiafoca.org/servicos.html</code> -
+Redireciona o usuário a URL especificada.
+</p></li><li class="listitem"><p>
+<code class="literal">ErrorDocument 403 "Acesso negado"</code> - Mostra a mensagem na
+tela no caso de erros 403.
+</p></li></ul></div></div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch12s03.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch12.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch12s05.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Restrições de Acesso </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Módulos DSO</td></tr></table></div></body></html>

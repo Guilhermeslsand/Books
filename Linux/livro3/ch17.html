@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Capítulo 17. CVS</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="index.html" title="Guia Foca Linux" /><link rel="prev" href="ch16.html" title="Capítulo 16. Servidor pop3" /><link rel="next" href="ch17s02.html" title="Servidor de CVS - configurando métodos de acesso ao repositório" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Capítulo 17. CVS</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch16.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch17s02.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-node">CVS</span></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="s-cvs"></a>Capítulo 17. CVS</h1></div></div></div><div class="toc"><p><strong>Índice</strong></p><dl class="toc"><dt><span class="section"><a href="ch17.html#s-cvs-intro">Introdução ao CVS</a></span></dt><dd><dl><dt><span class="section"><a href="ch17.html#s-cvs-versao">Versão</a></span></dt><dt><span class="section"><a href="ch17.html#s-cvs-historia">História</a></span></dt><dt><span class="section"><a href="ch17.html#s-cvs-contribuindo">Contribuindo com o CVS</a></span></dt><dt><span class="section"><a href="ch17.html#s-cvs-caracteristicas">Características</a></span></dt><dt><span class="section"><a href="ch17.html#s-cvs-ficha">Ficha técnica</a></span></dt><dt><span class="section"><a href="ch17.html#s-cvs-hwreq">Requerimentos de Hardware</a></span></dt><dt><span class="section"><a href="ch17.html#s-cvs-logs">Arquivos de log criados pelo CVS</a></span></dt><dt><span class="section"><a href="ch17.html#s-cvs-install">Instalação</a></span></dt><dt><span class="section"><a href="ch17.html#s-cvs-rodando">Iniciando o servidor/reiniciando/recarregando a configuração</a></span></dt><dt><span class="section"><a href="ch17.html#s-cvs-opcoescmd">Opções de linha de comando</a></span></dt></dl></dd><dt><span class="section"><a href="ch17s02.html">Servidor de CVS - configurando métodos de acesso ao repositório</a></span></dt><dd><dl><dt><span class="section"><a href="ch17s02.html#s-cvs-d-metodos-local">local</a></span></dt><dt><span class="section"><a href="ch17s02.html#s-cvs-d-metodos-fork">fork</a></span></dt><dt><span class="section"><a href="ch17s02.html#s-cvs-d-metodos-ext">ext</a></span></dt><dt><span class="section"><a href="ch17s02.html#s-cvs-d-metodos-pserver">pserver (password server)</a></span></dt><dt><span class="section"><a href="ch17s02.html#s-cvs-d-metodos-pserver-c">Configurando um servidor pserver</a></span></dt><dt><span class="section"><a href="ch17s02.html#s-cvs-d-metodos-gssapi">gssapi</a></span></dt></dl></dd><dt><span class="section"><a href="ch17s03.html">Criando projetos para serem usados no CVS</a></span></dt><dd><dl><dt><span class="section"><a href="ch17s03.html#s-cvs-p-repos">Repositório</a></span></dt><dt><span class="section"><a href="ch17s03.html#s-cvs-p-mkrepos">Criando um repositório</a></span></dt><dt><span class="section"><a href="ch17s03.html#s-cvs-p-login">Logando no servidor de CVS via pserver</a></span></dt><dt><span class="section"><a href="ch17s03.html#s-cvs-p-logout">Encerrando uma seção de CVS</a></span></dt><dt><span class="section"><a href="ch17s03.html#s-cvs-p-checkout">Baixando arquivos</a></span></dt><dt><span class="section"><a href="ch17s03.html#s-cvs-p-import">Adicionando um novo projeto</a></span></dt><dt><span class="section"><a href="ch17s03.html#s-cvs-p-update">Sincronizando a cópia remota com a cópia local</a></span></dt><dt><span class="section"><a href="ch17s03.html#s-cvs-p-commit">Enviando as mudanças para o servidor remoto</a></span></dt><dt><span class="section"><a href="ch17s03.html#s-cvs-p-add">Adicionando um arquivo ao módulo CVS do servidor</a></span></dt><dt><span class="section"><a href="ch17s03.html#s-cvs-p-add-dir">Adicionando um diretório ao módulo CVS do servidor</a></span></dt><dt><span class="section"><a href="ch17s03.html#s-cvs-p-remove">Removendo um arquivo do módulo CVS remoto</a></span></dt><dt><span class="section"><a href="ch17s03.html#s-cvs-p-removed">Removendo um diretório do módulo CVS remoto</a></span></dt><dt><span class="section"><a href="ch17s03.html#s-cvs-p-release">Dizendo que o módulo atual não está mais em uso</a></span></dt><dt><span class="section"><a href="ch17s03.html#s-cvs-p-diff">Visualizando diferenças entre versões de um arquivo</a></span></dt><dt><span class="section"><a href="ch17s03.html#s-cvs-p-status">Visualizando o status de versão de arquivos</a></span></dt><dt><span class="section"><a href="ch17s03.html#s-cvs-p-utils">Outros utilitários para trabalho no repositório</a></span></dt></dl></dd><dt><span class="section"><a href="ch17s04.html">Arquivos administrativos em CVSROOT</a></span></dt><dd><dl><dt><span class="section"><a href="ch17s04.html#s-cvs-cvsroot-config"><code class="filename">config</code></a></span></dt><dt><span class="section"><a href="ch17s04.html#s-cvs-cvsroot-modules"><code class="filename">modules</code></a></span></dt><dt><span class="section"><a href="ch17s04.html#s-cvs-cvsroot-cvswrappers"><code class="filename">cvswrappers</code></a></span></dt><dt><span class="section"><a href="ch17s04.html#s-cvs-cvsroot-commitinfo"><code class="filename">commitinfo</code></a></span></dt><dt><span class="section"><a href="ch17s04.html#s-cvs-cvsroot-verifymsg"><code class="filename">verifymsg</code></a></span></dt><dt><span class="section"><a href="ch17s04.html#s-cvs-cvsroot-loginfo"><code class="filename">loginfo</code></a></span></dt><dt><span class="section"><a href="ch17s04.html#s-cvs-cvsroot-cvsignore"><code class="filename">cvsignore</code></a></span></dt><dt><span class="section"><a href="ch17s04.html#s-cvs-cvsroot-checkoutlist"><code class="filename">checkoutlist</code></a></span></dt><dt><span class="section"><a href="ch17s04.html#s-cvs-cvsroot-history"><code class="filename">history</code></a></span></dt></dl></dd><dt><span class="section"><a href="ch17s05.html">Clientes de CVS</a></span></dt><dd><dl><dt><span class="section"><a href="ch17s05.html#s-cvs-c-cvs">cvs</a></span></dt><dt><span class="section"><a href="ch17s05.html#s-cvs-c-gcvs">gcvs - Linux</a></span></dt><dt><span class="section"><a href="ch17s05.html#s-cvs-c-wincvs">WinCVS - Windows</a></span></dt><dt><span class="section"><a href="ch17s05.html#s-cvs-c-maccvs">MacCVS - Macintosh (PPC)</a></span></dt><dt><span class="section"><a href="ch17s05.html#s-cvs-c-viewcvs">viewcvs</a></span></dt></dl></dd><dt><span class="section"><a href="ch17s06.html">Exemplo de uma seção CVS</a></span></dt></dl></div>
+    <p>
+    Este capítulo explica os requerimentos, instalação, configuração, segurança e
+    diversos modelos de configuração de acesso para trabalho em grupo utilizados
+    pelo <span class="command"><strong>CVS</strong></span>.
+    </p>
+    <p>
+    Não tome-o como uma referência completa ao uso e configuração do cvs, a
+    pesquisa de sua info page é muito importante.
+    </p>
+    
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-cvs-intro"></a>Introdução ao CVS</h2></div></div></div><p>
+O CVS (<span class="emphasis"><em>Concurrent Version Software</em></span>) permite que se
+organizem grupos de trabalho para desenvolvimento de projetos colaborativos.
+Um projeto pode ser desde um programa em C, documentação em equipe, etc.  O uso
+do CVS é recomendado para qualquer desenvolvimento de projeto que tenha vários
+envolvidos trabalhando ao mesmo tempo.
+</p><p>
+Para cada mudança feita no programa, é pedido uma descrição dos trabalhos
+realizados e o sistema registra todas as modificações realizadas ao longo do
+desenvolvimento, permitindo voltar a uma versão anterior ou ver as mudanças
+entre elas facilmente.
+</p><p>
+Imagine uma situação onde você está desenvolvendo um programa de computador e
+após a última modificação ele para de funcionar.  Com o CVS é possível ver o
+que foi modificado e voltar até a versão que estava funcionando para consertar
+o problema.  No desenvolvimento de documentação e tradução o CVS também
+desempenha um papel importante, pois com ele o tradutor pode ver o que foi
+modificado entre a versão do documento original que ele usou para tradução e
+uma versão recente, traduzindo apenas as diferenças.
+</p><p>
+Uma seção de <span class="command"><strong>cvs</strong></span> é feita de modo interativo através do
+comando <span class="command"><strong>cvs</strong></span>.  Por exemplo:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">logar no sistema</code> - cvs login
+</p></li><li class="listitem"><p>
+<code class="literal">baixar um projeto</code> - cvs checkout projeto
+</p></li></ul></div><p>
+Cada comando do <span class="command"><strong>cvs</strong></span> será explicado em detalhes no decorrer
+deste capítulo.
+</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-versao"></a>Versão</h3></div></div></div><p>
+A versão do <span class="command"><strong>CVS</strong></span> documentada no guia é a
+<span class="emphasis"><em>1.11.1</em></span>.  As explicações aqui certamente serão compatíveis
+com versões posteriores deste programa.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-historia"></a>História</h3></div></div></div><p>
+O <span class="command"><strong>CVS</strong></span> é uma substituição do sistema RCS (Revision Control
+System) ele possui mais recursos e foi criado sendo compatível com o RCS.
+</p><p>
+A história do CVS (extraída de sua info page) é que ele foi iniciado a partir
+de um conjunto de scripts shell escritos por <span class="emphasis"><em>Dick Grune</em></span>
+que foram postados ao grupo de notícias <code class="literal">comp.sources.unix</code> no
+volume 6 de Dezembro de 1986.  Na versão atual não estão mais presentes shell
+scripts porque muitos dos conflitos de resolução de algorítmos vem deles.
+</p><p>
+Em Abril de 1989, <span class="emphasis"><em>Brian Berliner</em></span> fez o design e programou
+o CVS.  Mais tarde, Jeff Polk ajudou Brian com o design do módulo CVS.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-contribuindo"></a>Contribuindo com o CVS</h3></div></div></div><p>
+Através da lista de discussão <code class="literal">info-cvs</code>.  Para se inscrever
+envie uma mensagem com o subject "subscribe" para
+<code class="literal">info-cvs-request@gnu.org</code>.  Outra alternativa é através do
+grupo de noticias (newsgroup) da Usenet
+<code class="literal">comp.software.config-mgm</code>.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-caracteristicas"></a>Características</h3></div></div></div><p>
+Abaixo uma lista de características que tornam o CVS útil no gerenciamento de
+trabalhos em grupo:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+Gerenciamento de projeto em equipe
+</p></li><li class="listitem"><p>
+Log de todas as alterações realizadas
+</p></li><li class="listitem"><p>
+Lock de arquivos, permitindo que somente uma determinada pessoa modifique o
+arquivo durante o desenvolvimento do projeto.
+</p></li><li class="listitem"><p>
+Histórico de todas as mudanças feitas, isto permite voltar a uma versão
+anterior em caso de problemas, e ver o que houve de errado com o código.
+</p></li><li class="listitem"><p>
+Os projetos podem ser hospedados em repositórios.
+</p></li><li class="listitem"><p>
+Podem ser criados diversas equipes de trabalho para cada repositórios, e
+definidos quem terá ou não acesso ao repositório individualmente.  O
+desenvolvedor <code class="literal">gleydson</code>, por exemplo, podem ter acesso ao
+projeto <code class="literal">x_beta</code> e não ter acesso a projeto
+<code class="literal">secret_y</code>.
+</p></li><li class="listitem"><p>
+Permissões de acesso individuais de leitura/gravação.
+</p></li><li class="listitem"><p>
+É possível criar um usuário com acesso anônimo sem dar uma conta no sistema.
+</p></li><li class="listitem"><p>
+Pode tanto utilizar o banco de dados de contas/senhas do sistema como um banco
+de dados de autenticação do próprio CVS.
+</p></li><li class="listitem"><p>
+Permite utilizar diversos "métodos" de acesso ao servidor:
+<span class="emphasis"><em>local</em></span>, <span class="emphasis"><em>pserver</em></span>,
+<span class="emphasis"><em>ext</em></span>, etc.  Cada um destes métodos será descrito a seguir.
+</p></li><li class="listitem"><p>
+Permite o acesso via ssh para usuários que já possuam conta na máquina
+servidora.  Este método garante segurança no envio da senha criptografada (veja
+<a class="xref" href="ch20s02.html" title="Sniffer">“Sniffer”</a> para detalhes).
+</p></li><li class="listitem"><p>
+Permite visualizar facilmente o que foi modificado entre duas versões de um
+arquivo.
+</p></li></ul></div><p>
+<span class="strong"><strong>OBS</strong></span>: O CVS possui algumas limitações e
+falhas, uma delas que mais me faz falta é um suporte a protocolo pserver via
+ssh que resolveria o problema de tráfego em texto plano e gerenciamento de
+grupos com permissões diferenciadas.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-ficha"></a>Ficha técnica</h3></div></div></div><p>
+Pacote: 
+</p><p>
+Utilitários:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">cvs</code> - Servidor/ferramenta cliente.
+</p></li><li class="listitem"><p>
+<code class="literal">cvsbug</code> - Envia um bug sobre o CVS para a equipe de suporte.
+</p></li><li class="listitem"><p>
+<code class="literal">rcs2log</code> - Converte arquivos de log do formato usado pelo
+<span class="command"><strong>RCS</strong></span> para o <span class="command"><strong>CVS</strong></span>.  Utilizado na migração
+desta ferramenta para o <span class="command"><strong>CVS</strong></span>.
+</p></li><li class="listitem"><p>
+<code class="literal">cvsconfig</code> - Usado pela <span class="command"><strong>Debian</strong></span> para
+ativar/desativar o servidor <code class="literal">pserver</code>.  Pode também ser usado
+o <code class="literal">dpkg-reconfigure cvs</code> para desativar o servidor
+<code class="literal">pserver</code> e suas características.
+</p></li><li class="listitem"><p>
+<code class="literal">cvs-makerepos</code> - Script da <span class="command"><strong>Debian</strong></span> que lê a
+lista de repositórios de <code class="filename">/etc/cvs-pserver.conf</code>, cria os
+repositórios no local apropriado, corrige as permissões do diretório e adiciona
+os repositórios no servidor <code class="literal">pserver</code>.
+</p></li><li class="listitem"><p>
+<code class="literal">cvs-pserver</code> - Script da <span class="command"><strong>Debian</strong></span>
+responsável por fazer uma inicialização mais inteligente do servidor de CVS via
+<code class="literal">pserver</code>, leitura e processamento de repositórios, etc.
+Normalmente ele é chamado a partir do arquivo
+<code class="filename">/etc/inetd.conf</code>.
+</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-hwreq"></a>Requerimentos de Hardware</h3></div></div></div><p>
+Para executar o <span class="command"><strong>CVS</strong></span> é requerido pelo menos 3 vezes mais
+memória que o tamanho do maior arquivo usado pelo projeto (para realização de
+diffs entre as atualizações) e uma boa quantidade de espaço em disco.
+</p><p>
+Na realidade os requerimentos sobre o CVS dependem muito da aplicação que será
+desenvolvida.  É recomendável que a máquina tenha memória suficiente para
+evitar o uso de swap, que degrada bastante a performance do sistema.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-logs"></a>Arquivos de log criados pelo CVS</h3></div></div></div><p>
+Problemas na inicialização do <span class="command"><strong>CVS</strong></span> são registrados no arquivo
+<code class="filename">/var/log/daemon.log</code>.  Os logs de modificações feitas nos
+arquivos de um projeto no CVS são armazenadas no formato
+<code class="filename">arquivo.extensão,v</code> (é adicionado o ",v" ao final do
+arquivo para indicar que é um arquivo de controle de modificações do CVS).
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-install"></a>Instalação</h3></div></div></div><p>
+O <span class="command"><strong>CVS</strong></span> pode ser baixado de <a class="link" href="http://www.cvshome.org/" target="_top">http://www.cvshome.org/</a>.
+</p><p>
+Para pacotes <span class="command"><strong>Debian</strong></span> basta apenas executar o comando:
+<code class="literal">apt-get install cvs</code> e seguir as telas de configuração para
+ter o pacote <span class="command"><strong>CVS</strong></span> instalado e (opcionalmente) com o servidor
+sendo executado.  Você poderá a qualquer momento reconfigurar o
+<span class="command"><strong>CVS</strong></span> executando: <code class="literal">dpkg-reconfigure cvs</code>.
+</p><p>
+Uma boa documentação de referência é encontrada no pacote .
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-rodando"></a>Iniciando o servidor/reiniciando/recarregando a configuração</h3></div></div></div><p>
+A única configuração requerida é quando o <span class="command"><strong>CVS</strong></span> é executado
+via <code class="literal">pserver</code>.  Para isto, é necessária a seguinte linha no
+arquivo <code class="filename">/etc/inetd.conf</code>
+</p><pre class="screen">
+cvspserver      stream  tcp     nowait.200      root    /usr/sbin/tcpd /usr/sbin/cvs-pserver
+</pre><p>
+Note que o parâmetro "200" indica quantas vezes o processo
+<span class="command"><strong>CVS</strong></span> poderá ser executado por minuto no sistema.  Caso esse
+número seja excedido, o serviço será desabilitado e será necessário reiniciar o
+servidor <span class="command"><strong>inetd</strong></span> com o comando <code class="literal">killall -HUP
+inetd</code> para reativar o servidor CVS pserver (veja <a class="xref" href="ch04s07.html#rede-servicos-inetd-c" title="/etc/inetd.conf">“/etc/inetd.conf”</a> capítulo do <span class="command"><strong>inetd</strong></span> para
+detalhes).  Ajuste este valor de forma adequada ao seu servidor!
+</p><p>
+Veja o script <code class="filename">cvs-pserver</code> sendo executado no final da
+linha.  Ele foi desenvolvido para lidar de forma mais inteligente com a
+configuração do servidor CVS pserver.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-opcoescmd"></a>Opções de linha de comando</h3></div></div></div><p>
+As seguintes opções são aceitas pelo CVS.
+</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">-z [num]</span></dt><dd><p>
+Utiliza o gzip para fazer a transferência compactada dos arquivos.  O valor
+especificado pode ser de 0 a 9, quanto maior o número maior o nível de
+compactação e uso da CPU.
+</p><p>
+Exemplo: <code class="literal">cvs -z 3 checkout teste</code>
+</p></dd><dt><span class="term">-q</span></dt><dd><p>
+Oculta mensagens sobre recursão de diretório durante os comandos do CVS.
+</p></dd><dt><span class="term">-d [repositório]</span></dt><dd><p>
+Permite especificar o repositório através da linha de comando.
+</p></dd><dt><span class="term">-e [editor]</span></dt><dd><p>
+Define qual é o editor de textos usado para registrar o texto de commits.
+</p></dd><dt><span class="term">-n</span></dt><dd><p>
+Executa o cvs em modo "simulação" não modificando qualquer arquivo do
+repositório.
+</p></dd><dt><span class="term">-t</span></dt><dd><p>
+Mostra mensagens mostrando o processo de execução de comandos do CVS.  É
+bastante útil para aprendizado do cvs usado junto com a opção
+<span class="emphasis"><em>-n</em></span>.
+</p></dd><dt><span class="term">-r</span></dt><dd><p>
+Torna os novos arquivos criados somente para leitura.  É a mesma coisa que
+especificar a variável <em class="replaceable"><code>CVSREAD</code></em>.
+</p></dd><dt><span class="term">-w</span></dt><dd><p>
+Torna os novos arquivos criados leitura/gravação que é o padrão.
+</p></dd><dt><span class="term">-x</span></dt><dd><p>
+Utiliza criptografia para a transferência dos arquivos quando é utilizado em
+conjunto com o <span class="command"><strong>Kerberos</strong></span>.
+</p></dd></dl></div><p>
+Você pode obter detalhes sobre opções sobre um comando em especial do CVS
+(<span class="emphasis"><em>commit</em></span>, <span class="emphasis"><em>checkout</em></span>, etc) digitando:
+<code class="literal">cvs comando --help</code>.  Veja <a class="xref" href="ch17s03.html" title="Criando projetos para serem usados no CVS">“Criando projetos para serem usados no CVS”</a> para
+exemplos sobre cada uma delas.
+</p></div></div> 
+ 
+ 
+ 
+ 
+ 
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch16.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch17s02.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Capítulo 16. Servidor pop3 </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Servidor de CVS - configurando métodos de acesso ao repositório</td></tr></table></div></body></html>

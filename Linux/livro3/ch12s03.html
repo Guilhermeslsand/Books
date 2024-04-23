@@ -1,0 +1,1055 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Restrições de Acesso</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch12.html" title="Capítulo 12. Apache" /><link rel="prev" href="ch12s02.html" title="Configurações Básicas do Apache" /><link rel="next" href="ch12s04.html" title="Definindo documentos de erro personalizados" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Restrições de Acesso</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch12s02.html">Anterior</a> </td><th width="60%" align="center">Capítulo 12. Apache</th><td width="20%" align="right"> <a accesskey="n" href="ch12s04.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch12.html">Apache</a></span> &gt; <span class="breadcrumb-node">Restrições de Acesso</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-apache-acesso-restr"></a>Restrições de Acesso</h2></div></div></div><p>
+A restrição de acesso do <span class="command"><strong>Apache</strong></span> é feita através de
+<span class="emphasis"><em>Autorização</em></span> (<a class="xref" href="ch12s03.html#s-apache-acesso-restr-autor" title="Autorização">“Autorização”</a>) e <span class="emphasis"><em>Autenticação</em></span>
+(<a class="xref" href="ch12s03.html#s-apache-acesso-restr-auth" title="Autenticação">“Autenticação”</a>).  Através da
+<span class="emphasis"><em>autorização</em></span>, é checado se o endereço/rede especificada tem
+ou não permissão para acessar a página.  A <span class="emphasis"><em>autenticação</em></span>
+requer que seja passado nome e senha para garantir acesso a página.  Os métodos
+de <span class="emphasis"><em>Autorização</em></span> e <span class="emphasis"><em>Autenticação</em></span> podem
+ser combinados como veremos mais adiante.
+</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-acesso"></a>Especificando opções/permissões para as páginas</h3></div></div></div><p>
+    As opções de restrição podem tanto ser especificadas nas diretivas
+    &lt;Directory&gt;, &lt;Location&gt; ou &lt;Files&gt; quanto nos arquivos
+    <code class="filename">.htaccess</code> (ou outro nome de arquivo de controle de acesso
+    especificado pela opção <span class="emphasis"><em>AccessFileName</em></span> do arquivo de
+    configuração do <span class="command"><strong>Apache</strong></span>).  Cada diretiva de acesso é
+    especificada entre &lt;tags&gt; e devem ser fechadas com &lt;/tag&gt; (como na
+    linguagem HTML).  As seguintes diretivas de acesso são válidas no
+    <span class="command"><strong>Apache</strong></span>:
+    </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Directory</span></dt><dd><p>
+    As restrição afetará o diretório no disco especificado, conseqüentemente a
+    página armazenada nele.  Por exemplo:
+    </p><pre class="screen">
+    &lt;Directory /var/www&gt;
+     Order deny,allow
+     deny from all
+     allow from 10.1.0.1
+    &lt;Directory&gt;
+    </pre><p>
+    O acesso ao diretório <code class="filename">/var/www</code> será permitido somente ao
+    computador com o endereço IP <code class="literal">10.1.0.1</code>.
+    </p></dd><dt><span class="term">DirectoryMatch</span></dt><dd><p>
+    Funciona como a diretiva &lt;Directory&gt; mas trabalha com expressões
+    regulares como argumento.  Por exemplo:
+    </p><pre class="screen">
+    &lt;DirectoryMatch "^/www/.*"&gt;
+     Order deny,allow
+     deny from all
+    &lt;DirectoryMatch&gt;
+    </pre><p>
+    Bloqueará o acesso ao diretório <code class="filename">/www</code> e sub-diretórios
+    dentro dele.
+    </p></dd><dt><span class="term">Files</span></dt><dd><p>
+    As restrições afetarão os arquivos do disco que conferem com o especificado.  É
+    possível usar os coringas <span class="emphasis"><em>?</em></span> e <span class="emphasis"><em>*</em></span> como
+    no shell.  Também podem ser usadas expressões regulares especificando um "~"
+    após <code class="literal">Files</code> e antes da expressão.  Por exemplo:
+    </p><pre class="screen">
+    &lt;Files *.txt&gt;
+     Order deny,allow
+     deny from all
+    &lt;/Files&gt;
+    </pre><p>
+    Bloqueia o acesso a todos os arquivos com a extensão <code class="filename">.txt</code>
+    </p><pre class="screen">
+    &lt;Files ~ "\.(gif|jpe?g|bmp|png)$"&gt;
+     Order deny,allow
+    &lt;/Files&gt;
+    </pre><p>
+    Bloqueia o acesso a arquivos <code class="filename">gif, jpg, jpeg, bmp, png</code>
+    (note que o "~" ativa o modo de interpretação de expressões regulares).
+    </p></dd><dt><span class="term">FilesMatch</span></dt><dd><p>
+    Permite usar expressões regulares na especificação de arquivos (equivalente a
+    diretiva &lt;Files ~ "expressão"&gt;).  Por exemplo:
+    </p><pre class="screen">
+    &lt;FilesMatch "\.(gif|jpe?g|bmp|png)$"&gt;
+     Order deny,allow
+    &lt;/FilesMatch&gt;
+    </pre><p>
+    Bloqueia o acesso a arquivos <code class="filename">gif, jpg, jpeg, bmp, png</code>.
+    </p></dd><dt><span class="term">Location</span></dt><dd><p>
+    As restrições afetarão o diretório base especificado na URL e seus
+    sub-diretórios.  Por exemplo:
+    </p><pre class="screen">
+    &lt;Location /security&gt;
+     Order allow,deny
+    &lt;/Location&gt;
+    </pre><p>
+    Bloqueia o acesso de todos os usuários ao diretório
+    <code class="filename">/security</code> da URL (a explicação porque o acesso é bloqueado
+    neste caso será explicado em <a class="xref" href="ch12s03.html#s-apache-acesso-restr-autor" title="Autorização">“Autorização”</a>).
+    </p></dd><dt><span class="term">LocationMatch</span></dt><dd><p>
+    Idêntico a diretiva &lt;Location&gt; mas trabalha com expressões regulares.
+    Por exemplo:
+    </p><pre class="screen">
+    &lt;LocationMatch "/(extra|special)/data"&gt;
+     Order deny,allow
+     deny from all
+    &lt;/LocationMatch&gt;
+    </pre><p>
+    Bloqueará URLs que contém a substring "/extra/data" ou "/special/data".
+    </p></dd></dl></div><p>
+    O uso das diretivas &lt;Directory&gt; e &lt;Files&gt; é apropriada quando você
+    deseja trabalhar com permissões a nível de diretórios/arquivos no disco local
+    (o controle do proxy também é feito via &lt;Directory&gt;), o uso da diretiva
+    &lt;Location&gt; é adequado para trabalhar com permissões a nível de URL.  A
+    ordem de processamento das diretivas de acesso são processadas é a seguinte:
+    </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+    A diretiva &lt;Directory&gt; (com exceção de &lt;DirectoryMatch&gt;) e os
+    arquivos <code class="filename">.htaccess</code> são processados simultaneamente.  As
+    definições dos arquivos <code class="filename">.htaccess</code> substituem as de
+    &lt;Directory&gt;)
+    </p></li><li class="listitem"><p>
+    Expressões regulares de &lt;DirectoryMatch&gt;, &lt;Directory&gt;.
+    </p></li><li class="listitem"><p>
+    &lt;Files&gt; e &lt;FilesMatch&gt; são processados simultaneamente.
+    </p></li><li class="listitem"><p>
+    &lt;Location&gt; e &lt;LocationMatch&gt; são processados simultaneamente.
+    </p></li></ol></div><p>
+    Normalmente é encontrado a opção <span class="emphasis"><em>Options</em></span> dentro de uma das
+    diretivas acima, a função desta diretiva é controlar os seguintes aspectos da
+    listagem de diretórios:
+    </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">All</span></dt><dd><p>
+    Todas as opções são usadas exceto a <code class="literal">MultiViews</code>.  É a padrão
+    caso a opção <span class="emphasis"><em>Options</em></span> não seja especificada.
+    </p></dd><dt><span class="term">ExecCGI</span></dt><dd><p>
+    Permite a execução de scripts CGI.
+    </p></dd><dt><span class="term">FollowSymLinks</span></dt><dd><p>
+    O servidor seguirá links simbólicos neste diretório (o caminho não é
+    modificado).  Esta opção é ignorada caso apareça dentro das diretivas
+    &lt;Location&gt;, &lt;LocationMatch&gt; e &lt;DirectoryMatch&gt;.
+    </p></dd><dt><span class="term">Includes</span></dt><dd><p>
+    É permitido o uso de includes no lado do servidor.
+    </p></dd><dt><span class="term">IncludesNOEXEC</span></dt><dd><p>
+    É permitido o uso de includes do lado do servidor, mas o comando
+    <code class="literal">#exec</code> e <code class="literal">#include</code> de um script CGI são
+    desativados.
+    </p></dd><dt><span class="term">Indexes</span></dt><dd><p>
+    Se não existir um arquivo especificado pela diretiva &lt;DirectoryIndex&gt; no
+    diretório especificado, o servidor formatará automaticamente a listagem ao
+    invés de gerar uma resposta de acesso negado.
+    </p></dd><dt><span class="term">MultiViews</span></dt><dd><p>
+    Permite o uso da Negociação de conteúdo naquele diretório.  A negociação de
+    conteúdo permite o envio de um documento no idioma requisitado pelo navegador
+    do cliente.
+    </p></dd><dt><span class="term">SymLinksIfOwnerMatch</span></dt><dd><p>
+    O servidor somente seguirá links simbólicos se o arquivo ou diretório alvo
+    tiver como dono o mesmo user ID do link.  Esta opção é ignorada caso apareça
+    dentro das diretivas &lt;Location&gt;, &lt;LocationMatch&gt; e
+    &lt;DirectoryMatch&gt;.
+    </p></dd></dl></div><p>
+    Múltiplos parâmetros para <span class="emphasis"><em>Options</em></span> podem ser especificados
+    através de espaços.
+    </p><p>
+    <span class="strong"><strong>OBS1</strong></span>: A opção Options não tem efeito dentro
+    da diretiva FILES.
+    </p><p>
+    <span class="strong"><strong>OBS2</strong></span>: Tanto faz usar maiúsculas quanto
+    minúsculas nas diretivas de configuração, opções e parâmetros de configuração
+    do <span class="command"><strong>Apache</strong></span>, a capitalização apenas ajuda a leitura e
+    interpretação: SymLinksIfOwnerMatch (LinksSimbólicosSeDonoConferir).
+    </p><p>
+    As opções especificadas para o diretório afetam também seus sub-diretórios, a
+    não ser que sejam especificadas opções separadas para o sub-diretório:
+    </p><pre class="screen">
+    &lt;Directory /var/www&gt;
+     Options Indexes FollowSymLinks
+    &lt;/Directory&gt;
+    </pre><p>
+    Ao acessar o diretório <code class="filename">/var/www/focalinux</code>, as permissões
+    usadas serão de <code class="filename">/var/www</code>, ao menos que uma diretiva
+    &lt;Directory&gt; ou &lt;Location&gt; seja especificada:
+    </p><pre class="screen">
+    &lt;Directory /var/www&gt;
+     Options Indexes FollowSymLinks
+    &lt;/Directory&gt;
+    
+    &lt;Directory /var/www/focalinux&gt;
+     Options Includes
+    &lt;/Directory&gt;
+    </pre><p>
+    As opções e restrições de acesso de <code class="filename">/var/www/focalinux</code>
+    serão EXATAMENTE as especificadas no bloco da diretiva &lt;Directory
+    /var/www/focalinux&gt; e somente os <span class="emphasis"><em>includes</em></span> serão
+    permitidos.  Para adicionar ou remover uma opção individual definidas por
+    diretivas anteriores, podem ser usado os sinais "+" ou "-", por exemplo:
+    </p><pre class="screen">
+    &lt;Directory /var/www&gt;
+     Options Indexes FollowSymLinks
+    &lt;/Directory&gt;
+    
+    &lt;Directory /var/www/focalinux&gt;
+     Options +Includes -Indexes
+    &lt;/Directory&gt;
+    </pre><p>
+    As opções <span class="emphasis"><em>Indexes</em></span> e <span class="emphasis"><em>FollowSymLinks</em></span>
+    são definidas para o diretório <code class="filename">/var/www</code>, então as
+    permissões do diretório <code class="filename">/var/www/focalinux</code> serão
+    <span class="emphasis"><em>FollowSymLinks</em></span> (do diretório
+    <code class="filename">/web/docs</code>) e <span class="emphasis"><em>Includes</em></span> (adicionada) e
+    o parâmetro <span class="emphasis"><em>Indexes</em></span> não terá efeito neste diretório.
+    </p><p>
+    É permitido fazer um aninhamento das diretivas &lt;Directory&gt; e
+    &lt;Files&gt;:
+    </p><pre class="screen">
+    &lt;Directory /var/www&gt;
+     Order allow,deny
+     allow from all
+    
+     &lt;Files LEIAME-DONO.txt&gt;
+      Order deny,allow
+      deny from all
+     &lt;/Files&gt;
+    
+    &lt;/Directory&gt;
+    </pre><p>
+    Neste caso, somente os arquivos <code class="filename">LEIAME-DONO.txt</code> existentes
+    no diretório <code class="filename">/var/www</code> e seus sub-diretórios serão
+    bloqueados.
+    </p><p>
+    Se a diretiva &lt;Files&gt; for usada fora de uma estrutura &lt;Directory&gt;,
+    ela terá efeito em todos os arquivos disponibilizados pelo servidor.  Este é
+    excelente método para proteger os arquivos de acesso, senhas e grupos, conforme
+    será explicado mais adiante.
+    </p><p>
+    Qualquer outro tipo de aninhamento de diretivas resultará em um erro de
+    configuração ao se tentar carregar/recarregar o <span class="command"><strong>Apache</strong></span>.  Um
+    exemplo de diretiva incorreta:
+    </p><pre class="screen">
+    &lt;Directory /var/www&gt;
+     Options Indexes FollowSymLinks
+    
+     &lt;Directory /var/www/focalinux&gt;
+      Options +Includes -Indexes
+     &lt;/Directory&gt;
+    
+    &lt;/Directory&gt;
+    </pre><p>
+    O correto é:
+    </p><pre class="screen">
+    &lt;Directory /var/www&gt;
+     Options Indexes FollowSymLinks
+    &lt;/Directory&gt;
+    
+    &lt;Directory /var/www/focalinux&gt;
+     Options +Includes -Indexes
+    &lt;/Directory&gt;
+    </pre><p>
+    Espero que tenha observado o erro no exemplo acima.
+    </p><p>
+    <span class="strong"><strong>OBS1</strong></span>: Você pode verificar se a configuração
+    do apache está correta digitando <code class="literal">apache -t</code> como usuário
+    root, se tudo estiver correto com suas configurações ele retornará a mensagem:
+    "Syntax OK".
+    </p><p>
+    <span class="strong"><strong>OBS2</strong></span>: Se <span class="emphasis"><em>Options</em></span> não
+    for especificado, o padrão será permitir tudo exceto
+    <span class="emphasis"><em>MultiViews</em></span>.
+    </p><p>
+    <span class="strong"><strong>OBS3</strong></span>: Qualquer restrição afetará o diretório
+    atual e todos os seus sub-diretórios!  Defina permissões de sub-diretórios
+    específicos separadamente caso precise de um nível de acesso diferente.  Veja
+    também a seção sobre arquivos OverRide (<code class="filename">.htaccess</code>) para
+    detalhes sobre este tipo de arquivo.
+    </p><p>
+    <span class="strong"><strong>OBS4</strong></span>: A diretiva de acesso "&lt;Directory
+    /&gt;" não afetará outros sistemas de arquivos montados dentro de seus
+    subdiretórios.  Caso uma diretiva de acesso padrão não seja especificada para
+    outros sistemas de arquivos, o acesso será automaticamente negado.
+    </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-acesso-restr-autor"></a>Autorização</h3></div></div></div><p>
+A restrição de acesso por autorização (controlado pelo módulo
+<code class="filename">mod_access</code>), permite ou não o acesso ao cliente de acordo
+com o endereço/rede especificada.  As restrições afetam também os
+sub-diretórios do diretório alvo.  Abaixo um exemplo de restrição de acesso que
+bloqueia o acesso de qualquer host que faz parte do domínio
+<span class="emphasis"><em>.spammers.com.br</em></span> a URL
+<code class="filename">http://servidor/teste</code>:
+</p><pre class="screen">
+&lt;Location /teste&gt;
+ Option Indexes
+ Order allow,deny
+ allow from all
+ deny from .spammers.com.br
+&lt;/Location&gt;
+</pre><p>
+A opção <code class="literal">Option</code> foi explicada acima, seguem as explicações
+das outras diretivas:
+</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Order</span></dt><dd><p>
+Especifica em que ordem as opções de acesso <span class="emphasis"><em>allow/deny</em></span>
+serão pesquisadas.  Caso não seja especificada, o padrão será
+<span class="emphasis"><em>deny/allow</em></span>.  Note que a ordem de pesquisa de
+<span class="emphasis"><em>allow</em></span> e <span class="emphasis"><em>deny</em></span> é a inversa da
+especificada.  A diretiva <span class="emphasis"><em>Order</em></span> aceita os seguintes
+valores:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">deny,allow</code> - Esta é a padrão, significa um servidor mais
+restritivo; a diretiva <span class="emphasis"><em>allow</em></span> é processada primeiro e
+somente depois a diretiva <span class="emphasis"><em>deny</em></span>.  Caso nenhuma diretiva
+allow e deny forem especificadas ou não conferirem, <span class="strong"><strong>PERMITE TUDO</strong></span> como padrão.
+</p></li><li class="listitem"><p>
+<code class="literal">allow,deny</code> - Significa um servidor mais permissivo, a opção
+<span class="emphasis"><em>deny</em></span> é processada primeiro e somente depois a opção
+<span class="emphasis"><em>allow</em></span>.  Caso nenhuma diretiva allow e deny for
+especificadas ou não conferirem, <span class="strong"><strong>BLOQUEIA
+TUDO</strong></span> como padrão.
+</p></li><li class="listitem"><p>
+<code class="literal">mutual-failure</code> - Somente permite o acesso se o usuário
+receber autorização através da opção <span class="emphasis"><em>allow</em></span> e <span class="strong"><strong>NÃO</strong></span> ser bloqueado pela opção
+<span class="emphasis"><em>deny</em></span>, caso uma das checagens falhe, o acesso é
+imediatamente negado.  É uma opção interessante quando você quer somente
+pessoas de um determinado endereço/rede acessando o seu sistema e não estejam
+em sua lista negra :-)
+</p></li></ul></div><p>
+<span class="strong"><strong>ATENÇÃO</strong></span>: É importante saber se a página será
+permissiva ou restritiva para escolher a ordem mais adequada ao seu caso,
+também leve em consideração a possibilidade do processamento cair na diretiva
+de acesso padrão, caso nem a diretiva allow e deny conferiram e estiver usando
+a ordem de acesso "allow,deny" ou "deny,allow".  Um sistema mal configurado
+neste aspecto poderá trazer sérias conseqüências.
+</p><p>
+É comum em páginas permissivas se definir a seguinte configuração:
+</p><pre class="screen">
+Order allow,deny
+allow from all
+</pre><p>
+O motivo é que em um grande site, se forem adicionadas mais restrições nesta
+página (devido a alguns domínios que tem usuários mal comportados, bloqueio de
+acesso a rede do concorrente, potenciais atacantes, etc...), estas deverão ser
+lidas antes da diretiva "allow from all" e podem passar desapercebidas ao
+administrador e podem simplesmente não funcionar caso a opção
+<span class="emphasis"><em>Order</em></span> não esteja ajustada corretamente (lembre-se, você é
+o administrador e a integridade do site depende de sua atenção na escolha da
+ordem correta das diretivas de acesso).
+</p></dd><dt><span class="term">allow from</span></dt><dd><p>
+Especifica o endereço que terá acesso ao recurso especificado.  A diretiva
+<span class="emphasis"><em>allow</em></span> from aceita os seguintes valores:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">all</code> - O acesso é permitido a todos.
+</p></li><li class="listitem"><p>
+um endereço de domínio completo (FQDN).  Por exemplo
+<code class="filename">www.debian.org.br</code>.
+</p></li><li class="listitem"><p>
+um endereço de domínio parcial.  Qualquer computador que confira com o inicio
+ou fim terá o acesso permitido.  Por exemplo,
+<code class="filename">.spammers.com.br</code>, <code class="filename">.debian.org</code>.
+</p></li><li class="listitem"><p>
+um endereço IP completo, como <code class="literal">192.168.1.1</code>
+</p></li><li class="listitem"><p>
+um endereço IP parcial como <code class="literal">192.168.1.</code>
+</p></li><li class="listitem"><p>
+um par rede/máscara como <code class="literal">10.1.0.0/255.255.0.0</code> ou
+<code class="literal">10.1.0.0/16</code>, uma faixa de acesso a máquinas de uma mesma
+rede pode ser definida facilmente através deste método.
+</p></li></ul></div><p>
+<span class="strong"><strong>OBS1</strong></span>: É necessário reiniciar o
+<span class="command"><strong>Apache</strong></span> depois de qualquer modificação em seu arquivo de
+configuração (executando <code class="literal">apachectl restart</code>), ou recarregar
+os arquivos de configuração (<code class="literal">apachectl graceful</code>).
+</p><p>
+<span class="strong"><strong>OBS2</strong></span>: Mais de um host pode ser especificado
+separando com um espaço:
+</p><pre class="screen">
+allow from 192.168. .debian.org.br
+</pre><p>
+Permitirá o acesso de qualquer máquina que o endereço IP confira com
+<code class="literal">192.168.*.*</code> e qualquer computador do domínio
+<code class="literal">debian.org.br</code>
+</p><p>
+<span class="strong"><strong>OBS3</strong></span>: Regras baseadas em nomes simples de
+hosts (como <code class="literal">www</code>) não conferirão!  Deverá ser usado o FQDN ou
+IP: <code class="literal">www.dominio.com.br</code>
+</p><p>
+<span class="strong"><strong>OBS4</strong></span>: Caso Order não seja especificado,
+<span class="emphasis"><em>deny,allow</em></span> será usado como padrão (ou seja, permitirá tudo
+como padrão).
+</p></dd><dt><span class="term">deny from</span></dt><dd><p>
+Especifica os endereços que NÃO terão acesso ao recurso especificado.  As
+explicações referentes a esta diretiva de acesso são idêntica as de
+<span class="emphasis"><em>allow from</em></span>.
+</p></dd></dl></div><p>
+É recomendável o uso de endereços IP ao invés de endereços DNS e um mecanismo
+anti-spoofing no firewall ou código de roteamento, pois ficará mais difícil um
+ataque baseado em DNS spoofing, aumentando consideravelmente a segurança de seu
+servidor web.
+</p><p>
+<span class="strong"><strong>ATENÇÃO</strong></span>: Caso receba erros 403 (acesso
+negado) sem bloquear a URL nas diretivas de acesso, uma dos seguintes problemas
+pode ser a causa:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+O servidor Web não tem permissões para acessar/abrir o diretório da página.
+Certifique-se que o <span class="emphasis"><em>dono</em></span> e <span class="emphasis"><em>grupo</em></span> do
+processo <span class="command"><strong>Apache</strong></span> (especificado pela diretiva
+<span class="emphasis"><em>User</em></span> e <span class="emphasis"><em>Group</em></span>) possuem permissões de
+acesso àquele diretório.
+</p></li><li class="listitem"><p>
+Quando quer fazer uma listagem de arquivos do diretório e não especifica a
+opção <code class="literal">Option Indexes</code> como opção de listagem.
+</p></li><li class="listitem"><p>
+Quando não está usando <code class="literal">Option Indexes</code> para impedir a
+listagem de conteúdo do diretório e o não foi encontrado um arquivo de índice
+válido dentre os existentes na diretiva <code class="literal">DirectoryIndex</code> no
+diretório atual.
+</p></li></ul></div><p>
+Abaixo alguns exemplos de permissões de acesso:
+</p><pre class="screen">
+&lt;Directory /var/www&gt;
+ Options SymLinksIfOwnerMatch Indexes MultiViews
+ Order allow,deny
+ allow from all
+&lt;/Directory&gt;
+</pre><p>
+Permite o acesso a de qualquer usuário de qualquer lugar (allow from all),
+permite também a visualização da listagem formatada de arquivos caso nenhum
+arquivo especificado na diretiva <span class="emphasis"><em>DirectoryIndex</em></span> seja
+encontrado (Indexes), permite negociação de conteúdo
+(<span class="emphasis"><em>MultiViews</em></span>) e seguir links caso o dono do arquivo confira
+com o nome do link (<span class="emphasis"><em>SymLinksIfOwnerMatch</em></span>).
+</p><pre class="screen">
+&lt;Directory /var/www&gt;
+ Options SymLinksIfOwnerMatch Indexes MultiViews
+&lt;/Directory&gt;
+</pre><p>
+Tem o mesmo significado da diretiva acima por métodos diferentes; quando
+nenhuma opção <span class="emphasis"><em>Order</em></span> é especificada,
+<span class="emphasis"><em>deny,allow</em></span> é definido como padrão, e como nenhuma opção de
+acesso <span class="emphasis"><em>allow/deny</em></span> foi especificada, o padrão "Order
+deny,allow" é usado e permite TUDO como padrão.
+</p><pre class="screen">
+&lt;Directory /var/www&gt;
+ Options Indexes
+ Order deny,allow
+ deny from all
+&lt;/Directory&gt;
+</pre><p>
+Esta regra acima não tem muita lógica pois restringe o acesso de todos os
+usuários ao diretório <code class="filename">/var/www</code>, ao menos se esta for sua
+intenção...
+</p><pre class="screen">
+&lt;Location /focalinux&gt;
+ Options All
+ Order allow,deny
+ allow from all
+&lt;/Location&gt;
+</pre><p>
+A regra acima permite o acesso a URL
+<code class="filename">http://www.servidor.org/focalinux</code> de qualquer host na
+Internet
+</p><pre class="screen">
+&lt;Files .htaccess&gt;
+ Order deny,allow
+ deny from all
+&lt;/Files&gt;
+</pre><p>
+Bloqueia o acesso a qualquer arquivo <code class="filename">.htaccess</code> do sistema
+</p><pre class="screen">
+&lt;Files ~ "leiame-(arm|alpha|m68k|sparc|powerpc)\.txt"&gt;
+ Order deny,allow
+ deny from all
+&lt;/Files&gt;
+</pre><p>
+Bloqueia o acesso a qualquer arquivo <code class="filename">leiame-arm.txt</code>,
+<code class="filename">leiame-alpha.txt</code>, <code class="filename">leiame-m68k.txt</code>,
+<code class="filename">leiame-sparc.txt</code> e <code class="filename">leiame-powerpc.txt</code>
+fazendo uso de expressões regulares.
+</p><pre class="screen">
+&lt;Directory /var/www&gt;
+ Options Indexes
+ Order mutual-failure
+ allow from .dominio.com.br
+ deny from lammer.dominio.com.br
+&lt;/Directory&gt;
+</pre><p>
+A diretiva acima somente permite acesso ao diretório
+<code class="filename">/var/www</code> de máquinas pertencentes ao domínio
+<code class="filename">.dominio.com.br</code> desde que não seja
+<code class="filename">lammer.dominio.com.br</code>.
+</p><pre class="screen">
+&lt;Directory /var/www&gt;
+ Options Indexes MultiViews
+ Order allow,deny
+ deny from .com .com.br
+ allow from all
+&lt;/Directory&gt;
+</pre><p>
+Bloqueia o acesso ao diretório <code class="filename">/var/www</code> de computadores
+pertencentes aos domínios <span class="emphasis"><em>.com</em></span> e
+<span class="emphasis"><em>.com.br</em></span>.
+</p><pre class="screen">
+&lt;Directory /var/www&gt;
+ Options None
+ Order deny,allow
+ allow from 192.168.1. .guiafoca.org .debian.org
+ deny from 200.200.123.
+&lt;/Directory&gt;
+</pre><p>
+A regra acima permite o acesso de máquinas da rede
+<code class="literal">192.168.1.*</code>, do domínio <code class="literal">*.guiafoca.org</code> e
+<code class="literal">*.debian.org</code>, o acesso de máquinas da rede
+<code class="literal">200.200.123.*</code> é bloqueado (nada contra, peguei nesse número
+ao acaso :-).
+</p><p>
+Note que a máquina <code class="literal">192.168.4.10</code> terá acesso LIVRE a regra
+acima, pois não conferirá nem com <span class="emphasis"><em>allow</em></span> nem com
+<span class="emphasis"><em>deny</em></span>, então o processamento cairá na diretiva padrão de
+<span class="emphasis"><em>deny,allow</em></span>, que neste caso permite o acesso caso nem
+<span class="emphasis"><em>allow</em></span> e <span class="emphasis"><em>deny</em></span> conferiram com o padrão.
+</p><pre class="screen">
+&lt;Directory /var/www&gt;
+ Options None
+ Order allow,deny
+ allow from 192.168.1. .cipsga.org.br .debian.org
+ deny from 200.200.123.
+&lt;/Directory&gt;
+</pre><p>
+A regra acima é idêntica a anterior somente com a mudança da opção
+<span class="emphasis"><em>Order</em></span>.  Bloqueia o acesso de máquinas da rede
+<code class="literal">200.200.123.*</code> e permite o acesso de máquinas da rede
+<code class="literal">192.168.1.*</code>, do domínio <code class="literal">*.cipsga.org.br</code> e
+<code class="literal">*.debian.org</code>.
+</p><p>
+Note que a máquina <code class="literal">192.168.4.10</code> terá acesso BLOQUEADO a
+regra acima, pois não conferirá nem com <span class="emphasis"><em>allow</em></span> nem com
+<span class="emphasis"><em>deny</em></span>, então o processamento cairá na diretiva padrão de
+<span class="emphasis"><em>allow,deny</em></span> que neste caso bloqueia o acesso.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-acesso-restr-auth"></a>Autenticação</h3></div></div></div><p>
+Através da <span class="emphasis"><em>autenticação</em></span> (controlado pelo módulo
+<code class="filename">mod_auth</code>) é possível especificar um
+<span class="emphasis"><em>nome</em></span> e <span class="emphasis"><em>senha</em></span> para acesso ao recurso
+solicitado.  As senhas são gravadas em formato criptografado usando
+<span class="emphasis"><em>Crypto</em></span> ou <span class="emphasis"><em>MD5</em></span> (conforme desejado).  O
+arquivo de senhas pode ser centralizado ou especificado individualmente por
+usuário, diretório ou até mesmo por arquivo acessado.
+</p><div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="s-apache-acesso-restr-auth-arqsenha"></a>Criando um arquivo de Senhas</h4></div></div></div><p>
+O arquivo de senhas pode ser criado e mantido através do uso de 3 utilitários:
+<span class="command"><strong>htpasswd</strong></span>, <span class="command"><strong>htdigest</strong></span> e
+<span class="command"><strong>dbmmanage</strong></span>:
+</p><div class="section"><div class="titlepage"><div><div><h5 class="title"><a id="s-apache-acesso-restr-auth-arqsenha-htpasswd"></a>htpasswd</h5></div></div></div><p>
+Este é usado para criar o arquivo de senhas.  Para criar um banco de dados com
+o nome <code class="filename">senhas</code> para o usuário
+<em class="replaceable"><code>convidado</code></em>, é usada a seguinte sintaxe:
+</p><p>
+<code class="literal">htpasswd -c -m senhas convidado</code>
+</p><p>
+Você será perguntado por uma senha para o usuário
+<em class="replaceable"><code>convidado</code></em> e para redigita-la.  A opção "-c" indica
+que deverá ser criado um arquivo, a opção "-m" indica a utilização de senhas
+criptografadas usando o algoritmo <span class="emphasis"><em>MD5</em></span>, que garante maior
+segurança que o método <span class="emphasis"><em>Crypto</em></span>.  A senha pode ser
+especificada diretamente na linha de comando através da opção "-b" (isto é um
+ótimo recurso para utilização em shell scripts ou programas CGI de integração
+com o navegador).
+</p><p>
+<code class="literal">htpasswd -b -d senhas chefe abcdef</code>
+</p><p>
+No exemplo acima, uma senha de alta segurança será introduzida no banco de
+dados <code class="filename">senhas</code> tornando impossível o acesso a página do
+usuário :-)
+</p><p>
+Note que esta senha foi cadastrada usando o algoritmo de criptografia Crypto
+(opção -d).  O algoritmo <span class="emphasis"><em>SHA</em></span> também pode ser usado como
+alternativa, através da opção "-s".  Para modificar a senha do usuário
+convidado, basta usar a mesma sintaxe (sem a opção "-c" que é usada para criar
+um novo arquivo):
+</p><p>
+<code class="literal">htpasswd -m senhas convidado</code>
+</p><p>
+ou
+</p><p>
+<code class="literal">htpasswd -b -m senhas convidado nova_senha</code>
+</p><p>
+Opcionalmente você pode especificar a opção "-d" para atualizar também o
+formato da senha para <span class="emphasis"><em>Crypto</em></span>.  Podem existir senhas de
+criptografias mistas (<span class="emphasis"><em>SHA, Crypto, MD5</em></span>) no mesmo arquivo
+sem nenhum problema.
+</p><p>
+A mudança do formato de senhas é útil quando se deseja aumentar o nível de
+segurança oferecido por um melhor sistema ou para manter a compatibilidade com
+alguns scripts/programas que compartilhem o arquivo de senhas.
+</p></div><div class="section"><div class="titlepage"><div><div><h5 class="title"><a id="s-apache-acesso-restr-auth-arqsenha-htdigest"></a>htdigest e dbmmanage</h5></div></div></div><p>
+Estes são idênticos ao <span class="command"><strong>htpasswd</strong></span>, a diferença é que o
+<span class="command"><strong>htdigest</strong></span> permite criar/manter um arquivo de senhas usando a
+autenticação Digest, enquanto o <span class="command"><strong>dbmmanage</strong></span> permite manter o
+banco de dados de senhas em um arquivo <code class="filename">DB, DBM, GDBM</code> e
+<code class="filename">NDBM</code>, formatos conhecidos pelo Perl.
+</p></div></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="s-apache-acesso-restr-auth-usuarios"></a>Autenticação através de usuários</h4></div></div></div><p>
+Através deste método é possível especificar que usuários terão acesso ao
+recurso definido, usando senhas de acesso individuais criptografadas usando um
+dos utilitários da seção anterior.  Para restringir o acesso ao endereço
+<code class="filename">http://servidor.org/teste</code>:
+</p><pre class="screen">
+&lt;Location /teste&gt;
+ AuthName "Acesso a página do Foca Linux"
+ AuthType basic
+ AuthUserFile /home/gleydson/SenhaUsuario
+# AuthGroupFile /home/users/SenhaGrupo
+ Require valid-user
+&lt;/Location&gt;
+</pre><p>
+Ao tentar acessar o endereço <code class="filename">http://servidor/teste</code>, será
+aberta uma janela no navegador com o título <span class="emphasis"><em>Enter username for Acesso
+a página do Foca Linux at servidor.org</em></span>, a diretiva <span class="emphasis"><em>Require
+valid-user</em></span> definem que o usuário e senha digitados devem existir no
+arquivo especificado por <span class="emphasis"><em>AuthUserFile</em></span> para que o acesso
+seja garantido.  Uma explicação de cada opção de acesso usado na autenticação:
+</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">AuthName</span></dt><dd><p>
+Será o nome que aparecerá na janela de autenticação do seu navegador indicando
+qual área restrita está solicitando senha (podem existir várias no servidor,
+bastando especificar várias diretivas de restrições).
+</p></dd><dt><span class="term">AuthType</span></dt><dd><p>
+Especifica o método de que o nome e senha serão passados ao servidor.  Este
+método de autenticação pode ser <span class="emphasis"><em>Basic</em></span> ou
+<span class="emphasis"><em>Digest</em></span>
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">Basic</code> - Utiliza a codificação <span class="emphasis"><em>base64</em></span>
+para encodificação de nome e senha, enviando o resultado ao servidor.  Este é
+um método muito usado e pouco seguro, pois qualquer sniffer instalado em um
+roteador pode capturar e descobrir facilmente seu nome e senha.
+</p></li><li class="listitem"><p>
+<code class="literal">Digest</code> - Transmite os dados de uma maneira que não pode ser
+facilmente decodificada, incluindo a codificação da área protegida
+(especificada pela diretiva <span class="emphasis"><em>AuthName</em></span>) que possui a
+seqüencia de login/senha válida.  A diferença deste método é que você precisará
+de arquivos de senhas diferentes para cada área protegida especificada por
+<span class="emphasis"><em>AuthName</em></span> (também chamada de Realm).
+</p></li></ul></div></dd><dt><span class="term">AuthUserFile</span></dt><dd><p>
+É o arquivo gerado pelo utilitário <span class="command"><strong>htpasswd</strong></span> que contém a
+senha correspondente ao usuário
+</p></dd><dt><span class="term">AuthGroupFile</span></dt><dd><p>
+É um arquivo texto que contém o nome do grupo, dois pontos (":") e o nome dos
+usuários que podem ter acesso ao recurso, separados por vírgulas.  No exemplo
+acima ele se encontra comentado, mas a seguir encontrará exemplos que explicam
+em detalhes o funcionamento desta diretiva.
+</p></dd><dt><span class="term">Require</span></dt><dd><p>
+Especifica que usuários podem ter acesso ao diretório.  Podem ser usadas uma
+das 3 sintaxes:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">Require user usuário1 usuário2 usuário3</code> - Somente os
+usuários especificados são considerados válidos para ter acesso ao diretório.
+</p></li><li class="listitem"><p>
+<code class="literal">Require group grupo1 grupo2 grupo3</code> - Somente os usuários dos
+grupos especificados são considerados válidos para terem acesso ao diretório.
+Esta diretiva é útil quando deseja que somente alguns usuários de determinado
+grupo tenham acesso ao recurso (por exemplo, usuários do grupo admins).
+</p></li><li class="listitem"><p>
+<code class="literal">Require valid-user</code> - Qualquer usuário válido no banco de
+dados de senhas pode acessar o diretório.  É bem útil quando as opções de
+acesso especificadas por Require user são muito longas.
+</p><p>
+A opção Require deve ser acompanhado das diretivas
+<span class="emphasis"><em>AuthName</em></span>, <span class="emphasis"><em>AuthType</em></span> e as diretivas
+<span class="emphasis"><em>AuthUserFile</em></span> e <span class="emphasis"><em>AuthGroupFile</em></span> para
+funcionar adequadamente.
+</p></li></ul></div></dd></dl></div><p>
+<span class="strong"><strong>OBS</strong></span>: É necessário reiniciar o
+<span class="command"><strong>Apache</strong></span> depois de qualquer modificação em seu arquivo de
+configuração (<code class="literal">apachectl restart</code>), ou recarregar os arquivos
+de configuração (<code class="literal">apachectl graceful</code>).  Note que o
+<span class="command"><strong>apachectl</strong></span> é somente um shell script para interação mais
+amigável com o servidor web <span class="command"><strong>apache</strong></span>, retornando mensagens
+indicando o sucesso/falha no comando ao invés de códigos de saída.
+</p><p>
+Alguns exemplos para melhor assimilação:
+</p><pre class="screen">
+&lt;Location /teste&gt;
+ AuthName "Acesso a página do Foca Linux"
+ AuthType basic
+ AuthUserFile /home/gleydson/SenhaUsuario
+ Require user gleydson
+&lt;/Location&gt;
+</pre><p>
+As explicações são idênticas a anterior, mas somente permite o acesso do
+usuário <code class="literal">gleydson</code> a URL
+<code class="filename">http://servidor.org/teste</code>, bloqueando o acesso de outros
+usuários contidos no arquivo <span class="emphasis"><em>AuthUserFile</em></span>.
+</p><pre class="screen">
+&lt;Location /teste&gt;
+ AuthName "Acesso a página do Foca Linux"
+ AuthType basic
+ AuthUserFile /home/gleydson/SenhaUsuario
+ Require user gleydson usuario1 usuario2
+&lt;/Location&gt;
+</pre><pre class="screen">
+&lt;Location /teste&gt;
+ AuthName "Acesso a página do Foca Linux"
+ AuthType basic
+ AuthUserFile /home/gleydson/SenhaUsuario
+ Require user gleydson
+ Require user usuario1
+ Require user usuario2
+&lt;/Location&gt;
+</pre><p>
+As 2 especificações acima são equivalentes e permite o acesso aos usuários
+<code class="literal">gleydson</code>, <code class="literal">usuario1</code> e
+<code class="literal">usuario2</code> a página
+<code class="filename">http://servidor.org/teste</code>.
+</p></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="s-apache-acesso-restr-auth-grupos"></a>Autenticação usando grupos</h4></div></div></div><p>
+Há casos onde existem usuários de um arquivo de senhas que devem ter acesso a
+um diretório e outros não, neste caso a diretiva
+<span class="emphasis"><em>valid-user</em></span> não pode ser especificada (porque permitiria o
+acesso de todos os usuários do arquivo de senha ao diretório) e uma grande
+lista de usuários ficaria bastante complicada de ser gerenciada com vários
+usuários na diretiva <span class="emphasis"><em>Require user</em></span>.
+</p><p>
+Quando existe esta situação, é recomendado o uso de grupos de usuários.  Para
+fazer uso desse recurso, primeiro deverá ser criado um arquivo quer armazenará
+o nome do <span class="emphasis"><em>grupo</em></span> e dos usuários pertencente àquele grupo
+usando a seguinte sintaxe (vamos chamar este arquivo de
+<code class="filename">SenhaGrupo</code>):
+</p><pre class="screen">
+admins: gleydson usuario2
+usuarios: usuario1 usuario2 usuario3 gleydson
+</pre><p>
+Agora adaptamos o exemplo anterior para que somente os usuários especificados
+no grupo admins do arquivo criado acima:
+</p><pre class="screen">
+&lt;Location /teste&gt;
+ AuthName "Acesso a página do Foca Linux"
+ AuthType basic
+ AuthUserFile /home/gleydson/SenhaUsuario
+ AuthGroupFile /home/gleydson/SenhaGrupo
+ Require group admins
+&lt;/Location&gt;
+</pre><p>
+Agora somente os usuários pertencentes ao grupo <span class="emphasis"><em>admins</em></span>
+(<span class="emphasis"><em>gleydson</em></span> e <span class="emphasis"><em>usuario2</em></span>) poderão ter
+acesso ao diretório <code class="filename">/teste</code>.
+</p><p>
+<span class="strong"><strong>OBS1</strong></span>: Verifique se o servidor Web possui
+acesso a leitura no arquivo de senhas de usuários e grupos, caso contrário será
+retornado um código "500 - Internal Server Error".  Este tipo de erro é
+caracterizado por tudo estar OK na sintaxe dos arquivos de configuração após
+checagem com "apache -t" e todas as diretivas de controle de acesso apontam
+para os diretórios e arquivos corretos.
+</p><p>
+<span class="strong"><strong>OBS2:</strong></span>: Sempre use espaços para separar os
+nomes de usuários pertencentes a um grupo.
+</p><p>
+<span class="strong"><strong>OBS3</strong></span>: NUNCA coloque os arquivos que contém
+senhas e grupos em diretórios de acesso público onde usuários podem ter acesso
+via o servidor Web.  Tais localizações são <code class="filename">/var/www</code>,
+<code class="filename">/home/"usuario"/public_html</code> e qualquer outro diretório de
+acesso público que defina em seu sistema.
+</p><p>
+É recomendável também ocultar estes arquivos através da diretiva &lt;Files&gt;
+evitando possíveis riscos de segurança com usuários acessando os arquivos de
+senha e grupo.
+</p><p>
+Na distribuição <span class="command"><strong>Debian</strong></span>, qualquer arquivo iniciando com
+<code class="filename">.ht*</code> será automaticamente ocultado pelo sistema, pois já
+existe uma diretiva &lt;Files ~ "\.ht"&gt;.  Tal diretiva pode também ser
+especificada no arquivo de acesso <code class="filename">.htaccess</code>.  Assim um
+arquivo <code class="filename">.htsenha</code> e <code class="filename">.htgroup</code> são bons
+nomes se estiver desejando ocultar dados de olhos curiosos...
+</p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-acesso-restr-autorANDauth"></a>Usando autorização e autenticação juntos</h3></div></div></div><p>
+Os métodos de <span class="emphasis"><em>autorização</em></span> e
+<span class="emphasis"><em>autenticação</em></span> podem ser usados ao mesmo tempo dentro de
+qualquer uma das diretivas de controle de acesso.  As diretivas de
+<span class="emphasis"><em>autorização</em></span> são processadas primeiro (mod_access) e depois
+as diretivas de <span class="emphasis"><em>autenticação</em></span> (mod_auth).  Segue um
+exemplo:
+</p><pre class="screen">
+&lt;Directory /var/www&gt;
+ Options Indexes
+ Order deny,allow
+ allow from .dominiolocal.com.br
+ deny from all
+ AuthName "Acesso ao diretório do servidor Web"
+ AuthType basic
+ AuthUserFile /var/cache/apache/senhas
+ Require valid-user
+&lt;/Directory&gt;
+</pre><p>
+Para ter acesso ao diretório <code class="filename">/var/www</code>, primeiro o
+computador deve fazer parte do domínio
+<code class="filename">.dominiolocal.com.br</code>, assim ela passa pelo teste de
+autorização, depois disso será necessário fornecer o login e senha para acesso
+a página, digitando o login e senha corretos, o teste de autenticação será
+completado com sucesso e o acesso ao diretório <code class="filename">/var/www</code>
+autorizado.
+</p><pre class="screen">
+&lt;Directory /var/www&gt;
+ Options Indexes
+ Order mutual-failure
+ allow from .dominiolocal.com.br
+ deny from lammer.dominiolocal.com.br
+ AuthName "Acesso ao diretório do servidor Web"
+ AuthType basic
+ AuthUserFile /var/cache/apache/senhas
+ AuthGroupFile /var/cache/apache/grupos
+ Require group admins
+&lt;/Directory&gt;
+</pre><p>
+No exemplo acima, é usado o método de autorização com a opção <span class="emphasis"><em>Order
+mutual-failure</em></span> e o método de autenticação através de
+<span class="emphasis"><em>grupos</em></span>.  Primeiro é verificado se o usuário pertence ao
+domínio <code class="filename">.dominiolocal.com.br</code> e se ele não está acessando
+da máquina <code class="filename">lammer.dominiolocal.com.br</code>, neste caso ele
+passa pelo teste de autorização.  Depois disso ele precisará fornecer o nome e
+senha válidos, com o login pertencente ao <span class="emphasis"><em>AuthGroupFile</em></span>,
+passando pelo processo de autenticação e obtendo acesso ao diretório
+<code class="filename">/var/www</code>.
+</p><div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="s-apache-acesso-restr-autorANDauth-diferenciado"></a>Acesso diferenciado em uma mesma diretiva</h4></div></div></div><p>
+É interessante permitir usuários fazendo conexões de locais confiáveis terem
+acesso direto sem precisar fornecer nome e senha e de locais inseguros
+acessarem somente após comprovarem <span class="strong"><strong>quem</strong></span>
+realmente são.  Como é o caso de permitir usuários de uma rede privada terem
+acesso completo aos recursos e permitir o acesso externo ao mesmo recurso
+somente através de senha.  Isto pode ser feito com o uso da diretiva
+<span class="emphasis"><em>Satisfy</em></span> junto ao bloco de
+<span class="emphasis"><em>autorização/autenticação</em></span>.  Vamos tomar como base o exemplo
+anterior:
+</p><pre class="screen">
+&lt;Directory /var/www&gt;
+ Options Indexes
+ Order mutual-failure
+ allow from .dominiolocal.com.br
+ deny from lammer.dominiolocal.com.br
+ AuthName "Acesso ao diretório do servidor Web"
+ AuthType basic
+ AuthUserFile /var/cache/apache/senhas
+ AuthGroupFile /var/cache/apache/grupos
+ Require group admins
+ Satisfy any
+&lt;/Directory&gt;
+</pre><p>
+Note que o exemplo é o mesmo com a adição da diretiva <span class="emphasis"><em>Satisfy
+any</em></span> no final do bloco do arquivo.  Quando a opção
+<span class="emphasis"><em>Satisfy</em></span> não é especificada, ela assumirá "all" como
+padrão, ou seja, o usuário deverá passar no teste de autorização e autenticação
+para ter acesso.
+</p><p>
+A diferença do exemplo acima em relação ao da seção anterior é se a máquina
+passar no teste de autorização ela já terá acesso garantido.  Caso falhe no
+teste de autorização, ainda terá a chance de ter acesso a página passando na
+checagem de autenticação.
+</p><p>
+Isto garante acesso livre aos usuários do domínio
+<code class="filename">.dominiolocal.com.br</code>.  Já os outros usuários, incluindo
+acessos vindos de <code class="filename">lammer.dominiolocal.com.br</code> que pode ser
+uma máquina com muito uso, poderá ter acesso ao recurso caso tenha fornecido um
+nome e senha válidos para passar pelo processo de autenticação.  Tenha isto em
+mente...  este tipo de problema é comum e depende mais de uma política de
+segurança e conduta interna, o sistema de segurança não pode fazer nada a não
+ser permitir acesso a um nome e senha válidos.
+</p><p>
+Tenha cuidado com o uso da opção <span class="emphasis"><em>Satisfy</em></span> em diretivas que
+especificam somente o método de autenticação:
+</p><pre class="screen">
+&lt;Directory /var/www&gt;
+ Options Indexes
+ AuthName "Acesso ao diretório do servidor Web"
+ AuthType basic
+ AuthUserFile /var/cache/apache/senhas
+ AuthGroupFile /var/cache/apache/grupos
+ Require group admins
+ Satisfy any
+&lt;/Directory&gt;
+</pre><p>
+ATENÇÃO PARA O DESCUIDO ACIMA!: Como o método de autorização NÃO é
+especificado, é assumido <span class="emphasis"><em>deny,allow</em></span> como padrão, que
+permite o acesso a TODOS os usuários.  O bloco acima <span class="strong"><strong>NUNCA</strong></span> executará o método de autenticação por este
+motivo.  A melhor coisa é NÃO usar a opção <span class="emphasis"><em>Satisfy</em></span> em
+casos que só requerem autenticação ou usar <span class="emphasis"><em>Satisfy all</em></span>
+(que terá o mesmo efeito de não usa-la, hehehe).
+</p><p>
+A falta de atenção nisto pode comprometer silenciosamente a segurança de seu
+sistema.
+</p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-acesso-restr-htaccess"></a>O arquivo <code class="filename">.htaccess</code></h3></div></div></div><p>
+O arquivo <code class="filename">.htaccess</code> deve ser colocado no diretório da
+página que deverá ter suas permissões de acesso/listagem controladas.  A
+vantagem em relação a inclusão direta de diretivas de acesso dentro do arquivo
+de configuração do <span class="command"><strong>Apache</strong></span>, é que o controle de acesso poderá
+ser definido pelo próprio webmaster da página, sem precisar ter acesso direto a
+configuração do <span class="command"><strong>Apache</strong></span>, que requerem privilégios de root.
+</p><p>
+Outro ponto fundamental é que não há necessidade de reiniciar o servidor Web,
+pois este arquivo é lido no momento de cada acesso ao diretório que controla.
+O nome do arquivo OverRide pode ser definido através da diretiva
+<span class="emphasis"><em>AccessFileName</em></span> no arquivo de configuração do
+<span class="command"><strong>Apache</strong></span>, <code class="filename">.htaccess</code> é usado como padrão.
+</p><p>
+O controle de que opções estarão disponíveis no <code class="filename">.htaccess</code>
+são definidas na diretiva <span class="emphasis"><em>AllowOverride</em></span> que pode conter o
+seguintes parâmetros:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">None</code> - O servidor não buscará o arquivo
+<code class="literal">.htaccess</code> nos diretórios
+</p></li><li class="listitem"><p>
+<code class="literal">All</code> - O servidor utilizará todas as opções abaixo no arquivo
+<code class="filename">.htaccess</code>
+</p></li><li class="listitem"><p>
+<code class="literal">AuthConfig</code> - Permite o uso de diretivas de autenticação
+(<span class="emphasis"><em>AuthDBMGroupFile</em></span>, <span class="emphasis"><em>AuthDBMUserFile</em></span>,
+<span class="emphasis"><em>AuthGroupFile</em></span>, <span class="emphasis"><em>AuthName</em></span>,
+<span class="emphasis"><em>AuthType</em></span>, <span class="emphasis"><em>AuthUserFile</em></span>,
+<span class="emphasis"><em>Require</em></span>, etc.).
+</p></li><li class="listitem"><p>
+<code class="literal">FileInfo</code> - Permite o uso de diretivas controlando o tipo de
+documento (<span class="emphasis"><em>AddEncoding</em></span>, <span class="emphasis"><em>AddLanguage</em></span>,
+<span class="emphasis"><em>AddType</em></span>, <span class="emphasis"><em>DefaultType</em></span>,
+<span class="emphasis"><em>ErrorDocument</em></span>, <span class="emphasis"><em>LanguagePriority</em></span>,
+etc.).
+</p></li><li class="listitem"><p>
+<code class="literal">Indexes</code> - Permite o uso de diretivas controlando a indexação
+de diretório (<span class="emphasis"><em>AddDescription</em></span>,
+<span class="emphasis"><em>AddIcon</em></span>, <span class="emphasis"><em>AddIconByEncoding</em></span>,
+<span class="emphasis"><em>AddIconByType</em></span>, <span class="emphasis"><em>DefaultIcon</em></span>,
+<span class="emphasis"><em>DirectoryIndex</em></span>, <span class="emphasis"><em>FancyIndexing</em></span>,
+<span class="emphasis"><em>HeaderName</em></span>, <span class="emphasis"><em>IndexIgnore</em></span>,
+<span class="emphasis"><em>IndexOptions</em></span>, <span class="emphasis"><em>ReadmeName</em></span>, etc.).
+</p></li><li class="listitem"><p>
+<code class="literal">Limit</code> - Permite o uso de diretivas controlando o acesso ao
+computador (<span class="emphasis"><em>allow</em></span>, <span class="emphasis"><em>deny</em></span> e
+<span class="emphasis"><em>order</em></span>).
+</p></li><li class="listitem"><p>
+<code class="literal">Options</code> - Permite o uso de diretivas controlando
+características específicas do diretório (<span class="emphasis"><em>Options</em></span> e
+<span class="emphasis"><em>XBitHack</em></span>).
+</p></li></ul></div><p>
+<span class="strong"><strong>OBS</strong></span>: Não tem sentido usar a opção
+<span class="emphasis"><em>AllowOverride</em></span> dentro da diretiva &lt;Location&gt;, ela
+será simplesmente ignorada.
+</p><p>
+Para acesso ao arquivo <code class="filename">.htaccess</code> do diretório
+<code class="filename">/var/www/focalinux</code>, o <span class="command"><strong>Apache</strong></span> buscará os
+arquivos <code class="filename">.htaccess</code> na seqüencia:
+<code class="filename">/.htaccess</code>, <code class="filename">/var/.htaccess</code>,
+<code class="filename">/var/www/.htaccess</code>,
+<code class="filename">/var/www/focalinux/.htaccess</code>, qualquer diretiva que não
+exista no <code class="filename">.htaccess</code> do diretório
+<code class="filename">/var/www/focalinux</code> terá seu valor definido pela diretiva
+dos arquivos <code class="filename">.htaccess</code> dos diretórios anteriores.  Somente
+após esta seqüencia de checagens o acesso ao documento é permitido (ou negado).
+</p><p>
+Por este motivo, muitos administradores decidem desativar completamente o uso
+de arquivos <code class="filename">.htaccess</code> no diretório raíz e habilitar
+somente nos diretórios especificados pela diretiva &lt;Directory&gt; no arquivo
+de configuração do <span class="command"><strong>Apache</strong></span>, evitando brechas de segurança na
+manipulação destes arquivos (esta é uma boa idéia a não ser que se dedique 24
+horas somente na administração do seu servidor Web e conheça toda sua estrutura
+hierárquica de segurança:
+</p><pre class="screen">
+&lt;Directory /&gt;
+ AllowOverride none
+&lt;/Directory&gt;
+
+&lt;Directory /var/www&gt;
+ AllowOverride limit authconfig indexes
+&lt;/Directory&gt;
+</pre><p>
+Na especificação acima, o arquivo <code class="filename">.htaccess</code> será procurado
+no diretório <code class="filename">/var/www</code> e seus sub-diretórios, usando
+somente opções que controlam a autorização de acesso
+(<span class="emphasis"><em>limit</em></span>), autenticação e opções
+(<span class="emphasis"><em>authconfig</em></span>) e de indexação de documentos
+(<span class="emphasis"><em>indexes</em></span>).
+</p><p>
+Alguns exemplos do uso do arquivo <code class="filename">.htaccess</code>:
+</p><p>
+Para permitir o acesso direto de usuários da rede
+<code class="literal">192.168.1.*</code> diretamente, e requerer senha de acesso para
+outros usuários, o seguinte arquivo <code class="filename">.htaccess</code> deve ser
+criado no diretório <code class="filename">/var/www</code>:
+</p><pre class="screen">
+Order deny,allow
+allow from 192.168.1.0/24
+deny from all
+AuthName "Acesso a página Web principal da Empresa"
+AuthType basic
+AuthUserFile /var/cache/apache/senhas
+Require valid-user
+Satisfy any
+</pre><p>
+Note que a sintaxe é exatamente a mesma das usadas na diretivas de acesso, por
+este motivo vou dispensar explicações detalhadas a respeito.
+</p><p>
+<span class="strong"><strong>ATENÇÃO</strong></span>: A diretiva <span class="emphasis"><em>Options
+Indexes</em></span> deverá ser especificada no
+<span class="emphasis"><em>AllowOverRide</em></span> e não no arquivo
+<code class="filename">.htaccess</code>.  Agora você já sabe o que fazer se estiver
+recebendo erros 500 ao tentar acessar a página (Erro interno no servidor)...
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-acesso-setenvif"></a>Usando a diretiva SetEnvIf com Allow e Deny</h3></div></div></div><p>
+É possível especificar o acesso baseado em variáveis de ambiente usando a
+diretiva <span class="emphasis"><em>SetEnvIf</em></span>, isto lhe permite controlar o acesso de
+acordo com o conteúdo de cabeçalhos HTTP.  A sintaxe é a seguinte:
+</p><p>
+<code class="literal">SetEnvIf [<span class="emphasis"><em>atributo</em></span>]
+[<span class="emphasis"><em>expressão</em></span>] [<span class="emphasis"><em>variável</em></span>]</code>
+</p><p>
+Isto poder ser facilmente interpretado como: Se o "atributo" especificado
+conter a "expressão", a "variável" será criada e armazenará o valor verdadeiro.
+Veja abaixo:
+</p><pre class="screen">
+SetEnvIf User-Agent ".*MSIE*." EXPLODER
+&lt;Directory /var/www&gt;
+ Order deny,allow
+ allow from all
+ deny from env=EXPLODER
+&lt;/Directory&gt;
+</pre><p>
+Se o Navegador (campo <span class="emphasis"><em>User-Agent</em></span> do cabeçalho http) usado
+para acessar a página for o <code class="literal">Internet Explorer</code>, a variável
+<em class="replaceable"><code>EXPLODER</code></em> será criada e terá o valor verdadeiro
+(porque a expressão de <span class="emphasis"><em>SetEnvIf</em></span> conferiu com a expressão).
+</p><p>
+Note o uso de "deny from env=VARIÁVEL".  Neste caso se o navegador for o
+<code class="literal">Internet Explorer</code>, o acesso será bloqueado (pois o navegador
+conferiu, assim a variável <em class="replaceable"><code>EXPLODER</code></em> recebeu o valor
+verdadeiro).
+</p><p>
+É permitido especificar as diretivas de acesso normais junto com especificação
+de variáveis de ambiente, basta separa-los com espaços.  Uma descrição completa
+dos cabeçalhos HTTP, conteúdo e parâmetros aceitos por cada um são descritos na
+<code class="literal">RFC 2068</code>.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-acesso-limit"></a>A diretiva &lt;Limit&gt;</h3></div></div></div><p>
+Esta diretiva é semelhante a &lt;Directory&gt; mas trabalha com métodos HTTP
+(como GET, PUT, POST, etc) ao invés de diretórios.  A diretiva &lt;Limit&gt;
+pode ser usada dentro da diretiva de acesso &lt;Directory&gt;,
+&lt;Location&gt;, mas nenhuma diretiva de controle de acesso pode ser colocada
+dentro de &lt;Limit&gt;.
+</p><p>
+Os métodos HTTP válidos são: GET, POST, PUT DELETE, CONNECT, OPTIONS, TRACE,
+PATCH, PROPFIND, PROPPATCH, MKCOL, COPY, MOVE, LOCK e UNLOCK.  Note que os
+métodos são case-sensitive.  Por exemplo:
+</p><pre class="screen">
+&lt;Directory /var/www&gt;
+ Option Indexes
+  &lt;Limit POST PUT DELETE&gt;
+     Order deny,allow
+     allow from 192.168.1.0/24
+     deny from all
+   &lt;/Limit&gt;
+&lt;/Directory&gt;
+</pre><p>
+Somente permitem o uso dos métodos POST, PUT, DELETE de máquinas da rede
+interna.
+</p><p>
+<span class="strong"><strong>OBS1</strong></span>: Se o método GET é bloqueado, o
+cabeçalho HTTP também será bloqueado.
+</p><p>
+<span class="strong"><strong>OBS2</strong></span>: A diretiva de acesso &lt;Limit&gt;
+somente terá efeito na diretiva &lt;Location&gt; se for especificada no arquivo
+de configuração do servidor web.  A diretiva &lt;Location&gt; simplesmente é
+ignorada nos arquivos <code class="filename">.htaccess</code>...
+</p><p>
+Este abaixo é usado por padrão na distribuição <span class="command"><strong>Debian</strong></span> para
+restringir para somente leitura o acesso aos diretórios de usuários acessados
+via módulo <code class="filename">mod_userdir</code>:
+</p><pre class="screen">
+&lt;Directory /home/*/public_html&gt;
+    AllowOverride FileInfo AuthConfig Limit
+    Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
+    &lt;Limit GET POST OPTIONS PROPFIND&gt;
+        Order allow,deny
+        Allow from all
+    &lt;/Limit&gt;
+    &lt;Limit PUT DELETE PATCH PROPPATCH MKCOL COPY MOVE LOCK UNLOCK&gt;
+        Order deny,allow
+        Deny from all
+    &lt;/Limit&gt;
+&lt;/Directory&gt;
+</pre></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-acesso-limitexcept"></a>Diretiva &lt;LimitExcept&gt;</h3></div></div></div><p>
+Esta diretiva é semelhante a &lt;Limit&gt;, mas atinge todos os métodos HTTP,
+menos os especificados.
+</p></div></div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch12s02.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch12.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch12s04.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Configurações Básicas do Apache </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Definindo documentos de erro personalizados</td></tr></table></div></body></html>

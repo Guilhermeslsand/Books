@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Capítulo 14. Servidor telnet</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="index.html" title="Guia Foca Linux" /><link rel="prev" href="ch13.html" title="Capítulo 13. Servidor ident" /><link rel="next" href="ch14s02.html" title="Controle de acesso" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Capítulo 14. Servidor telnet</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch13.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch14s02.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-node">Servidor telnet</span></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="s-telnet"></a>Capítulo 14. Servidor telnet</h1></div></div></div><div class="toc"><p><strong>Índice</strong></p><dl class="toc"><dt><span class="section"><a href="ch14.html#s-telnet-intro">Introdução</a></span></dt><dd><dl><dt><span class="section"><a href="ch14.html#s-telnet-versao">Versão</a></span></dt><dt><span class="section"><a href="ch14.html#s-telnet-caracteristicas">Características</a></span></dt><dt><span class="section"><a href="ch14.html#s-telnet-ficha">Ficha técnica</a></span></dt><dt><span class="section"><a href="ch14.html#s-telnet-hwreq">Requerimentos de Hardware</a></span></dt><dt><span class="section"><a href="ch14.html#s-telnet-logs">Arquivos de log criados pelo servidor telnet</a></span></dt><dt><span class="section"><a href="ch14.html#s-telnet-install">Instalação</a></span></dt><dt><span class="section"><a href="ch14.html#s-telnet-rodando">Iniciando o servidor/reiniciando/recarregando a configuração</a></span></dt><dt><span class="section"><a href="ch14.html#s-telnet-opcoescmd">Opções de linha de comando</a></span></dt></dl></dd><dt><span class="section"><a href="ch14s02.html">Controle de acesso</a></span></dt><dt><span class="section"><a href="ch14s03.html">Recomendações</a></span></dt><dt><span class="section"><a href="ch14s04.html">Fazendo conexões ao servidor telnet</a></span></dt></dl></div>
+    <p>
+    Este capítulo ensina como instalar, configurar, usar e fazer restrições de
+    acesso ao servidor telnet.  Também é explicada a utilização do cliente telnet e
+    o suporte a criptografia (ssl).
+    </p>
+
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-telnet-intro"></a>Introdução</h2></div></div></div>
+<p>
+O serviço telnet é oferece o login remoto em seu computador, que lhe permite
+trabalhar conectado a distância como se estivesse em frente a ela.  Ele
+substitui o <span class="command"><strong>rlogin</strong></span> e possui muitas melhorias em relação a
+ele, como o controle de acesso, personalização de seção e controle de terminal.
+</p>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-telnet-versao"></a>Versão</h3></div></div></div>
+<p>
+É assumido que esteja usando a versão 0.17.16 do <span class="command"><strong>telnet</strong></span>.  As
+explicações contidas aqui podem funcionar para versões posteriores, mas é
+recomendável que leia a documentação sobre modificações no programa (changelog)
+em busca de mudanças que alterem o sentido das explicações fornecidas aqui.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-telnet-caracteristicas"></a>Características</h3></div></div></div>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+Conexão rápida (não utiliza transmissão de dados criptografada), recomendado
+para ambientes seguros.
+</p>
+</li><li class="listitem">
+<p>
+Possui uma versão com suporte a criptografia via ssl.
+</p>
+</li><li class="listitem">
+<p>
+Possui controle de acesso tcpd (usando <code class="filename">/etc/hosts.allow</code> e
+<code class="filename">/etc/hosts.deny</code>).
+</p>
+</li><li class="listitem">
+<p>
+A maioria dos sistemas operacionais trazem este utilitário por padrão como
+sistema de acesso remoto a máquinas UNIX.
+</p>
+</li><li class="listitem">
+<p>
+Suporte a terminais ANSI (cores e códigos de escape especiais para o console) e
+uma grande variedade de outros terminais.
+</p>
+</li></ul></div>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-telnet-ficha"></a>Ficha técnica</h3></div></div></div>
+<p>
+Pacotes:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+ - Cliente telnet com suporte a
+autenticação.
+</p>
+</li><li class="listitem">
+<p>
+ - Servidor telnet com suporte a
+autenticação.
+</p>
+</li><li class="listitem">
+<p>
+ - Cliente telnet com suporte
+a autenticação e ssl.  Também suporta conexão a servidores telnet padrão quando
+o servidor não suporta ssl.  Por padrão é tentada a conexão usando ssl, se esta
+falhar será assumida a transmissão em texto plano.
+</p>
+</li><li class="listitem">
+<p>
+ - Servidor telnet com
+suporte a autenticação e ssl.  Também suporta conexão de clientes telnet padrão
+(sem suporte a ssl).
+</p>
+</li></ul></div>
+<p>
+Utilitários:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="filename">in.telnetd</code> - Servidor telnet
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">telnet</code> - Cliente telnet padrão (quando o pacote
+ está instalado, é
+simplesmente um link para <code class="filename">telnet-ssl</code>).
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">telnet-ssl</code> - Cliente telnet com suporte a ssl.
+</p>
+</li></ul></div>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-telnet-hwreq"></a>Requerimentos de Hardware</h3></div></div></div>
+<p>
+Normalmente o servidor telnet é carregado via inetd, o que permite sua
+utilização em uma máquina com a quantidade mínima de memória RAM requerida para
+o funcionamento do kernel: 2 MB para kernels da série 2.2 e 4MB para kernels da
+série 2.4.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-telnet-logs"></a>Arquivos de log criados pelo servidor telnet</h3></div></div></div>
+<p>
+Mensagens do servidor telnet relacionadas com seções são enviadas para
+<code class="filename">/var/log/daemon.log</code>.  Adicionalmente, as mensagens sobre
+autenticação (serviços de login) são registradas pelos módulos PAM em
+<code class="filename">/var/log/auth.log</code>.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-telnet-install"></a>Instalação</h3></div></div></div>
+<p>
+<code class="literal">apt-get install telnet telnetd</code> ou <code class="literal">apt-get install
+telnet-ssl telnetd-ssl</code>.
+</p>
+<p>
+Os pacotes com o <code class="literal">-ssl</code> no final possuem suporte a
+criptografia ssl.  Por padrão a porta usada para executar o serviço telnet é a
+23 (ou outro número de porta definido no <code class="filename">/etc/services</code>).
+A instalação do servidor telnet é feita via inetd (no arquivo
+<code class="filename">/etc/inetd.conf</code>) e o controle de acesso ao serviço é feito
+através dos arquivos <code class="filename">/etc/hosts.allow</code> e
+<code class="filename">/etc/hosts.deny</code> (veja <a class="xref" href="ch04s07.html#rede-servicos-inetd" title="Serviços iniciados através do inetd">“Serviços iniciados através do inetd”</a> e <a class="xref" href="ch04s08.html#rede-seg-tcpd" title="O mecanismo de controle de acessos tcpd">“O mecanismo de controle de acessos tcpd”</a>).
+</p>
+<p>
+O servidor tem o nome <code class="filename">in.telnetd</code> e este deverá ser usado
+para ajustar o controle de acesso nos arquivos acima.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-telnet-rodando"></a>Iniciando o servidor/reiniciando/recarregando a configuração</h3></div></div></div>
+<p>
+O arquivo que controla o funcionamento do servidor <span class="command"><strong>telnet</strong></span> é
+o <code class="filename">/etc/inetd.conf</code> e o controle de acesso sendo feito pelos
+arquivos <code class="filename">/etc/hosts.allow</code> e
+<code class="filename">/etc/hosts.deny</code>.  Será necessário reiniciar o servidor
+<span class="command"><strong>inetd</strong></span> caso algum destes três arquivos seja modificado:
+<code class="literal">killall -HUP inetd</code>.  A porta de operação padrão é a 23 e
+pode ser modificada no arquivo <code class="filename">/etc/services</code>.
+</p>
+</div>
+
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-telnet-opcoescmd"></a>Opções de linha de comando</h3></div></div></div>
+<p>
+Opções de linha de comando do servidor <span class="command"><strong>telnetd</strong></span>:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="literal">-D nível_de_depuração</code> - Permite especificar o que será
+registrado pelo servidor durante a conexão dos clientes telnet.  As seguintes
+opções são suportadas:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem">
+<p>
+<code class="literal">options</code> - Mostra detalhes sobre a negociação das opções de
+conexão.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">report</code> - Mostra detalhe de opções e o que está sendo feito.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">netdata</code> - Mostra os dados transferidos na conexão telnetd.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">ptydata</code> - Mostra os dados mostrados na pty.
+</p>
+</li></ul></div>
+</li><li class="listitem">
+<p>
+<code class="literal">-edebug</code> - Ativa a depuração do código de criptografia apenas
+para o servidor telnet com suporte a ssl.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">-h</code> - Somente mostra os detalhes de configuração do seu PC
+após o usuário fornecer um nome/senha válidos.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">-L [programa]</code> - Utiliza o programa especificado para fazer o
+login do usuário (<code class="filename">/usr/sbin/telnetlogin</code> é o padrão).
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">-n</code> - Não envia pacotes keep alive para verificar o estado da
+conexão.  Desativando esta opção poderá fazer o servidor ficar rodando
+constantemente caso aconteça algum problema e o usuário não consiga se
+desconectar normalmente.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">-S TOS</code> - Ajusta o tipo de serviço usado na conexão para o
+valor especificado (veja <a class="xref" href="ch10s05.html#fw-iptables-mangle-TOS" title="Especificando o tipo de serviço">“Especificando o tipo de serviço”</a> para maiores
+detalhes sobre esta opção e os valores aceitos).
+</p>
+</li></ul></div>
+<p>
+Estas opções deverão ser especificadas após o servidor
+<code class="filename">in.telnetd</code> no arquivo
+<code class="filename">/etc/inetd.conf</code>.
+</p>
+</div>
+
+</div>
+
+
+
+
+
+
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch13.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch14s02.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Capítulo 13. Servidor ident </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Controle de acesso</td></tr></table></div></body></html>

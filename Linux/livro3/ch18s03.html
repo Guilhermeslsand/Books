@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Compartilhamento de arquivos e diretórios</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch18.html" title="Capítulo 18. SAMBA" /><link rel="prev" href="ch18s02.html" title="Conceitos gerais para a configuração do SAMBA" /><link rel="next" href="ch18s04.html" title="Configuração em Grupo de Trabalho" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Compartilhamento de arquivos e diretórios</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch18s02.html">Anterior</a> </td><th width="60%" align="center">Capítulo 18. SAMBA</th><td width="20%" align="right"> <a accesskey="n" href="ch18s04.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch18.html">SAMBA</a></span> &gt; <span class="breadcrumb-node">Compartilhamento de arquivos e diretórios</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-samba-s-a"></a>Compartilhamento de arquivos e diretórios</h2></div></div></div><p>
+Esta seção documenta como disponibilizar arquivos e impressoras com o SAMBA e
+os parâmetros usados para realizar restrições de compartilhamento, modo que os
+dados serão disponibilizados e ítens de performance.  A maior parte destes
+parâmetros são empregados em serviços do SAMBA, mas nada impede que também
+sejam colocado na seção <span class="emphasis"><em>[global]</em></span> do arquivo de
+configuração, principalmente quando isto é válido para diversos serviços
+compartilhados (veja <a class="xref" href="ch18s02.html#s-samba-s-global" title="Seção [global]">“Seção <code class="literal">[global]</code>”</a>).
+</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-s-a-param"></a>Descrição de parâmetros usados em compartilhamento</h3></div></div></div><p>
+Abaixo o guia traz algumas das opções que podem ser usadas para controlar o
+comportamento do compartilhamento de arquivos por <span class="emphasis"><em>serviços</em></span>
+no servidor SAMBA:
+</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">path</span></dt><dd><p>
+Indica o diretório que será compartilhado.  Lembre-se que o usuário terá as
+permissões de acesso que ele teria caso estivesse logado no sistema como um
+usuário UNIX normal, exceto se estiver fazendo mapeamento para outros nomes de
+usuários (veja <a class="xref" href="ch18s11.html#s-samba-a-usernamemap" title="Mapeamento de nomes de usuários">“Mapeamento de nomes de usuários”</a>).
+</p><p>
+Ex: <code class="literal">path=/pub</code> - Compartilha o diretório local
+<code class="filename">/pub</code>.
+</p><p>
+<span class="strong"><strong>OBS:</strong></span> Quando não é definido um
+<code class="literal">path</code>, o diretório <code class="filename">/tmp</code> é usado como
+padrão.
+</p></dd><dt><span class="term">comment</span></dt><dd><p>
+Descrição do compartilhamento que será mostrada na janela de procura de rede ou
+no <code class="literal">smbclient -L maquina</code>.
+</p><p>
+Ex: <code class="literal">comment=Pasta de conteúdo público do sistema</code>.
+</p></dd><dt><span class="term">browseable</span></dt><dd><p>
+Define se o compartilhamento será ou não exibido na janela de procura de rede.
+Mesmo não sendo exibido, o compartilhamento poderá ser acessado.  Veja <a class="xref" href="ch18s11.html#s-samba-a-invisivel" title="Criando um compartilhamento invisível">“Criando um compartilhamento invisível”</a> para uma explicação mais detalhada.
+</p><p>
+Ex: <code class="literal">browseable=yes</code> - Lista o compartilhamento na janela de
+pesquisa de servidores.
+</p></dd><dt><span class="term">guest account</span></dt><dd><p>
+Conta que será usada para fazer acesso sem senha (convidado) quando o parâmetro
+<code class="literal">guest ok</code> ou <code class="literal">public</code> forem usados em um
+compartilhamento.  Por padrão ela é mapeada para o usuário
+<code class="literal">nobody</code>.  É importante especificar uma nome de usuário
+<span class="emphasis"><em>guest</em></span> (convidado), principalmente porque seu UID será
+usado para fazer várias operações no SAMBA, como exibir os recursos disponíveis
+na máquina para a rede.  Por motivos claros, é recomendável que este usuário
+<span class="strong"><strong>não</strong></span> tenha acesso login ao sistema.
+</p><p>
+Caso não tenha a intenção de ocultar o SAMBA na lista de máquinas da rede
+(fazendo apenas acesso direto aos recursos), especifique um valor para esta
+opção.
+</p><p>
+Ex: <code class="literal">guest account = sambausr</code> - Mapeia os usuário se
+conectando sem senha para o usuário <code class="literal">sambausr</code>, desde que o
+acesso guest seja permitido pela opção <code class="literal">public</code>.
+</p></dd><dt><span class="term">public</span></dt><dd><p>
+Permitem aos usuários usuários se conectarem ao compartilhamento sem fornecer
+uma senha usando o usuário guest.  O UID que o usuário guest será mapeado é
+especificado pelo parâmetro <code class="literal">guest account</code>).  Veja <a class="xref" href="ch18s11.html#s-samba-a-publico" title="Criando um compartilhamento para acesso sem senha">“Criando um compartilhamento para acesso sem senha”</a>.  O parâmetro <code class="literal">guest ok</code> é
+equivalente a <code class="literal">public</code>.
+</p><p>
+Ex: <code class="literal">public = no</code> - Não permite
+</p></dd><dt><span class="term">guest only</span></dt><dd><p>
+Permite somente conexões guest ao recurso.  O UID do usuário é mapeado para
+guest, mesmo que forneça uma senha correta.  O valor padrão é
+<code class="literal">no</code>.
+</p><p>
+Ex: <code class="literal">guest only = no</code>.
+</p></dd><dt><span class="term">write list</span></dt><dd><p>
+Lista de usuários separados por espaço ou vírgula que poderão ler e gravar no
+compartilhamento.  Caso o nome for iniciado por "@", o nome especificado será
+tratado como um grupo UNIX (<code class="filename">/etc/group</code>) e todos os
+usuários daquele grupo terão acesso de gravação.  O uso deste parâmetro ignora
+o <code class="literal">read only = yes</code>.  Veja <a class="xref" href="ch18s11.html#s-samba-a-restr" title="Excessão de acesso na permissão padrão de compartilhamento">“Excessão de acesso na permissão padrão de compartilhamento”</a>
+para mais detalhes.
+</p><p>
+Ex: <code class="literal">write list = gleydson, @usuarios</code> - Permite acesso
+gravação somente do usuário <code class="literal">gleydson</code> e todos os usuários
+pertencentes ao grupo <code class="literal">@usuarios</code>.
+</p><p>
+<span class="strong"><strong>OBS:</strong></span> - O significado de "@" nos parâmetros
+"invalid users"/"valid users" é diferente das opções <code class="literal">write
+list</code> e <code class="literal">read list</code>.
+</p></dd><dt><span class="term">read list</span></dt><dd><p>
+Lista de usuários separados por espaço ou vírgula que poderão apenas ler o
+compartilhamento.  O caracter "@" pode ser especificado para fazer referência a
+grupos, como no <code class="literal">write list</code>.  O uso deste parâmetro ignora o
+<code class="literal">read only = no</code>.  Veja <a class="xref" href="ch18s11.html#s-samba-a-restr" title="Excessão de acesso na permissão padrão de compartilhamento">“Excessão de acesso na permissão padrão de compartilhamento”</a> para
+mais detalhes.
+</p><p>
+Ex: <code class="literal">read list = nobody, system, operador, @usuarios</code> -
+Permite acesso de leitura somente do usuário <code class="literal">nobody, system,
+operador</code> e todos os usuários pertencentes ao grupo
+<code class="literal">@usuarios</code>.
+</p></dd><dt><span class="term">user</span></dt><dd><p>
+Especifica um ou mais nomes de usuários ou grupos (caso o nome seja seguido de
+"@") para checagem de senha.  Quando o cliente somente fornece uma senha
+(especialmente na rede <span class="command"><strong>Lan Manager</strong></span>, <span class="command"><strong>Windows for
+Workgroups</strong></span> e primeira versão do <span class="command"><strong>Windows 95</strong></span>) ela
+será validada no banco de dados de senhas usando o usuário especificado nesta
+opção.
+</p><p>
+Ex: <code class="literal">user = john @usuariosrede</code>
+</p></dd><dt><span class="term">only user</span></dt><dd><p>
+Especifica se somente serão permitidas conexões vindas de usuários da diretiva
+<code class="literal">user</code>.  O padrão é <code class="literal">no</code>.  Caso deseje
+restringir o acesso a determinados usuários, o certo é faze-lo usando
+<code class="literal">valid users</code> e <code class="literal">invalid users</code> (veja <a class="xref" href="ch18s11.html#s-samba-a-restrusu" title="Restringindo o acesso por usuários">“Restringindo o acesso por usuários”</a>).  O uso de <code class="literal">only user</code> é
+apropriado quando é necessário um controle específico de acesso sobre a
+diretiva <code class="literal">user</code>.
+</p><p>
+Ex: <code class="literal">only user = no</code>.
+</p></dd><dt><span class="term">locking</span></dt><dd><p>
+Permite ao SAMBA fazer um lock real de arquivo ou apenas simular.  Caso seja
+especificado como "0", o arquivo não é bloqueado para acesso exclusivo no
+servidor mas uma resposta positiva de lock é retornada ao cliente.  Se definido
+como "1", um lock real é feito.  O padrão é <code class="literal">yes</code>.
+</p><p>
+Ex: <code class="literal">locking = yes</code>
+</p></dd><dt><span class="term">available</span></dt><dd><p>
+Faz o SAMBA ignorar o compartilhamento (como se tivesse retirado do servidor).
+O valor padrão é "no".
+</p></dd><dt><span class="term">follow symlinks</span></dt><dd><p>
+Permite o uso de links simbólicos no compartilhamento (veja também a opção
+<code class="literal">wide links</code>).  A desativação desta opção diminui um pouco a
+performance de acesso aos arquivos.  Como é restrita a compartilhamento, o
+impacto de segurança depende dos dados sendo compartilhados.  O valor padrão
+desta opção é "YES".
+</p><p>
+Ex: <code class="literal">follow symlinks = yes</code>
+</p></dd><dt><span class="term">wide links</span></dt><dd><p>
+Permite apontar para links simbólicos para fora do compartilhamento exportada
+pelo SAMBA.  O valor padrão esta opção é "YES".
+</p><p>
+Ex: <code class="literal">wide links = yes</code>.
+</p><p>
+<span class="strong"><strong>OBS:</strong></span> - A desativação desta opção causa um
+aumento na performance do servidor SAMBA, evitando a chamada de funções do
+sistema para resolver os links.  Entretanto, diminui a segurança do seu
+servidor, pois facilita a ocorrência de ataques usando links simbólicos.
+</p><p>
+Lembre-se mais uma vez que a segurança do seu sistema começa pela política e
+uma instalação bem configurada, isso já implica desde a escolha de sua
+distribuição até o conhecimento de permissões e planejamento na implantação do
+servidor de arquivos.
+</p></dd><dt><span class="term">dont descend</span></dt><dd><p>
+Não mostra o conteúdo de diretórios especificados.
+</p><p>
+Ex: <code class="literal">dont descend = /root, /proc, /win/windows, "/win/Arquivos de
+Programas", "/win/program files"</code>.
+</p></dd><dt><span class="term">printable</span></dt><dd><p>
+Especifica se o compartilhamento é uma impressora (yes) ou um compartilhamento
+de arquivo/diretório (no).  O padrão é "no".
+</p></dd><dt><span class="term">read only</span></dt><dd><p>
+Especifica se o compartilhamento é somente para leitura (yes) ou não (no) para
+todos os usuários.  O parâmetro <code class="literal">writable</code> é um antônimo
+equivalente a este parâmetro, só que utiliza as opções invertidas.  Por
+segurança, o valor padrão é somente leitura.  Veja uma explicação mais
+detalhada em <a class="xref" href="ch18s11.html#s-samba-a-ro" title="Criando um compartilhamento com acesso somente leitura">“Criando um compartilhamento com acesso somente leitura”</a>.
+</p><p>
+Ex: <code class="literal">read only = yes</code>.
+</p></dd><dt><span class="term">create mask</span></dt><dd><p>
+Modo padrão para criação de arquivos no compartilhamento.  O parâmetro "create
+mode" é um sinônimo para este.  O modo de arquivos deve ser especificado em
+formato octal.  Veja <a class="xref" href="">???</a>).
+</p><p>
+Ex: <code class="literal">create mask = 0600</code>.
+</p></dd><dt><span class="term">directory mask</span></dt><dd><p>
+Modo padrão para a criação de diretórios no compartilhamento.  O parâmetro
+"directory mode" é um sinônimo para este.  O modo de diretório deve ser
+especificado em formato octal.
+</p><p>
+Ex: <code class="literal">directory mask = 0700</code>.
+</p></dd><dt><span class="term">getwd cache</span></dt><dd><p>
+Permite utilizar um cache para acesso as requisições getwd, diminuindo o número
+de ciclos de processamento para acesso a arquivos/diretórios.  O valor padrão é
+"Yes".
+</p></dd><dt><span class="term">write cache size</span></dt><dd><p>
+Tamanho do cache de leitura/gravação do compartilhamento.  Este valor é
+especificado em bytes e o padrão é "0".  Veja <a class="xref" href="ch18s12.html" title="Melhorando a performance do compartilhamento/servidor">“Melhorando a performance do compartilhamento/servidor”</a>
+para detalhes sobre seu uso.
+</p><p>
+Ex: <code class="literal">write cache size = 384000</code>.
+</p></dd><dt><span class="term">inherit permissions</span></dt><dd><p>
+Permite herdar permissões de arquivos/diretórios do diretório pai quando novos
+arquivos/diretórios são criados, isto inclui bits SGID (set group ID).  O
+padrão é <code class="literal">NÃO</code> herdar permissões.  O uso desta opção substitui
+as opções fornecidas por <code class="literal">create mask</code>, <code class="literal">directory
+mask</code>, <code class="literal">force create mask</code> e <code class="literal">force directory
+mask</code>.
+</p><p>
+Ex: <code class="literal">inherit permissions</code>.
+</p></dd><dt><span class="term">preexec</span></dt><dd><p>
+Executa um comando antes a abertura de um compartilhamento.  O parâmetro
+<code class="literal">exec</code> é um sinônimo para este.  Veja <a class="xref" href="ch18s11.html#s-samba-a-comandos" title="Executando comandos antes e após o acesso ao compartilhamento">“Executando comandos antes e após o acesso ao compartilhamento”</a>.
+</p></dd><dt><span class="term">postexec</span></dt><dd><p>
+Executa um comando depois da utilização do compartilhamento.  Veja <a class="xref" href="ch18s11.html#s-samba-a-comandos" title="Executando comandos antes e após o acesso ao compartilhamento">“Executando comandos antes e após o acesso ao compartilhamento”</a>.
+</p></dd><dt><span class="term">preexec close</span></dt><dd><p>
+Fecha imediatamente o compartilhamento caso o valor do comando executado pela
+opção <code class="literal">preexec</code> seja diferente de 0.  O uso desta opção só faz
+sentido em conjunto com <code class="literal">preexec</code>.  O valor padrão é "no".
+Veja <a class="xref" href="ch18s11.html#s-samba-a-comandos" title="Executando comandos antes e após o acesso ao compartilhamento">“Executando comandos antes e após o acesso ao compartilhamento”</a>.
+</p><p>
+Exemplo: <code class="literal">preexec close = yes</code>.
+</p></dd><dt><span class="term">volume = nome</span></dt><dd><p>
+Retorna o nome de volume especificado quando é feito o acesso ao
+compartilhamento.  Isto é muito útil para instalações onde o serial do CD,
+disquete ou HD é verificado durante o acesso.  Isto acontece com freqüência em
+produtos de fabricantes proprietários como forma de evitar a execução ilegal do
+programa.
+</p></dd></dl></div></div></div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch18s02.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch18.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch18s04.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Conceitos gerais para a configuração do SAMBA </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Configuração em <code class="literal">Grupo de Trabalho</code></td></tr></table></div></body></html>

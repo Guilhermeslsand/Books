@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Arquivos administrativos em CVSROOT</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch17.html" title="Capítulo 17. CVS" /><link rel="prev" href="ch17s03.html" title="Criando projetos para serem usados no CVS" /><link rel="next" href="ch17s05.html" title="Clientes de CVS" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Arquivos administrativos em CVSROOT</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch17s03.html">Anterior</a> </td><th width="60%" align="center">Capítulo 17. CVS</th><td width="20%" align="right"> <a accesskey="n" href="ch17s05.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch17.html">CVS</a></span> &gt; <span class="breadcrumb-node">Arquivos administrativos em CVSROOT</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-cvs-cvsroot"></a>Arquivos administrativos em CVSROOT</h2></div></div></div><p>
+Esta seção descreve a função de cada um dos arquivos administrativos, isto pode
+ser útil na configuração e personalização do CVS e de seu repositório.
+</p><p>
+Para não alongar muito o capítulo, procurei colocar uma breve descrição da
+função de cada um deles, o comentários e exemplos existentes nos arquivos
+oferecem uma boa compreensão do seu conteúdo.
+</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-cvsroot-config"></a><code class="filename">config</code></h3></div></div></div><p>
+Este arquivo é segue os padrões do arquivos de configuração e possui alguns
+parâmetros que controlam o comportamento do CVS.  Segue uma lista deles:
+</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><em class="replaceable"><code>SystemAuth</code></em></span></dt><dd><p>
+Define se será utilizado a autenticação via <code class="filename">/etc/passwd</code>
+quando o método <span class="emphasis"><em>pserver</em></span> for utilizado.  Note que se o
+arquivo <code class="filename">passwd</code> for criado no <code class="filename">CVSROOT</code>,
+o <em class="replaceable"><code>SystemAuth</code></em> será definido automaticamente para
+<code class="literal">no</code>.
+</p><p>
+Exemplo: <code class="literal">SystemAuth=yes</code>.
+</p></dd><dt><span class="term"><em class="replaceable"><code>LockDir</code></em></span></dt><dd><p>
+Especifica o diretório onde serão gravados os arquivos de lock.  Caso não seja
+especificado, será usado o diretório do CVS.
+</p><p>
+Exemplo: <code class="literal">LockDir=/var/lock/cvs</code>
+</p></dd><dt><span class="term"><em class="replaceable"><code>TopLevelAdmin</code></em></span></dt><dd><p>
+Permite criar ou não um diretório chamado <code class="filename">CVS</code> no root do
+diretório de trabalho durante o <code class="literal">cvs checkout</code>.
+</p></dd><dt><span class="term"><em class="replaceable"><code>LogHistory</code></em></span></dt><dd><p>
+Utiliza opções para especificar o que será registrado nos arquivos de log do
+<code class="literal">CVS</code>.
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">TOFEWGCMAR</code> ou <code class="literal">all</code>
+</p><p>
+Registra todas as operações nos logs do <span class="command"><strong>cvs</strong></span>.
+</p></li><li class="listitem"><p>
+<code class="literal">TMAR</code>
+</p><p>
+Registra todas as operações que modificam os arquivos <code class="filename">",v"</code>
+</p></li></ul></div></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-cvsroot-modules"></a><code class="filename">modules</code></h3></div></div></div><p>
+Especifica opções e programas externos que serão usados durante a execução de
+comandos no repositório CVS.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-cvsroot-cvswrappers"></a><code class="filename">cvswrappers</code></h3></div></div></div><p>
+Este arquivo define ações de controle de características de arquivos, de acordo
+com seu nome.
+</p><p>
+Pode ser também definidas ações através de arquivos
+<code class="filename">.cvswrappers</code>.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-cvsroot-commitinfo"></a><code class="filename">commitinfo</code></h3></div></div></div><p>
+Define programas para fazer uma checagem baseada no diretório e dizer se o
+commit é permitido.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-cvsroot-verifymsg"></a><code class="filename">verifymsg</code></h3></div></div></div><p>
+Especifica o programa usado para verificar as mensagens de log.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-cvsroot-loginfo"></a><code class="filename">loginfo</code></h3></div></div></div><p>
+Programa que é executado após o commit.  Ele pode ser usado para tratar a
+mensagem de log e definir onde ela será gravada/enviada, etc.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-cvsroot-cvsignore"></a><code class="filename">cvsignore</code></h3></div></div></div><p>
+Tudo que constar neste arquivo não será gravado (commit) no cvs.  Referências
+globais podem ser usadas para especificar estes arquivos.  Veja a info page do
+cvs para detalhes sober seu formato.
+</p><p>
+Pode também ser especificado através de arquivos
+<code class="filename">.cvsignore</code>.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-cvsroot-checkoutlist"></a><code class="filename">checkoutlist</code></h3></div></div></div><p>
+Especifica os arquivos que deseja manter sobre o controle do CVS que se
+encontram em <code class="filename">CVSROOT</code>.  Se adicionar um script adicional,
+ou qualquer outro arquivo no diretório <code class="filename">CVSROOT</code> ele deverá
+constar neste arquivo.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-cvsroot-history"></a><code class="filename">history</code></h3></div></div></div><p>
+É usado para registrar detalhes do comando <span class="emphasis"><em>history</em></span> do CVS.
+</p></div></div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch17s03.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch17.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch17s05.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Criando projetos para serem usados no CVS </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Clientes de CVS</td></tr></table></div></body></html>

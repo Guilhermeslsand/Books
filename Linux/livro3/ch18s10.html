@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Compartilhamento de impressão no servidor SAMBA</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch18.html" title="Capítulo 18. SAMBA" /><link rel="prev" href="ch18s09.html" title="Mapeamento de usuários/grupos em clientes" /><link rel="next" href="ch18s11.html" title="Controle de acesso ao servidor SAMBA" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Compartilhamento de impressão no servidor SAMBA</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch18s09.html">Anterior</a> </td><th width="60%" align="center">Capítulo 18. SAMBA</th><td width="20%" align="right"> <a accesskey="n" href="ch18s11.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch18.html">SAMBA</a></span> &gt; <span class="breadcrumb-node">Compartilhamento de impressão no servidor SAMBA</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-samba-i"></a>Compartilhamento de impressão no servidor SAMBA</h2></div></div></div><p>
+Este capítulo documenta como configurar o seu servidor samba para permitir o
+acesso a compartilhamento de arquivos e impressão no sistema.
+</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-i-win-linux"></a>Configurando o Linux como um servidor de impressão Windows</h3></div></div></div><p>
+Será necessário ter o pacote 
+instalado e adicionar as seguintes linhas no seu arquivo
+<code class="filename">/etc/samba/smb.conf</code>:
+</p><pre class="screen">
+[hp-printer]
+ path = /tmp
+ printer name=HP DeskJet 690C
+ printable = yes
+ print command = lpr -r -h -P %p %s
+ valid users = winuser winuser2
+ create mode = 0700
+</pre><p>
+O compartilhamento acima tornará disponível a impressora local "lp" as máquinas
+Windows com o nome "HP DeskJet 690C".  Uma impressora alternativa pode ser
+especificada modificando a opção <span class="emphasis"><em>-P</em></span> da linha de comando do
+<span class="command"><strong>lpr</strong></span>.  Note que somente os usuários "winuser" e "winuser2"
+poderão usar esta impressora.  Os arquivos de spool (para gerenciar a fila de
+impressão) serão gravador em <code class="filename">/tmp</code> (<code class="literal">path =
+/tmp</code>) e o compartilhamento <code class="literal">[hp-printer]</code> será
+mostrado como uma impressora (<code class="literal">printable = yes</code>).
+</p><p>
+Agora será necessário instalar o driver desta impressora no Windows (HP 690C) e
+escolher impressora instalada via rede e seguir os demais passos de
+configuração.
+</p></div></div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch18s09.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch18.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch18s11.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Mapeamento de usuários/grupos em clientes </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Controle de acesso ao servidor SAMBA</td></tr></table></div></body></html>

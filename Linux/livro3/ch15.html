@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Capítulo 15. Servidor ssh</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="index.html" title="Guia Foca Linux" /><link rel="prev" href="ch14s04.html" title="Fazendo conexões ao servidor telnet" /><link rel="next" href="ch15s02.html" title="Usando aplicativos clientes" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Capítulo 15. Servidor ssh</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch14s04.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch15s02.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-node">Servidor ssh</span></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="s-ssh"></a>Capítulo 15. Servidor ssh</h1></div></div></div><div class="toc"><p><strong>Índice</strong></p><dl class="toc"><dt><span class="section"><a href="ch15.html#s-ssh-intro">Introdução</a></span></dt><dd><dl><dt><span class="section"><a href="ch15.html#s-ssh-versao">Versão</a></span></dt><dt><span class="section"><a href="ch15.html#s-ssh-historia">História</a></span></dt><dt><span class="section"><a href="ch15.html#s-ssh-contribuindo">Contribuindo</a></span></dt><dt><span class="section"><a href="ch15.html#s-ssh-caracteristicas">Características</a></span></dt><dt><span class="section"><a href="ch15.html#s-ssh-ficha">Ficha técnica</a></span></dt><dt><span class="section"><a href="ch15.html#s-ssh-hwreq">Requerimentos de Hardware</a></span></dt><dt><span class="section"><a href="ch15.html#s-ssh-logs">Arquivos de log criados pelo servidor ssh</a></span></dt><dt><span class="section"><a href="ch15.html#s-ssh-install">Instalação do servidor openSSH</a></span></dt><dt><span class="section"><a href="ch15.html#s-ssh-rodando">Iniciando o servidor/reiniciando/recarregando a configuração</a></span></dt><dt><span class="section"><a href="ch15.html#s-ssh-opcoescmd">Opções de linha de comando</a></span></dt></dl></dd><dt><span class="section"><a href="ch15s02.html">Usando aplicativos clientes</a></span></dt><dd><dl><dt><span class="section"><a href="ch15s02.html#s-ssh-cliente-ssh">ssh</a></span></dt><dt><span class="section"><a href="ch15s02.html#s-ssh-cliente-scp">scp</a></span></dt><dt><span class="section"><a href="ch15s02.html#s-ssh-cliente-sftp">sftp</a></span></dt></dl></dd><dt><span class="section"><a href="ch15s03.html">Servidor ssh</a></span></dt><dd><dl><dt><span class="section"><a href="ch15s03.html#s-ssh-server-sshd">sshd</a></span></dt><dt><span class="section"><a href="ch15s03.html#s-ssh-acesso">Controle de acesso</a></span></dt><dt><span class="section"><a href="ch15s03.html#s-ssh-server-rsaauth">Usando autenticação RSA/DSA - chave pública/privada</a></span></dt><dt><span class="section"><a href="ch15s03.html#s-ssh-server-cmdkey">Execução de comandos específicos usando chaves</a></span></dt><dt><span class="section"><a href="ch15s03.html#s-ssh-server-gatewayssh">Criando um gateway ssh</a></span></dt><dt><span class="section"><a href="ch15s03.html#s-ssh-server-proxy">Criando um tunel proxy</a></span></dt><dt><span class="section"><a href="ch15s03.html#s-ssh-server-protodiff">Diferenças nas versões do protocolo</a></span></dt><dt><span class="section"><a href="ch15s03.html#s-ssh-server-sshd-config">Exemplo de <code class="filename">sshd_config</code> com explicações das diretivas</a></span></dt></dl></dd></dl></div>
+    <p>
+    Este capítulo documenta a instalação, configuração e personalização do servidor
+    de shell seguro <span class="command"><strong>sshd</strong></span>, além de explicar as vantagens da
+    utilização dos serviços criptográficos.  A utilização do programa cliente
+    <span class="command"><strong>ssh</strong></span> também é explicada, além de utilitários usados para
+    geração de chaves pública/privada para o <span class="command"><strong>ssh</strong></span> (autenticação
+    RSA/DAS - o que é, vantagens), cópia de arquivos e métodos de autenticação
+    usando o método de chave pública/privada RSA.
+    </p>
+    <p>
+    Ambas as versões 1 e 2 do ssh são documentadas neste capítulo.  Opções
+    específicas do protocolo 1 ou 2 do ssh serão destacadas.
+    </p>
+    
+
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-ssh-intro"></a>Introdução</h2></div></div></div><p>
+O serviço de <span class="command"><strong>ssh</strong></span> permite fazer o acesso remoto ao console de
+sua máquina, em outras palavras, você poderá acessar sua máquina como se
+estivesse conectado localmente ao seu console (substituindo o
+<span class="command"><strong>rlogin</strong></span> e <span class="command"><strong>rsh</strong></span>).  A principal diferença com
+relação ao serviço <span class="command"><strong>telnet</strong></span> padrão, <span class="command"><strong>rlogin</strong></span>
+e <span class="command"><strong>rsh</strong></span> é que toda a comunicação entre cliente/servidor é
+feita de forma encriptada usando chaves públicas/privadas RSA para criptografia
+garantindo uma transferência segura de dados.
+</p><p>
+A velocidade do console remoto conectado via Internet é excelente (melhor que a
+obtida pelo <span class="command"><strong>telnet</strong></span> e serviços r*) dando a impressão de uma
+conexão em tempo real (mesmo em links discados de 9.600 KB/s), a compactação
+dos dados também pode ser ativada para elevar ainda mais a velocidade entre
+cliente-servidor ssh.  Além do serviço de acesso remoto, o
+<span class="command"><strong>scp</strong></span> possibilita a transferência/recepção segura de arquivos
+(substituindo o <span class="command"><strong>rcp</strong></span>).
+</p><p>
+Em conexões sem criptografia (rsh, rlogin) os dados trafegam de forma
+desprotegida e caso exista algum sniffer instalado em sua rota com a máquina
+destino, todo o que fizer poderá ser capturado (incluindo senhas).
+</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-ssh-versao"></a>Versão</h3></div></div></div><p>
+É assumido que esteja usando a versão 2.0 do <span class="command"><strong>ssh</strong></span>.  As
+explicações contidas aqui podem funcionar para versões posteriores, mas é
+recomendável que leia a documentação sobre modificações no programa (changelog)
+em busca de mudanças que alterem o sentido das explicações fornecidas aqui.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-ssh-historia"></a>História</h3></div></div></div><p>
+O <span class="command"><strong>openSSH</strong></span> (explicado neste capítulo) é baseado na última
+versão livre do implementação de Tatu Ylonen com todos os algoritmos
+patenteados (para bibliotecas externas) removidos, todos as falhas de segurança
+corrigidas, novas características e muitas outras melhorias.  O openSSH foi
+criado por Aaron Campbell, Bob Beck, Markus Friedl, Niels Provos, Theo de Raadt
+e Dug Song.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-ssh-contribuindo"></a>Contribuindo</h3></div></div></div><p>
+A Home page principal é <a class="link" href="http://www.unixuser.org/~haruyama/security/openssh/index.html" target="_top">http://www.unixuser.org/~haruyama/security/openssh/index.html</a>.
+Falhas, correções e sugestões podem ser enviadas para a lista de discussão
+<code class="email">&lt;<a class="email" href="mailto:openssh-unix-dev@mindrot.org">openssh-unix-dev@mindrot.org</a>&gt;</code> (aberta a postagens de usuários não
+inscritos).
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-ssh-caracteristicas"></a>Características</h3></div></div></div><p>
+Abaixo as principais características do serviço <span class="command"><strong>ssh</strong></span>
+(<span class="command"><strong>Openssh</strong></span>).
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+Conexão de dados criptografada entre cliente/servidor.
+</p></li><li class="listitem"><p>
+Cópia de arquivos usando conexão criptografada.
+</p></li><li class="listitem"><p>
+Suporte a ftp criptografado (sftp).
+</p></li><li class="listitem"><p>
+Suporte a compactação de dados entre cliente/servidor.
+</p></li><li class="listitem"><p>
+Controle de acesso das interfaces servidas pelo servidor
+<span class="command"><strong>ssh</strong></span>.
+</p></li><li class="listitem"><p>
+Suporte a controle de acesso tcp wrappers.
+</p></li><li class="listitem"><p>
+Autenticação usando um par de chaves pública/privada RSA ou DSA.
+</p></li><li class="listitem"><p>
+Algoritmo de criptografia livre de patentes.
+</p></li><li class="listitem"><p>
+Suporte a PAM.
+</p></li><li class="listitem"><p>
+Suporte a caracteres ANSI (cores e códigos de escape especiais no console).
+</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-ssh-ficha"></a>Ficha técnica</h3></div></div></div><p>
+Pacote: 
+</p><p>
+Utilitários:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">ssh</code> - Cliente ssh (console remoto).
+</p></li><li class="listitem"><p>
+<code class="literal">slogin</code> - Link simbólico para o programa
+<span class="command"><strong>ssh</strong></span>.
+</p></li><li class="listitem"><p>
+<code class="literal">sshd</code> - Servidor de shell seguro ssh.
+</p></li><li class="listitem"><p>
+<code class="literal">scp</code> - Programa para transferência de arquivos entre
+cliente/servidor
+</p></li><li class="listitem"><p>
+<code class="literal">ssh-keygen</code> - Gera chaves de autenticação para o ssh
+</p></li><li class="listitem"><p>
+<code class="literal">sftp</code> - Cliente ftp com suporte a comunicação segura.
+</p></li><li class="listitem"><p>
+<code class="literal">sftp-server</code> - Servidor ftp com suporte a comunicação segura.
+</p></li><li class="listitem"><p>
+<code class="literal">ssh-add</code> - Adiciona chaves de autenticação DSA ou RSA ao
+programa de autenticação.
+</p></li><li class="listitem"><p>
+<code class="literal">ssh-agent</code> - Agente de autenticação, sua função é armazenar a
+chave privada para autenticação via chave pública (DSA ou RSA).
+</p></li><li class="listitem"><p>
+<code class="literal">ssh-keyscan</code> - Scaneia por chaves públicas de autenticação de
+hosts especificados.  O principal objetivo é ajudar na construção do arquivo
+local <code class="filename">know_hosts</code>.
+</p></li><li class="listitem"><p>
+<code class="literal">ssh-copy-id</code> - Usado para instalação do arquivo
+<code class="filename">identity.pub</code> em uma máquina remota.
+</p></li></ul></div><p>
+Arquivos de configuração:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="filename">/etc/ssh/sshd_config</code> - Arquivo de configuração do servidor
+ssh.
+</p></li><li class="listitem"><p>
+<code class="filename">/etc/ssh/ssh_config</code> - Arquivo de configuração do cliente
+ssh.
+</p></li><li class="listitem"><p>
+<code class="filename">~/.ssh/config</code> - Arquivo de configuração pessoal do cliente
+ssh.
+</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-ssh-hwreq"></a>Requerimentos de Hardware</h3></div></div></div><p>
+É recomendado no mínimo 6MB de memória RAM para a execução do serviço
+<span class="command"><strong>ssh</strong></span> mais o kernel do <span class="command"><strong>Linux</strong></span>.  Este limite
+deve ser redimensionado para servidores de acesso dedicado, uma quantidade de
+64MB deve ser confortável para centenas de usuários conectados simultaneamente
+(o que raramente acontece).
+</p><p>
+Veja também <a class="xref" href="ch19.html" title="Capítulo 19. Restrições de acesso, recursos e serviços">Capítulo 19, <em>Restrições de acesso, recursos e serviços</em></a> para configuração de restrições usando
+PAM.  O <span class="command"><strong>ssh</strong></span> que acompanha a distribuição
+<span class="command"><strong>Debian</strong></span> vem com o suporte a tcp wrappers compilado por
+padrão.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-ssh-logs"></a>Arquivos de log criados pelo servidor ssh</h3></div></div></div><p>
+Detalhes sobre a execução do servidor <span class="command"><strong>sshd</strong></span> (como inicio,
+autenticação e término) são enviadas ao <span class="command"><strong>syslog</strong></span> do sistema.
+A <span class="emphasis"><em>prioridade</em></span> e <span class="emphasis"><em>nível</em></span> são definidos no
+arquivo de configuração <code class="filename">/etc/ssh/sshd_config</code> (veja <a class="xref" href="ch15s03.html#s-ssh-server-sshd-config" title="Exemplo de sshd_config com explicações das diretivas">“Exemplo de <code class="filename">sshd_config</code> com explicações das diretivas”</a>).
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-ssh-install"></a>Instalação do servidor openSSH</h3></div></div></div><p>
+<code class="literal">apt-get install ssh</code>.
+</p><p>
+Por padrão o servidor <span class="command"><strong>sshd</strong></span> é instalado como daemon, também é
+possível executa-lo via <span class="command"><strong>inetd</strong></span> mas isto não é aconselhável
+porque o servidor gera uma chave aleatória de seção toda vez que é iniciado,
+isto podendo levar vários segundos (quando é usada a versão 1 do protocolo ssh,
+veja <a class="xref" href="ch15s03.html#s-ssh-server-protodiff" title="Diferenças nas versões do protocolo">“Diferenças nas versões do protocolo”</a>).
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-ssh-rodando"></a>Iniciando o servidor/reiniciando/recarregando a configuração</h3></div></div></div><p>
+O arquivo que controla o funcionamento do daemon do <span class="command"><strong>ssh</strong></span> é
+controlado pelo arquivo <code class="filename">/etc/init.d/ssh</code>.
+</p><p>
+A execução do <span class="command"><strong>ssh</strong></span> através de <span class="command"><strong>inetd</strong></span> é
+automática quando é feita uma requisição para a porta <span class="emphasis"><em>22</em></span>.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-ssh-opcoescmd"></a>Opções de linha de comando</h3></div></div></div><p>
+Opções de linha de comando do servidor <span class="command"><strong>sshd</strong></span>:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">-b bits</code> - Especifica o número de bits da chave do servidor
+(768 por padrão).
+</p></li><li class="listitem"><p>
+<code class="literal">-d</code> - Modo de depuração - O servidor envia detalhes sobre seu
+funcionamento aos logs do sistema e não é executado em segundo plano.  Ele
+também responderá conexões pelo mesmo processo.  Podem ser usadas no máximo 3
+opções <span class="emphasis"><em>-d</em></span> para aumentar os detalhes de depuração.
+</p></li><li class="listitem"><p>
+<code class="literal">-f arquivo_configuração</code> Indica um arquivo de configuração
+alternativo (por padrão é usado <code class="filename">/etc/ssh/sshd_config</code>).  O
+<span class="command"><strong>ssh</strong></span> pode ser configurado através de opções de linha de
+comando mas requer um arquivo de configuração para ser executado.  Opções de
+linha de comando substituem as especificadas no arquivo de configuração.
+</p></li><li class="listitem"><p>
+<code class="literal">-g segundos</code> - Especifica o tempo máximo para a digitação de
+senha de acesso.  Após o tempo especificado o servidor encerra a conexão.  O
+valor padrão é 600 segundos e 0 desativa este recurso.
+</p></li><li class="listitem"><p>
+<code class="literal">-h arquivo_chave</code> - Diz qual arquivo contém a chave privada
+local.  O padrão é <code class="filename">/etc/ssh/ssh_host_key</code> e somente o
+usuário <code class="literal">root</code> deve ter permissões de leitura neste arquivo.
+Será necessário especificar esta opção caso o <span class="command"><strong>sshd</strong></span> não
+esteja sendo executado como usuário <code class="literal">root</code>.
+</p><p>
+É possível ter múltiplos arquivos de chaves para os protocolos 1 e 2 do ssh.
+</p></li><li class="listitem"><p>
+<code class="literal">-i</code> - Indica que o servidor <span class="command"><strong>sshd</strong></span> será
+executado pelo <span class="command"><strong>inetd</strong></span>.  Isto não é aconselhável porque o
+servidor gerará a chave aleatória de seção toda vez que for iniciado e isto
+pode levar alguns segundos.  Esta opção pode se tornar viável com o uso do
+protocolo 2 ou criando chaves pequenas como 512 bytes (no ssh 1), mas a
+segurança criptográfica também será diminuída.  Veja as diferenças entre os
+dois protocolos em <a class="xref" href="ch15s03.html#s-ssh-server-protodiff" title="Diferenças nas versões do protocolo">“Diferenças nas versões do protocolo”</a>.
+</p></li><li class="listitem"><p>
+<code class="literal">-k segundos</code> - Especifica a freqüência da geração de novas
+chaves do daemon <span class="command"><strong>sshd</strong></span>.  O valor padrão é 3600 segundos e 0
+desativa este recurso.
+</p><p>
+<span class="strong"><strong>ATENÇÃO:</strong></span> NÃO desative este recurso!!!  Esta
+opção traz a segurança que uma nova chave gerada de servidor será gerada
+constantemente (esta chave é enviada junto com a chave pública quando o cliente
+conecta e fica residente na memória volátil), assim mesmo que um cracker
+consiga obtê-la interceptando as conexões, será praticamente impossível tentar
+qualquer coisa.  Valores menores tendem a aumentar ainda mais a segurança.
+</p></li><li class="listitem"><p>
+<code class="literal">-p porta</code> - Especifica a porta que o daemon
+<span class="command"><strong>sshd</strong></span> atenderá as requisições.  Por padrão é usada a porta
+22.
+</p></li><li class="listitem"><p>
+<code class="literal">-q</code> - Nenhuma mensagem será enviada ao
+<span class="command"><strong>syslog</strong></span> do sistema.
+</p></li><li class="listitem"><p>
+<code class="literal">-u tam</code> - Especifica o tamanho do campo de nome do computador
+que será armazenado no arquivo <code class="filename">utmp</code>.  A opção
+<span class="emphasis"><em>u0</em></span> faz somente endereços IP serem gravados.
+</p></li><li class="listitem"><p>
+<code class="literal">-D</code> - Quando usada não faz o <span class="command"><strong>sshd</strong></span> iniciar
+em segundo plano.
+</p></li><li class="listitem"><p>
+<code class="literal">-V versão_cliente</code> - Assume que o cliente possui a versão ssh
+especificada (1 ou 2) e não faz os testes de identificação de protocolo.
+</p></li><li class="listitem"><p>
+<code class="literal">-4</code> - Força o uso do protocolo IP tradicional (IPv4).
+</p></li><li class="listitem"><p>
+<code class="literal">-6</code> - Força o uso da nova geração do protocolo IP (IPv6).
+</p></li></ul></div><p>
+A maioria das opções são realmente úteis para modificar o comportamento do
+servidor <span class="command"><strong>ssh</strong></span> sem mexer em seu arquivo de configuração (para
+fins de testes) ou para executar um servidor <span class="command"><strong>ssh</strong></span> pessoal,
+que deverá ter arquivos de configuração específicos.
+</p></div></div> 
+ 
+ 
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch14s04.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch15s02.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Fazendo conexões ao servidor telnet </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Usando aplicativos clientes</td></tr></table></div></body></html>

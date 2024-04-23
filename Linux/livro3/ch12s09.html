@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Uso de criptografia SSL</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch12.html" title="Capítulo 12. Apache" /><link rel="prev" href="ch12s08.html" title="Virtual Hosts" /><link rel="next" href="ch12s10.html" title="Exemplo comentado de um arquivo de configuração do Apache" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Uso de criptografia SSL</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch12s08.html">Anterior</a> </td><th width="60%" align="center">Capítulo 12. Apache</th><td width="20%" align="right"> <a accesskey="n" href="ch12s10.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch12.html">Apache</a></span> &gt; <span class="breadcrumb-node">Uso de criptografia SSL</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-apache-ssl"></a>Uso de criptografia SSL</h2></div></div></div><p>
+Esta seção é uma referência rápida para configuração e uso do módulo
+<code class="filename">apache-ssl</code> com o servidor <span class="command"><strong>Apache</strong></span>.  Este
+módulo realiza a comunicação segura de dados (criptografada) via porta 443 (que
+é usada como padrão quando especificamos uma url iniciando com
+<span class="emphasis"><em>https://</em></span>).  A transmissão criptografada de dados é
+importante quanto temos dados confidenciais que precisamos transmitir como
+movimentação bancária, senhas, número de cartões de crédito, fazer a
+administração remota do servidor, etc.  SSL significa <span class="emphasis"><em>Secure Sockets
+Layer</em></span> (camada segura de transferência) e TLS <span class="emphasis"><em>Transport
+Layer Security</em></span> (camada segura de Transporte).
+</p><p>
+A intenção aqui é fornecer explicações práticas para colocar um servidor
+<span class="command"><strong>Apache</strong></span> com suporte a SSL funcionando no menor tempo
+possível.  Detalhes sobre funcionamento de certificados, métodos de
+criptografia, assinatura, etc.  deverão ser buscados na documentação deste
+módulo ou em sites especializados (é um assunto muito longo).
+</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-ssl-s"></a>Servidor apache com suporte a ssl</h3></div></div></div><p>
+Ao invés de utilizar o módulo <code class="filename">mod_ssl</code>, você poderá usar o
+pacote , ele nada mais é que
+um servidor <span class="command"><strong>Apache</strong></span> com o suporte SSL já incluso e não
+interfere no servidor <span class="command"><strong>Apache</strong></span> padrão, porque é executado
+somente na porta 443.
+</p><p>
+Se você tem um grande site com configurações de acesso personalizadas, ele
+trará mais trabalho de administração, pois as configurações e diretivas de
+restrições de acesso deverão ser copiadas para este servidor web.  No entanto,
+ele é indicado para máquinas que serão servidores SSL dedicados ou quando não
+possui configurações especiais em seu servidor web principal.
+</p><p>
+Esta seção tem por objetivo a instalação do suporte ao módulo SSL
+(<code class="filename">mod_ssl</code>) no servidor <span class="command"><strong>Apache</strong></span> padrão.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-ssl-instal"></a>Instalando o suporte a módulo SSL no Apache</h3></div></div></div><p>
+Instale o pacote .
+Após instala-lo, edite o arquivo <code class="filename">/etc/apache/httpd.conf</code>
+adicionando a linha:
+</p><pre class="screen">
+LoadModule ssl_module /usr/lib/apache/1.3/mod_ssl.so
+</pre><p>
+Depois, gere um certificado digital ssl com o programa
+<span class="command"><strong>mod-ssl-makecert</strong></span>.  Ele será armazenado por padrão nos
+diretórios em <code class="filename">/etc/apache/ssl.???</code> e seu uso explicado no
+resto desta seção.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-ssl-mkcert"></a>Gerando um certificado digital</h3></div></div></div><p>
+O certificado digital é a peça que garante a transferência segura de dados.
+Ele contém detalhes sobre a empresa que fará seu uso e quem o emitiu.  Para
+gerar ou modificar um certificado digital, execute o comando
+<code class="literal">mod-ssl-makecert</code> e siga as instruções.  O método de
+criptografia usado pelo certificado digital é baseado no conceito de chave
+pública/privada, a descrição sobre o funcionamento deste sistema de
+criptografia é feito em <a class="xref" href="ch20s05.html" title="Usando o GPG para Autenticação e Criptografia">“Usando o <span class="command"><strong>GPG</strong></span> para Autenticação e Criptografia”</a>.
+</p><p>
+<span class="strong"><strong>OBS</strong></span> Não utilize acentos nos dados de seu
+certificado.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-ssl-exemplo"></a>Exemplo de configuração do módulo mod-ssl</h3></div></div></div><p>
+Abaixo uma configuração rápida para quem deseja ter um servidor com suporte a
+SSL funcionando em menor tempo possível (ela é feita para operar em todas as
+instalações e não leva em consideração o projeto de segurança de sua
+configuração atual do <span class="command"><strong>Apache</strong></span>).  Note que todas as diretivas
+relacionadas com o módulo <code class="filename">mod_ssl</code> começam com o nome
+"SSL":
+</p><pre class="screen">
+# Somente processa as diretivas relacionadas a SSL caso o módulo mod_ssl estiver
+# carregado pela diretiva LoadModule
+&lt;IfModule mod_ssl.c&gt;
+# É necessário especificar as portas que o servidor Web aguardará conexões (normais e 
+# ssl). 
+Listen 80
+Listen 443
+
+# Ativa o tratamento de conexões com o destino na porta 443 pela diretiva
+# VirtualHost abaixo
+&lt;VirtualHost _default_:443&gt;
+
+# Ativa ou desativa o módulo SSL para este host virtual
+SSLEngine on
+
+# Certificado do servidor
+SSLCertificateFile    /etc/apache/ssl.crt/server.crt
+
+# Chave privada de certificado do servidor. 
+SSLCertificateKeyFile /etc/apache/ssl.key/server.key
+
+# A linha abaixo força o fechamento de conexões quando a 
+# conexão com o navegador Internet Explorer é interrompida. Isto
+# viola o padrão SSL/TLS mas é necessário para este tipo de 
+# navegador. Alguns problemas de conexões de navegadores também
+# são causados por não saberem lidar com pacotes keepalive.
+SetEnvIf User-Agent ".*MSIE.*" nokeepalive ssl-unclean-shutdown
+
+&lt;/VirtualHost&gt;
+
+&lt;/IfModule&gt;
+
+#################################################################################
+# Adicionalmente poderão ser especificadas as seguintes opções para modificar   #
+# o comportamento da seção SSL (veja mais detalhes na documentação do mod-ssl)  #
+#################################################################################
+
+# Formato e localização do cache paralelo de processos da seção. O cache de seção é 
+# feito internamente pelo módulo mas esta diretiva acelera o processamento 
+# de requisições paralelas feitas por modernos clientes navegadores. Por padrão 
+# nenhum cache é usado ("none"). 
+SSLSessionCache         dbm:/var/run/ssl-cache
+
+# Localização do arquivo de lock que o módulo SSL utiliza para 
+# sincronização entre processos. O padrão é nenhum. 
+SSLMutex  file:/var/run/ssl-mutex
+
+# Especifica o método de embaralhamento de dados que será utilizado
+# durante o inicio de uma seção SSL (startup) ou durante o processo 
+# de conexão (connect). Podem ser especificados "builtin" (é muito rápido 
+# pois consome poucos ciclos da CPU mas não gera tanta combinação aleatória), um 
+# programa que gera números aleatórios (com "exec") ou os dispositivos aleatórios 
+# /dev/random e /dev/urandom (com "file"). Por padrão nenhuma fonte 
+# adicional de números aleatórios é usada. 
+SSLRandomSeed startup builtin
+SSLRandomSeed connect builtin
+#SSLRandomSeed startup file:/dev/urandom 512
+#SSLRandomSeed connect file:/dev/urandom 512
+#SSLRandomSeed connect exec:/pub/bin/NumAleat
+
+# Tipos MIME para download de certificados
+AddType application/x-x509-ca-cert .crt
+AddType application/x-pkcs7-crl    .crl
+
+# Tempo máximo de permanência dos objetos do cache acima. O valor padrão é 
+# 300 segundos (5 minutos).
+SSLSessionCacheTimeout  300
+
+# Versão do protocolo SSL que será usada. Podem ser especificadas 
+# SSLv2, SSLv3 TLSv1 ou all. O mais compatível com os navegadores atuais 
+# é o "SSLv2". Por padrão "all" é usado.
+#SSLProtocol all
+#SSLProtocol -all +SSLv3
+
+# Registra detalhes sobre o tráfego neste arquivo. Mensagens de erro 
+# também são armazenadas no arquivo de registro padrão do Apache
+SSLLog      /var/log/apache/ssl-mod.log
+
+# Nível das mensagens de log registradas por SSLLog
+SSLLogLevel info
+</pre><p>
+Algumas diretivas deste módulo podem fazer parte tanto da configuração global
+do servidor como diretivas de acesso (<code class="literal">Directory</code>,
+<code class="literal">Location</code>, <code class="literal">.htaccess</code>, veja a opção
+"Context" na documentação do <code class="filename">mod_ssl</code>).
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-ssl-sslreq"></a>Autorizando acesso somente a conexões SSL</h3></div></div></div><p>
+Existem casos que precisa restringir o uso de conexões normais e permitir
+somente conexões via SSL (como por exemplo, dentro da diretiva de acesso que
+controla seu acesso a uma página com listagem de clientes).  A opção
+<span class="emphasis"><em>SSLRequereSSL</em></span> é usada para tal e deve ser usada dentro das
+diretivas de controle acesso:
+</p><pre class="screen">
+&lt;Directory /var/www/secure/clientes&gt;
+ Options Indexes 
+ Order deny,allow
+ Deny from evil.cracker.com
+ SSLRequireSSL
+&lt;/Directory&gt;
+</pre><p>
+A diretiva acima <span class="emphasis"><em>requer</em></span> que sejam feitas conexões SSL
+(porta 443 - https://) para acesso ao diretório
+<code class="filename">/var/www/secure/clientes</code>, qualquer conexão padrão não
+criptografada (feita na porta 80) será rejeitada com o erro 403.
+</p><p>
+<span class="strong"><strong>OBS:</strong></span> A diretiva
+<span class="emphasis"><em>SSLRequireSSL</em></span> podia ser colocada entre as condicionais
+"IfModule mod_ssl.c" mas o servidor web permitiria conexões não criptografadas
+se por algum motivo esse módulo não estivesse carregado.  Na configuração
+acima, ocorrerá um erro e impedirá o funcionamento do servidor web caso ocorra
+algum problema com o <code class="filename">mod_ssl</code>.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-ssl-inic"></a>Iniciando o servidor Web com suporte a SSL</h3></div></div></div><p>
+Verifique se a configuração do <span class="command"><strong>Apache</strong></span> está ok com
+<code class="literal">apache -t</code>.  Caso positivo, reinicie o servidor usando um dos
+métodos descritos em <a class="xref" href="ch12.html#s-apache-rodando" title="Iniciando o servidor/reiniciando/recarregando a configuração">“Iniciando o servidor/reiniciando/recarregando a configuração”</a>.  O servidor web lhe
+pedirá a FraseSenha para descriptografar a chave privada SSL (esta senha foi
+escolhida durante o processo de criação do certificado).
+</p><p>
+Esta senha garante uma segurança adicional caso a chave privada do servidor
+seja copiada de alguma forma.  Somente quem tem conhecimento da FraseSenha
+poderá iniciar o servidor com suporte a transferência segura de dados.
+Verifique se o virtual host está servindo as requisições na porta 443 com
+<code class="literal">apache -S</code>.
+</p><p>
+O único método para fazer o servidor web evitar de pedir a senha para
+descriptografar a chave privada é colocando uma senha em branco.  Isto só é
+recomendado em ambientes seguros e o diretório que contém a chave privada
+deverá ter somente permissões para o dono/grupo que executa o servidor Web.
+Qualquer outra permissão poderá por em risco a segurança da instalação caso a
+chave privada seja roubada.  Depois disso, execute o comando:
+</p><pre class="screen">
+# entre no diretório que contém a chave privada
+cd /etc/apache/ssl.key
+# renomeie a chave privada para outro nome
+ren server.key server.key-Csenha
+openssl rsa -in server.key-Csenha -out server.key
+</pre><p>
+Digite a senha quando pedido.  A chave original (com senha) estará gravada no
+arquivo <code class="filename">server.key-Csenha</code> e poderá ser restaurada se
+necessário.  Reinicie o servidor <span class="command"><strong>Apache</strong></span>, desta vez ele não
+pedirá a senha.
+</p><p>
+<span class="strong"><strong>OBS1:</strong></span> Tire uma cópia de segurança da chave
+privada original antes de executar esta operação.
+</p><p>
+<span class="strong"><strong>OBS2:</strong></span> Não se esqueça de ajustar as
+permissões de acesso no diretório <code class="filename">/etc/apache/ssl.key</code> caso
+não utilize senha para proteger seu certificado digital.
+</p></div></div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch12s08.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch12.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch12s10.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Virtual Hosts </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Exemplo comentado de um arquivo de configuração do Apache</td></tr></table></div></body></html>

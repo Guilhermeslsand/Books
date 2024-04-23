@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Códigos HTTP</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch12.html" title="Capítulo 12. Apache" /><link rel="prev" href="ch12s10.html" title="Exemplo comentado de um arquivo de configuração do Apache" /><link rel="next" href="ch13.html" title="Capítulo 13. Servidor ident" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Códigos HTTP</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch12s10.html">Anterior</a> </td><th width="60%" align="center">Capítulo 12. Apache</th><td width="20%" align="right"> <a accesskey="n" href="ch13.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch12.html">Apache</a></span> &gt; <span class="breadcrumb-node">Códigos HTTP</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-apache-httpcodes"></a>Códigos HTTP</h2></div></div></div><p>
+Esta seção pode ser uma interessante referência para a programação e
+configuração da diretiva <span class="emphasis"><em>ErrorDocument</em></span>, etc.
+</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">2xx - Sucesso</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">200</code> OK
+</p></li><li class="listitem"><p>
+<code class="literal">201</code> Criado
+</p></li><li class="listitem"><p>
+<code class="literal">202</code> Aceito
+</p></li><li class="listitem"><p>
+<code class="literal">203</code> Informação não-autoritativa *
+</p></li><li class="listitem"><p>
+<code class="literal">204</code> Nenhum conteúdo
+</p></li><li class="listitem"><p>
+<code class="literal">205</code> Conteúdo resetado *
+</p></li><li class="listitem"><p>
+<code class="literal">206</code> Conteúdo parcial *
+</p></li></ul></div></dd><dt><span class="term">3xx - Redirecionamento</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">300</code> Múltiplas escolhas
+</p></li><li class="listitem"><p>
+<code class="literal">301</code> Movido Permanentemente
+</p></li><li class="listitem"><p>
+<code class="literal">302</code> Movido Temporariamente
+</p></li><li class="listitem"><p>
+<code class="literal">303</code> Veja outra *
+</p></li><li class="listitem"><p>
+<code class="literal">304</code> Não modificada
+</p></li><li class="listitem"><p>
+<code class="literal">305</code> Use o Proxy (redirecionamento proxy) *
+</p></li></ul></div></dd><dt><span class="term">4xx - Erros no Cliente</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">400</code> Requisição incorreta
+</p></li><li class="listitem"><p>
+<code class="literal">401</code> Não autorizado
+</p></li><li class="listitem"><p>
+<code class="literal">402</code> Pagamento Requerido *
+</p></li><li class="listitem"><p>
+<code class="literal">403</code> Bloqueado
+</p></li><li class="listitem"><p>
+<code class="literal">404</code> Não encontrada
+</p></li><li class="listitem"><p>
+<code class="literal">405</code> Método não permitido *
+</p></li><li class="listitem"><p>
+<code class="literal">406</code> Não aceitável *
+</p></li><li class="listitem"><p>
+<code class="literal">407</code> Autenticação via proxy requerida *
+</p></li><li class="listitem"><p>
+<code class="literal">408</code> Tempo limite da requisição expirado *
+</p></li><li class="listitem"><p>
+<code class="literal">409</code> Conflito *
+</p></li><li class="listitem"><p>
+<code class="literal">410</code> Gone *
+</p></li><li class="listitem"><p>
+<code class="literal">411</code> Tamanho requerido *
+</p></li><li class="listitem"><p>
+<code class="literal">412</code> Falha na pré-condição *
+</p></li><li class="listitem"><p>
+<code class="literal">413</code> A requisição parece ser grande *
+</p></li><li class="listitem"><p>
+<code class="literal">414</code> A URL requisitada é muito longa *
+</p></li><li class="listitem"><p>
+<code class="literal">415</code> Tipo de mídia não suportado
+</p></li></ul></div></dd><dt><span class="term">5xx - Erros no Servidor</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">500</code> Erro Interno no Servidor
+</p></li><li class="listitem"><p>
+<code class="literal">501</code> Não implementado
+</p></li><li class="listitem"><p>
+<code class="literal">502</code> Gateway incorreto
+</p></li><li class="listitem"><p>
+<code class="literal">503</code> Serviço não disponível
+</p></li><li class="listitem"><p>
+<code class="literal">504</code> Tempo limite no gateway *
+</p></li><li class="listitem"><p>
+<code class="literal">505</code> Versão HTTP não suportada *
+</p></li></ul></div></dd></dl></div><p>
+Os códigos de erros marcados com um "*" pertencem ao padrão HTTP 1.1
+</p></div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch12s10.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch12.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch13.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Exemplo comentado de um arquivo de configuração do Apache </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Capítulo 13. Servidor ident</td></tr></table></div></body></html>

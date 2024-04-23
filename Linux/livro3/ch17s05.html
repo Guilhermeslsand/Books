@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Clientes de CVS</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch17.html" title="Capítulo 17. CVS" /><link rel="prev" href="ch17s04.html" title="Arquivos administrativos em CVSROOT" /><link rel="next" href="ch17s06.html" title="Exemplo de uma seção CVS" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Clientes de CVS</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch17s04.html">Anterior</a> </td><th width="60%" align="center">Capítulo 17. CVS</th><td width="20%" align="right"> <a accesskey="n" href="ch17s06.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch17.html">CVS</a></span> &gt; <span class="breadcrumb-node">Clientes de CVS</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-cvs-c"></a>Clientes de CVS</h2></div></div></div><p>
+Esta seção traz alguns programas cliente em modo texto/gráfico e visualizadores
+de repositórios via web.  Eles facilitam o trabalho de controle de revisão por
+parte de iniciantes e flexibilidade para pessoas mais experientes, além de ter
+uma interface de navegação disponível para todos os interessados em fazer
+pesquisas no repositório.
+</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-c-cvs"></a>cvs</h3></div></div></div><p>
+Este é o cliente <span class="command"><strong>Unix</strong></span> padrão, bastante poderoso e que opera
+em modo texto.  As explicações neste capítulo do guia assumem este cliente de
+<span class="command"><strong>cvs</strong></span>, então as explicações sobre sua utilização se encontra
+em <a class="xref" href="ch17s03.html" title="Criando projetos para serem usados no CVS">“Criando projetos para serem usados no CVS”</a> e os parâmetros de linha de comando em <a class="xref" href="ch17.html#s-cvs-opcoescmd" title="Opções de linha de comando">“Opções de linha de comando”</a>
+</p><p>
+É <span class="strong"><strong>altamente</strong></span> recomendável a leitura caso
+deseje utilizar um cliente de <span class="command"><strong>cvs</strong></span> gráfico, pois os conceitos
+são os mesmos.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-c-gcvs"></a>gcvs - Linux</h3></div></div></div><p>
+Este é um cliente CVS em GTK+Python para <span class="command"><strong>Linux</strong></span> que interage
+externamente com o cliente <span class="command"><strong>cvs</strong></span> externo, todas as opções do
+cvs estão disponíveis através de checkboxes nas telas de comando, incluindo
+suporte a compactação, visualizador gráfico da árvore de releases, histórico,
+diffs, etc.
+</p><p>
+Sua instalação é bastante fácil, instale o programa com <code class="literal">apt-get
+install gcvs</code> e execute o programa através do menu do sistema ou do
+terminal.  Utilize os seguintes procedimentos para configurar e utilizar o
+programa:
+</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+Defina o repositório <em class="replaceable"><code>CVSROOT</code></em> através do menu
+<span class="emphasis"><em>Admin</em></span>/<span class="emphasis"><em>Preferences</em></span>.  Selecione o
+método de acesso, entre com o login, servidor e repositório.
+</p><pre class="screen">
+Exemplo: :pserver:anonymous@servidor:/var/lib/cvs
+</pre><p>
+O formato deve ser <span class="emphasis"><em>EXATAMENTE</em></span> como o usado na variável
+CVSROOT no shell, incluindo os ":".  Caso tenha erros de login, verifique o
+valor de <em class="replaceable"><code>CVSROOT</code></em> cuidadosamente antes de contactar o
+administrador de sistemas!
+</p></li><li class="listitem"><p>
+Agora faça o login no sistema em: <span class="emphasis"><em>Admin</em></span>,
+<span class="emphasis"><em>Login</em></span>.  Note que o status de todas as operações do
+<span class="command"><strong>cvs</strong></span> são mostradas na janela de status que fica na parte
+inferior da tela.
+</p></li><li class="listitem"><p>
+Crie um diretório que será usado para armazenar os fontes baixados do CVS, por
+exemplo: <code class="literal">mkdir ~/projetos</code>
+</p></li><li class="listitem"><p>
+Acesse o menu <span class="emphasis"><em>Create</em></span>, <span class="emphasis"><em>Checkout Module</em></span>
+para baixar o projeto do CVS para sua máquina local.  Ele irá te pedir o nome
+de diretório para onde o código fonte do servidor CVS será baixado.  Digite
+<code class="filename">~/projetos</code> ou outro diretório que foi criado no passo
+anterior.
+</p><p>
+<span class="strong"><strong>OBS:</strong></span> Não utilize o nome
+<code class="filename">"cvs"</code> para o diretório local, pois o
+<span class="command"><strong>gcvs</strong></span> oculta automaticamente pois os arquivos administrativos
+de controle ficam neste local.
+</p></li><li class="listitem"><p>
+Altere o diretório padrão do <span class="command"><strong>gcvs</strong></span> para o diretório onde
+baixou o projeto (<code class="filename">~/projetos</code>)clicando no botão "set" no
+topo da coluna esquerda do <span class="command"><strong>gcvs</strong></span>.
+</p></li><li class="listitem"><p>
+Para enviar um arquivo modificado de volta ao servidor, selecione os arquivos,
+clique em <span class="emphasis"><em>Modify</em></span>, <span class="emphasis"><em>Commit Selection</em></span>,
+entre com a mensagem descrevendo as alterações e clique em "OK".
+</p><p>
+Note que os arquivos modificados serão identificados por um ícone vermelho e
+seu status será "Mod.  File" (arquivo modificado).
+</p></li><li class="listitem"><p>
+Se desejar adicionar um novo projeto no CVS, entre em
+<span class="emphasis"><em>Create</em></span>, <span class="emphasis"><em>Import Module</em></span>, entre no
+diretório que deseja adicionar como um projeto no servidor de CVS.  Após isto
+será feita uma checagem e mostrada uma tela de possíveis problemas que podem
+ocorrer durante a importação do novo projeto.
+</p><p>
+Na próxima tela, digite o nome do módulo e caminho no servidor remoto no
+primeiro campo, no segundo campo a mensagem de log para adicionar o projeto ao
+servidor.  Em "Vendor tag" especifique o nome do projeto e sua versão logo
+abaixo.  Clique em "OK" e aguarde a transferência dos arquivos para o servidor.
+</p><p>
+Para maiores detalhes sobre a criação de novos projetos no servidor de CVS,
+veja <a class="xref" href="ch17s03.html#s-cvs-p-import" title="Adicionando um novo projeto">“Adicionando um novo projeto”</a>.
+</p><p>
+<span class="strong"><strong>OBS:</strong></span> Você deverá ter permissão de gravação
+para criar um novo projeto no servidor CVS.
+</p></li><li class="listitem"><p>
+A partir de agora você poderá explorar as funções do programa e fazer uso das
+funções habituais do CVS.  Todas as funções de operação e opções extras do CVS
+estão disponíveis na interface gráfica, basta se acostumar com sua utilização.
+</p></li></ol></div><p>
+Após isto, explore bastante as opções do programa.  Todas as funcionalidades do
+CVS estão organizadas entre os menus do programa.  Caso não entenda bem as
+funções do programa, leia atentamente <a class="xref" href="ch17s03.html" title="Criando projetos para serem usados no CVS">“Criando projetos para serem usados no CVS”</a> e também não
+deixe de consultar detalhes na info page do cvs.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-c-wincvs"></a>WinCVS - Windows</h3></div></div></div><p>
+Este é um cliente CVS em Python para <span class="command"><strong>Windows</strong></span> equivalente ao
+<span class="command"><strong>gcvs</strong></span> para <span class="command"><strong>Linux</strong></span>.  Suas funcionalidades e
+recomendações são idênticas aos do <span class="command"><strong>gcvs</strong></span>.  Este cliente pode
+ser baixado de: <a class="link" href="http://telia.dl.sourceforge.net/sourceforge/cvsgui/WinCvs13b13.zip" target="_top">http://telia.dl.sourceforge.net/sourceforge/cvsgui/WinCvs13b13.zip</a>
+e o Python para Windows de <a class="link" href="http://starship.python.net/crew/mhammond/downloads/win32all-153.exe" target="_top">http://starship.python.net/crew/mhammond/downloads/win32all-153.exe</a>.
+</p><p>
+Para sua utilização, as explicações em <a class="xref" href="ch17s05.html#s-cvs-c-gcvs" title="gcvs - Linux">“gcvs - Linux”</a> são
+totalmente válidas.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-c-maccvs"></a>MacCVS - Macintosh (PPC)</h3></div></div></div><p>
+Idêntico ao <span class="command"><strong>gcvs</strong></span>, pode ser baixado de <a class="link" href="http://telia.dl.sourceforge.net/sourceforge/cvsgui/MacCvsX-3.3a1-1.dmg" target="_top">http://telia.dl.sourceforge.net/sourceforge/cvsgui/MacCvsX-3.3a1-1.dmg</a>.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-cvs-c-viewcvs"></a>viewcvs</h3></div></div></div><p>
+Este é um visualizador de repositórios CVS via web, ele precisa apenas de um
+servidor web instalado com suporte a CGI.  Para instalar, execute o comando
+<code class="literal">apt-get install </code> e siga os passos para configurar
+programa.  Para adequar melhor o <span class="command"><strong>viewcvs</strong></span> ao seu sistema,
+edite o arquivo <code class="filename">/etc/viewcvs/viewcvs.conf</code>.
+</p><p>
+O <span class="command"><strong>viewcvs</strong></span> possui uma interface que se parece com a navegação
+de um diretório de ftp, recursos como a extração de diffs coloridos entre
+versões de um arquivo selecionado, visualização de commits (com data, log do
+commit, usuário, etc.), classificação da listagem exibida.
+</p><p>
+<span class="strong"><strong>OBS:</strong></span>Leve em consideração as implicações de
+segurança impostas por aplicativos cgi sendo executados em seu sistema.  Veja
+<a class="xref" href="">???</a> para entender melhor o assunto.
+</p></div></div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch17s04.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch17.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch17s06.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Arquivos administrativos em CVSROOT </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Exemplo de uma seção CVS</td></tr></table></div></body></html>

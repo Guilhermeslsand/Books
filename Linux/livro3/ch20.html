@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Capítulo 20. Introdução ao uso de criptografia para transmissão/armazenamento de dados</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="index.html" title="Guia Foca Linux" /><link rel="prev" href="ch19s15.html" title="Restrições no hardware do sistema" /><link rel="next" href="ch20s02.html" title="Sniffer" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Capítulo 20. Introdução ao uso de criptografia para transmissão/armazenamento de dados</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch19s15.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch20s02.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-node">Introdução ao uso de criptografia para transmissão/armazenamento de dados</span></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="d-cripto"></a>Capítulo 20. Introdução ao uso de criptografia para transmissão/armazenamento de dados</h1></div></div></div><div class="toc"><p><strong>Índice</strong></p><dl class="toc"><dt><span class="section"><a href="ch20.html#d-cripto-intro">Introdução</a></span></dt><dt><span class="section"><a href="ch20s02.html">Sniffer</a></span></dt><dd><dl><dt><span class="section"><a href="ch20s02.html#d-cripto-sniffer-detect">Detectando a presença de sniffers</a></span></dt></dl></dd><dt><span class="section"><a href="ch20s03.html">Alternativas seguras a serviços sem criptografia</a></span></dt><dd><dl><dt><span class="section"><a href="ch20s03.html#d-cripto-http">http</a></span></dt><dt><span class="section"><a href="ch20s03.html#d-cripto-emails">Transmissão segura de e-mails</a></span></dt><dt><span class="section"><a href="ch20s03.html#d-cripto-pop3">Servidor pop3</a></span></dt><dt><span class="section"><a href="ch20s03.html#d-cripto-ftp">Transferência de arquivos</a></span></dt><dt><span class="section"><a href="ch20s03.html#d-cripto-rlogin">login remoto</a></span></dt><dt><span class="section"><a href="ch20s03.html#d-cripto-irc">Bate papo via IRC</a></span></dt><dt><span class="section"><a href="ch20s03.html#d-cripto-icq">Transmissão de mensagens via ICQ</a></span></dt></dl></dd><dt><span class="section"><a href="ch20s04.html">Sistemas de arquivos criptográfico</a></span></dt><dt><span class="section"><a href="ch20s05.html">Usando o <span class="command"><strong>GPG</strong></span> para Autenticação e Criptografia</a></span></dt><dd><dl><dt><span class="section"><a href="ch20s05.html#d-cripto-gpg-pacote">Instalando o PGP</a></span></dt><dt><span class="section"><a href="ch20s05.html#d-cripto-gpg-criando">Criando um par de chaves pública/privada</a></span></dt><dt><span class="section"><a href="ch20s05.html#d-cripto-gpg-e">Encriptando Dados</a></span></dt><dt><span class="section"><a href="ch20s05.html#d-cripto-gpg-d">Decriptando dados com o GPG</a></span></dt><dt><span class="section"><a href="ch20s05.html#d-cripto-gpg-a">Assinando arquivos</a></span></dt><dt><span class="section"><a href="ch20s05.html#d-cripto-gpg-a-c">Checando assinaturas</a></span></dt><dt><span class="section"><a href="ch20s05.html#d-cripto-gpg-c-e">Extraindo sua chave pública do chaveiro</a></span></dt><dt><span class="section"><a href="ch20s05.html#d-cripto-gpg-c-a">Adicionando chaves públicas ao seu chaveiro pessoal</a></span></dt><dt><span class="section"><a href="ch20s05.html#d-cripto-gpg-c-l">Listando chaves de seu chaveiro</a></span></dt><dt><span class="section"><a href="ch20s05.html#d-cripto-gpg-c-d">Apagando chaves de seu chaveiro</a></span></dt><dt><span class="section"><a href="ch20s05.html#d-cripto-gpg-chpasswd">Mudando sua FraseSenha</a></span></dt><dt><span class="section"><a href="ch20s05.html#d-cripto-gpg-sign">Assinando uma chave digital</a></span></dt><dt><span class="section"><a href="ch20s05.html#d-cripto-gpg-c-sign-l">Listando assinaturas digitais</a></span></dt><dt><span class="section"><a href="ch20s05.html#d-cripto-gpg-c-sign-guia">Recomendações para a assinatura de chaves GPG</a></span></dt></dl></dd></dl></div>
+<p>
+Este capítulo explica como dados transmitidos em uma rede pode ser capturados,
+isto ajudará a entender a vulnerabilidade de serviços comuns que não utilizam
+criptografia para a transmissão de dados e alternativas/programas equivalentes
+que fazem transmissão de dados usando métodos criptográficos para deixar a
+mensagem somente legível para origem e destino.
+</p>
+
+
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="d-cripto-intro"></a>Introdução</h2></div></div></div>
+<p>
+Quando enviamos um tráfego de nossa máquina para outra (e-mails, WhatsApp, 
+navegação web, Telegram, Slack, ftp, etc) os dados passam por várias máquinas até atingir o seu
+destino (isto se chama roteamento).  Se algum cracker instalou algum capturador
+de pacotes (sniffer) em alguma das máquinas de nossa rota os dados poderão
+facilmente visualizados.
+</p>
+<p>
+Crackers normalmente configuram estes programas a procura de campos como
+"passwd" e outras expressões que sejam úteis para acesso ao seu sistema ou
+espionagem.  Quem gosta de ter sua privacidade violada?  A internet
+definitivamente é uma rede insegura e nem todos os administradores de
+servidores são responsáveis o suficiente para fazer uma configuração restrita
+para evitar acesso de pessoas mal intencionadas.
+</p>
+<p>
+Este capítulo mostra (na prática) como um sniffer funciona para captura de
+pacotes, isto ajudará a entender como serviços que enviam seus dados em forma
+texto plano são vulneráveis a isto e alternativas para transmissão segura de
+dados.  Este capítulo tem a intenção de mostrar alternativas seguras de
+proteção dos dados que trafegam em sua rede e a segurança de suas instalações.
+</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch19s15.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch20s02.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Restrições no hardware do sistema </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Sniffer</td></tr></table></div></body></html>

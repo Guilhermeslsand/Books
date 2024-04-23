@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Fazendo conexões ao servidor telnet</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch14.html" title="Capítulo 14. Servidor telnet" /><link rel="prev" href="ch14s03.html" title="Recomendações" /><link rel="next" href="ch15.html" title="Capítulo 15. Servidor ssh" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Fazendo conexões ao servidor telnet</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch14s03.html">Anterior</a> </td><th width="60%" align="center">Capítulo 14. Servidor telnet</th><td width="20%" align="right"> <a accesskey="n" href="ch15.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch14.html">Servidor telnet</a></span> &gt; <span class="breadcrumb-node">Fazendo conexões ao servidor telnet</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-telnet-telnet"></a>Fazendo conexões ao servidor telnet</h2></div></div></div>
+<p>
+Use o comando: <code class="literal">telnet [endereço] [porta]</code> para realizar
+conexões com uma máquina rodando o servidor telnet.
+</p>
+<p>
+Adicionalmente as seguintes opções podem ser usadas:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="literal">-l [usuario]</code> - Envia o nome de usuário ao computador remoto.
+Muito útil com o <span class="command"><strong>telnet-ssl</strong></span>.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">-E</code> - Desativa o caracter de escape
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">-a</code> - Tenta fazer o login automático usando o nome de usuário
+local.  Se o login falhar, será solicitado o nome de usuário.  Esta opção é
+usada por padrão com o cliente <span class="command"><strong>telnet-ssl</strong></span>.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">-r</code> - Emula o comportamento do programa
+<span class="command"><strong>rlogin</strong></span>.
+</p>
+</li></ul></div>
+<pre class="screen">
+Exemplos:
+
+# Conecta-se ao servidor telnet rodando na porta 23 de sua própria máquina
+telnet localhost
+
+# Conecta-se ao servidor telnet 200.200.200.200 operando na porta 53454 usando o 
+# nome de usuário john
+telnet -l john 200.200.200.200 53454
+</pre>
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch14s03.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch14.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch15.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Recomendações </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Capítulo 15. Servidor ssh</td></tr></table></div></body></html>

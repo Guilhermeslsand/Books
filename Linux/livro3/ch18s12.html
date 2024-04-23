@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Melhorando a performance do compartilhamento/servidor</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch18.html" title="Capítulo 18. SAMBA" /><link rel="prev" href="ch18s11.html" title="Controle de acesso ao servidor SAMBA" /><link rel="next" href="ch18s13.html" title="Configuração de Clientes NetBEUI" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Melhorando a performance do compartilhamento/servidor</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch18s11.html">Anterior</a> </td><th width="60%" align="center">Capítulo 18. SAMBA</th><td width="20%" align="right"> <a accesskey="n" href="ch18s13.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch18.html">SAMBA</a></span> &gt; <span class="breadcrumb-node">Melhorando a performance do compartilhamento/servidor</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-samba-perf"></a>Melhorando a performance do compartilhamento/servidor</h2></div></div></div><p>
+Esta seção trará algumas formas de otimização do servidor SAMBA que fazem
+diferença quando os valores adequados são utilizados: A primeira é a ativação
+de um cache de gravação/leitura de arquivos.  Este cache é feito pela opção
+<code class="literal">write cache size</code> e funciona fazendo o cache dos arquivos que
+serão lidos/gravados.  Ele é esvaziado assim que o arquivo for fechado ou
+quando estiver cheio.  O valor especificado nesta opção é em bytes e o padrão é
+"0" para não causar impacto em sistemas com pouca memória (ou centenas de
+compartilhamentos).  Exemplo:
+</p><pre class="screen">
+[publico]
+ path = /pub
+ comment = Diretório de acesso público
+ read only = yes
+ public = yes
+ write cache size = 384000
+</pre><p>
+Compartilha o diretório <code class="filename">/pub</code> (<span class="emphasis"><em>path =
+/pub</em></span>) como compartilhamento de nome <code class="literal">publico</code>
+(<span class="emphasis"><em>[publico]</em></span>), seu acesso será feito como somente leitura
+(<span class="emphasis"><em>read only = yes</em></span>) e o tamanho do cache de leitura/gravação
+reservado de 384Kb (<span class="emphasis"><em>write cache size = 384000</em></span>).
+</p><p>
+Deixar a opção para seguir links simbólicos ativada (<code class="literal">follow
+symlinks</code>) garante mais performance de acesso a arquivos no
+compartilhamento.  A desativação da opção <code class="literal">wide links</code> em
+conjunto com o uso de cache nas chamadas getwd (<code class="literal">getwd cache</code>)
+permite aumentar a segurança e tem um impacto perceptível na performance dos
+dados.
+</p><p>
+A desativação da opção global <span class="emphasis"><em>nt smb support</em></span> também
+melhora a performance de acesso dos compartilhamentos.  Esta é uma opção útil
+para detectar problemas de negociação de protocolo e por padrão, ela é ativada.
+</p><p>
+Caso utiliza um valor de depuração de log muito alto (<span class="emphasis"><em>debug
+level</em></span>), o sistema ficará mais lento pois o servidor sincroniza o
+arquivo após cada operação.  Em uso excessivo do servidor de arquivos, isso
+apresenta uma degradação perceptível de performance.
+</p><p>
+A opção <code class="literal">prediction</code> permite que o SAMBA faça uma leitura
+adiante no arquivo abertos como somente-leitura enquanto aguarda por próximos
+comandos.  Esta opção associada com bons valores de <span class="emphasis"><em>write cache
+size</em></span> pode fazer alguma diferença.  Note que o valor de leitura nunca
+ultrapassa o valor de "read size".
+</p><p>
+A opção <span class="emphasis"><em>read size</em></span> permite obter um sincronismo fino entre
+a leitura e gravação do disco com o envio/recebimento de dados da rede.  O
+valor é dependente da instalação local, levando em consideração a velocidade de
+disco rígido, rede, etc.  O valor padrão é 16384.
+</p><p>
+Em casos onde um NFS montado ou até mesmo leitura em discos locais é
+compartilhada, o parâmetro <span class="emphasis"><em>strict locking</em></span> definido para
+<code class="literal">yes</code> pode fazer alguma diferença de performance.  Note que
+nem todos os sistemas ganham performance com o uso desta opção e não deve ser
+usada em aplicativos que não requisitam o estado do lock de arquivo ao
+servidor.
+</p><p>
+Caso você possua aplicativos que fazem o lock corretamente de arquivos, você
+poderá usar o <span class="emphasis"><em>share modes = no</em></span>, isto significa que futuras
+aberturas de arquivo podem ser feitas em em modo leitura/gravação.  Caso
+utiliza um aplicativo muito bem programado que implementa de forma eficiente de
+lock, você poderá desativar esta opção.
+</p><p>
+O uso de <span class="emphasis"><em>oplocks yes</em></span> em compartilhamentos aumenta a
+performance de acesso a arquivos em até 30%, pois utiliza um código de cache no
+cliente.  Tenha certeza do que está fazendo antes de sair usando
+<span class="emphasis"><em>oplocks</em></span> em tudo que é lugar.  A desativação de
+<span class="emphasis"><em>kernel oplocks</em></span> é necessária para que isto funcione.
+</p><p>
+A opção <span class="emphasis"><em>read raw</em></span> e <span class="emphasis"><em>write raw</em></span> devem
+ter seus valores experimentados para ver se faz diferença na performance da sua
+rede, pois é diretamente dependente do tipo de cliente que sua rede possui.
+Alguns clientes podem ficar mais lentos em modo de leitura raw.
+</p><p>
+O tipo de sistema de arquivos adotado na máquina e suas opções de montagem tem
+um impacto direto na performance do servidor, principalmente com relação a
+atualização de status dos arquivos no sistema de arquivos (hora de acesso,
+data, etc).
+</p><p>
+O cache de leitura adiante de abertura de arquivos em modo somente leitura
+aumenta a performance com o uso do oplocks nível 2.  Para isto, ajuste a opção
+<code class="literal">level2 oplocks</code> para <code class="literal">yes</code>.  A recomendação
+deste tipo de oplock é o mesmo do nível 1.
+</p><p>
+Como o SAMBA faz o transporte NetBEUI via TCP/IP, ajustes no socket fazem
+diferença nos dados que trafegam na rede.  Como isso é dependente de rede você
+precisará usar técnicas de leitura/gravação para determinar quais são as
+melhores que se encaixam em seu caso.  A opção <span class="emphasis"><em>socket
+options</em></span> é usada para fazer tais ajustes, por exemplo:
+</p><pre class="screen">
+socket options = SO_SNDBUF=2048 IPTOS_THROUGHPUT=1
+</pre><p>
+Em especial, a opção <code class="literal">TCP_NODELAY</code> apresenta uma perceptível
+melhoria de performance no acesso a arquivos locais.
+</p><p>
+<span class="strong"><strong>OBS:</strong></span>: Não use espaços entre o sinal de "="
+quando especificar as opções do parâmetro <code class="literal">socket options</code>.
+</p></div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch18s11.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch18.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch18s13.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Controle de acesso ao servidor SAMBA </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Configuração de Clientes NetBEUI</td></tr></table></div></body></html>

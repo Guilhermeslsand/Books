@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Servidor de data/hora</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch18.html" title="Capítulo 18. SAMBA" /><link rel="prev" href="ch18s05.html" title="Resolução de nomes de máquinas no samba" /><link rel="next" href="ch18s07.html" title="Configuração em Domínio" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Servidor de data/hora</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch18s05.html">Anterior</a> </td><th width="60%" align="center">Capítulo 18. SAMBA</th><td width="20%" align="right"> <a accesskey="n" href="ch18s07.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch18.html">SAMBA</a></span> &gt; <span class="breadcrumb-node">Servidor de data/hora</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-samba-s-timeserver"></a>Servidor de data/hora</h2></div></div></div><p>
+O samba pode atuar como um servidor de data/hora ajustando o horário de suas
+estações de trabalho com o servidor da rede.
+</p><p>
+As estações clientes poderão executar o comando <span class="command"><strong>net</strong></span> para
+sincronizar seu relógio durante a inicialização do Windows, ou durante o logon
+da rede através do script de logon, caso tenha configurado o servidor
+<span class="command"><strong>samba</strong></span> para logon em domínios NT.
+</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-s-timeserver-s"></a>Configuração do serviço de data/hora no SAMBA</h3></div></div></div><p>
+Para configurar o samba para atuar como servidor de data/hora de sua rede,
+adicione o seguinte parâmetro na seção global do arquivo de configuração
+<code class="filename">/etc/samba/smb.conf</code>:
+</p><pre class="screen">
+[global]
+time server = yes
+</pre><p>
+Para sincronizar a data/hora das estações de trabalho usando o servidor samba,
+veja <a class="xref" href="ch18s06.html#s-samba-s-timeserver-c" title="Sincronizando a data/hora no Cliente">“Sincronizando a data/hora no Cliente”</a>.  Caso o seu servidor SAMBA
+também seja o servidor de autenticação PDC da rede, a melhor forma de se fazer
+isto é colocar o comando <code class="literal">net time \\servidor_SAMBA /set /yes</code>
+em um script que será executado pela estação.
+</p><p>
+<span class="strong"><strong>OBS</strong></span> É recomendável instalar um cliente ntp
+para manter o relógio do servidor sempre atualizado, conseqüentemente mantendo
+a data/hora das estações também em sincronismo .  .
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-s-timeserver-c"></a>Sincronizando a data/hora no Cliente</h3></div></div></div><p>
+Na estação cliente Windows, use o seguinte comando:
+</p><pre class="screen">
+NET TIME \\SERVIDOR /WORKGROUP:GRUPO /SET /YES
+</pre><p>
+Um local interessante para colocação deste comando é na pasta Iniciar da
+estação Windows, pois todos os comandos que estejam nesta pasta são executados
+quando o sistema é iniciado.
+</p><p>
+Exemplos:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">net time \\linux /set /yes</code> - Sincroniza a hora com o
+servidor "\\linux" e não pede confirmação (/yes).
+</p></li><li class="listitem"><p>
+<code class="literal">net time \\linux /WORKGROUP:pinguim /set /yes</code> - Sincroniza a
+hora com o servidor "\\linux" do grupo de trabalho pinguim (/WORKGROUP:pinguim)
+e não pede confirmação (/yes).
+</p></li></ul></div></div></div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch18s05.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch18.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch18s07.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Resolução de nomes de máquinas no samba </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Configuração em <code class="literal">Domínio</code></td></tr></table></div></body></html>

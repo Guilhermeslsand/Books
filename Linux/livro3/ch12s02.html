@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Configurações Básicas do Apache</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch12.html" title="Capítulo 12. Apache" /><link rel="prev" href="ch12.html" title="Capítulo 12. Apache" /><link rel="next" href="ch12s03.html" title="Restrições de Acesso" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Configurações Básicas do Apache</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch12.html">Anterior</a> </td><th width="60%" align="center">Capítulo 12. Apache</th><td width="20%" align="right"> <a accesskey="n" href="ch12s03.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch12.html">Apache</a></span> &gt; <span class="breadcrumb-node">Configurações Básicas do Apache</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-apache-cfgini"></a>Configurações Básicas do Apache</h2></div></div></div><p>
+        Esta seção traz algumas configurações obrigatórioas para quem 
+        está iniciando a configuração do servidor web Apache.
+    </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-port"></a>Configurando a porta padrao</h3></div></div></div><p>
+    Use a diretiva <span class="emphasis"><em>Port</em></span> para configurar a porta padrão que o
+    <span class="command"><strong>Apache</strong></span> receberá requisições por padrão.  A diretiva
+    <span class="emphasis"><em>Listen</em></span> também é usada para ajustar o endereço/portas
+    alternativas (usadas também em <code class="literal">Virtual Hosts</code>) e substituirá
+    as definições de <span class="emphasis"><em>Port</em></span>(veja <a class="xref" href="ch12s02.html#s-apache-listen" title="Especificando endereços/portas adicionais (a diretiva Listen)">“Especificando endereços/portas adicionais (a diretiva <span class="emphasis"><em>Listen</em></span>)”</a> para detalhes).
+    </p><p>
+    <span class="strong"><strong>OBS:</strong></span>: Somente uma diretiva
+    <span class="emphasis"><em>Port</em></span> e um argumento poderão ser especificados.  Para mais
+    controle sobre as portas do sistema use a diretiva <span class="emphasis"><em>Listen</em></span>.
+    </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-adicpagina"></a>Adicionando uma página no Apache</h3></div></div></div><p>
+    Existem dois tipos de páginas que podem ser adicionadas ao
+    <span class="command"><strong>Apache</strong></span>: a página raíz e sub-páginas.
+    </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><span class="emphasis"><em>Página Raíz</em></span></span></dt><dd><p>
+    A página raíz é especificada através da diretiva
+    <span class="emphasis"><em>DocumentRoot</em></span> e será mostrada quando se entrar no domínio
+    principal, como <code class="filename">http://www.guiafoca.org</code>.  Na configuração
+    padrão do <span class="command"><strong>Apache</strong></span>, <span class="emphasis"><em>DocumentRoot</em></span> aponta
+    para o diretório <code class="filename">/var/www</code>.  Este diretório será assumido
+    como <span class="strong"><strong>raíz</strong></span> caso os diretórios não sejam
+    iniciados por uma <code class="filename">/</code>:
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+    <code class="filename">home/focalinux</code> - Aponta para
+    <code class="filename">/var/www/home/focalinux</code>
+    </p></li><li class="listitem"><p>
+    <code class="filename">/home/focalinux</code> - Aponta para
+    <code class="filename">/home/focalinux</code>
+    </p></li></ul></div><p>
+    Este diretório deve conter um arquivo de índice válido (especificado pela
+    diretiva <span class="emphasis"><em>DocumentIndex</em></span> no <code class="filename">srm.conf</code>) e
+    permissões de acesso válidas no arquivo <code class="filename">access.conf</code> para
+    autorizar o acesso as páginas em <code class="filename">/var/www</code> (veja <a class="xref" href="ch12s03.html" title="Restrições de Acesso">“Restrições de Acesso”</a> para detalhes).
+    </p></dd><dt><span class="term">Sub-páginas</span></dt><dd><p>
+    Sub páginas são armazenadas abaixo do diretório da <span class="emphasis"><em>Página
+    raíz</em></span>, como <code class="filename">http://www.guiafoca.org/download</code>.
+    Elas podem ser um subdiretório da página principal em
+    <code class="filename">/var/www</code> ou serem criadas através da diretiva
+    <span class="emphasis"><em>Alias</em></span> no arquivo <code class="filename">srm.conf</code>.  Caso seja
+    um sub-diretório, as permissões de acesso de <code class="filename">/var/www</code>
+    serão herdadas para este subdiretório, mas também poderão ser modificadas com a
+    especificação de uma nova diretiva de acesso.
+    </p><p>
+    Através da diretiva <span class="emphasis"><em>Alias</em></span> a página pode estar localizada
+    em outro diretório do disco (até mesmo outro sistema de arquivos) e as
+    permissões de acesso deverão ser definidas para aquela página.  Para criar um
+    endereço <code class="filename">http://www.guiafoca.org/iniciante</code> que aponta para
+    o diretório <code class="filename">/home/focalinux/download/iniciante</code> no disco
+    local, basta usar a seguinte diretiva no <code class="filename">srm.conf</code>:
+    </p><pre class="screen">
+    Alias /iniciante /home/focalinux/download/iniciante
+    </pre><p>
+    Pode ser necessário permitir o acesso a nova página caso o servidor tenha uma
+    configuração restritiva por padrão (veja <a class="xref" href="ch12s03.html" title="Restrições de Acesso">“Restrições de Acesso”</a> para detalhes).  Após isto, faça o servidor
+    <span class="command"><strong>httpd</strong></span> re-ler os arquivos de configuração ou reinicia-lo.
+    Após isto, a página <code class="filename">/home/focalinux/download/iniciante</code>
+    estará acessível via <code class="filename">http://www.guiafoca.org/iniciante</code>.
+    </p><p>
+    <span class="strong"><strong>OBS:</strong></span> Caso inclua uma <code class="filename">/</code>
+    no diretório que será acessível via URL, o endereço somente estará disponível
+    caso você entre com <code class="filename">/</code> no final da URL:
+    </p><pre class="screen">
+    Alias /doc/ /usr/doc/
+    </pre><p>
+    O diretório <code class="filename">/doc</code> somente poderá ser acessado usando
+    <code class="filename">http://www.guiafoca.org/doc/</code>, o uso de
+    <code class="filename">http://www.guiafoca.org/doc</code> retornará uma mensagem de URL
+    não encontrada.
+    </p></dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-bindaddress"></a>Configurando as interfaces que o Apache atenderá</h3></div></div></div><p>
+    A diretiva <span class="emphasis"><em>BindAddress</em></span> é usada para especificar endereços
+    IP das interfaces ou endereços FQDN que o <span class="command"><strong>Apache</strong></span> responderá
+    requisições.  Mais de um endereço podem ser especificados separados por
+    espaços.  Caso não seja definido, o <span class="command"><strong>Apache</strong></span> assumirá o valor
+    "*" (atenderá requisições vindas de qualquer interface).
+    </p><p>
+    <span class="strong"><strong>OBS1:</strong></span> - É permitido usar somente uma
+    diretiva <span class="emphasis"><em>BindAddress</em></span>.  A diretiva
+    <span class="emphasis"><em>Listen</em></span> deverá ser usada se desejar mais controle sobre as
+    portas do servidor web.  Veja <a class="xref" href="ch12s02.html#s-apache-listen" title="Especificando endereços/portas adicionais (a diretiva Listen)">“Especificando endereços/portas adicionais (a diretiva <span class="emphasis"><em>Listen</em></span>)”</a> para detalhes.
+    </p><p>
+    <span class="strong"><strong>OBS2:</strong></span> - As interfaces especificadas pela
+    diretiva <span class="emphasis"><em>Listen</em></span> substituirá as especificadas em
+    <span class="emphasis"><em>BindAddress</em></span>.
+    </p><p>
+    Exemplo:
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+    <code class="literal">BindAddress 192.168.1.1</code> - Especifica que os usuários da
+    faixa de rede <code class="filename">192.168.1.*</code> terão acesso ao servidor
+    <span class="command"><strong>httpd</strong></span>.  Isto assume que a máquina possui o endereço
+    <code class="filename">192.168.1.1</code> em sua interface de rede interna.
+    </p></li><li class="listitem"><p>
+    <code class="literal">BindAddress *</code> - Atenderá requisições vindas de qualquer
+    interface de rede.
+    </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-listen"></a>Especificando endereços/portas adicionais (a diretiva <span class="emphasis"><em>Listen</em></span>)</h3></div></div></div><p>
+        A diretiva <span class="emphasis"><em>Listen</em></span> é usada para se ter um controle maior
+        sobre a especificação de endereços/portas alternativas que o servidor web
+        esperará por requisições externas.  Esta diretiva é muito usada na construção
+        de <span class="emphasis"><em>Virtual Hosts</em></span>.  Esta diretiva pode substituir
+        completamente as diretivas <span class="emphasis"><em>Port</em></span> e
+        <span class="emphasis"><em>BindAddress</em></span>.  Podem ser usados o número da porta, ou o par
+        <code class="literal">endereço:porta</code>:
+        </p><pre class="screen">
+        Listen 192.168.1.1:80
+        Listen 192.168.7.1:81
+        Listen 60000
+        </pre><p>
+        O endereço que deverá ser usado é o da interface de rede (assim como na
+        diretiva <span class="emphasis"><em>BindAddress</em></span>).  No exemplo acima, o servidor
+        <span class="command"><strong>httpd</strong></span> esperará por requisições vindas de
+        <code class="filename">192.168.1.*</code> na porta 80 e também 60000, e requisições
+        vindas de 192.168.7.1 na porta 81 e também 60000.
+        </p></div></div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch12.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch12.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch12s03.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Capítulo 12. Apache </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Restrições de Acesso</td></tr></table></div></body></html>

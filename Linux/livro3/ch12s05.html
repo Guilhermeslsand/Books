@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Módulos DSO</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch12.html" title="Capítulo 12. Apache" /><link rel="prev" href="ch12s04.html" title="Definindo documentos de erro personalizados" /><link rel="next" href="ch12s06.html" title="Sistema de Log do Apache" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Módulos DSO</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch12s04.html">Anterior</a> </td><th width="60%" align="center">Capítulo 12. Apache</th><td width="20%" align="right"> <a accesskey="n" href="ch12s06.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch12.html">Apache</a></span> &gt; <span class="breadcrumb-node">Módulos DSO</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-apache-dso"></a>Módulos DSO</h2></div></div></div><p>
+Os módulos <span class="emphasis"><em>DSO</em></span> permitem adicionar/remover características
+do <span class="command"><strong>Apache</strong></span> sem necessidade de recompilar todo o servidor web,
+assim interrompendo o serviço para a atualização dos arquivos.  Módulos de
+programas terceiros também podem ser compilados e adicionado sem problemas
+através deste recurso.
+</p><p>
+Os módulos são carregados para a memória no momento que o
+<span class="command"><strong>apache</strong></span> é iniciado através da diretiva
+<span class="emphasis"><em>LoadModule</em></span> no arquivo de configuração.  Dessa forma, toda
+vez que um novo módulo for adicionado, removido ou alterado, será necessário
+reiniciar o servidor <span class="command"><strong>apache</strong></span>.  A sintaxe da linha para
+carregar módulos <code class="filename">.so</code> é a seguinte:
+</p><p>
+<code class="literal">LoadModule [<span class="emphasis"><em>nome_do_modulo</em></span>]
+[<span class="emphasis"><em>caminho_do_arquivo_so</em></span>]</code>
+</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><span class="emphasis"><em>nome_do_modulo</em></span></span></dt><dd><p>
+Especifica o nome do módulo, não deve conter espaços.
+</p></dd><dt><span class="term"><span class="emphasis"><em>caminho_do_arquivo_so</em></span></span></dt><dd><p>
+Define a localização do arquivo que contém o módulo especificado.  Por padrão
+os módulos estão localizados em <code class="filename">/usr/lib/apache/[versão]</code>
+</p></dd></dl></div><p>
+A posição em que os módulos aparecem podem ter influência em seu funcionamento,
+alguns requerem que sejam especificados antes de outros módulos para
+funcionarem corretamente (como o módulo <span class="emphasis"><em>php3_module</em></span>, que
+deve ser carregado antes de qualquer módulo de controle de CGI's).  Leia a
+documentação específica sobe o módulo em caso de dúvidas, os módulos que
+acompanham o <span class="command"><strong>Apache</strong></span> são documentados em detalhes no manual
+do <span class="command"><strong>Apache</strong></span>.
+</p><p>
+Para usar uma característica/diretiva/opção do <span class="command"><strong>Apache</strong></span> que
+dependa de um certo módulo, obviamente você deverá carregar o módulo
+correspondente (em caso de dúvidas, leia a documentação sobre o módulo).  Veja
+a <a class="xref" href="ch12s10.html#s-apache-exemplo-httpd" title="httpd.conf">“httpd.conf”</a> para exemplos do uso da diretiva
+<span class="emphasis"><em>LoadModule</em></span>.
+</p><p>
+Por exemplo, se você quiser utilizar as diretivas de autorização
+(<span class="emphasis"><em>allow, deny, order</em></span>) deverá ter o módulo
+<span class="emphasis"><em>mod_access</em></span> carregado, para usar as diretivas de
+autorização (<span class="emphasis"><em>authname, authuserfile, authtype, etc</em></span>) deverá
+ter o módulo <span class="emphasis"><em>mod_auth</em></span> carregado.  Mais detalhes podem ser
+encontrados em <a class="xref" href="ch12s03.html#s-apache-acesso-restr-autor" title="Autorização">“Autorização”</a>.  <span class="strong"><strong>OBS1</strong></span>: O suporte a <span class="emphasis"><em>DSO</em></span> atualmente
+só está disponível para plataforma <span class="command"><strong>UNIX</strong></span> e seus derivados,
+como o <span class="command"><strong>Linux</strong></span>.
+</p><p>
+Também é possível ativar certas diretivas verificando se o módulo
+correspondente estiver ou não carregado através da diretiva
+<span class="emphasis"><em>IfModule</em></span>:
+</p><pre class="screen">
+&lt;IfModule mod_userdir.c&gt;
+ UserDir disabled root
+ UserDir public_html
+&lt;/IfModule&gt;
+</pre><p>
+Nas linhas acima, as diretivas <span class="emphasis"><em>UserDir</em></span> somente serão
+executadas se o módulo <span class="emphasis"><em>mod_userdir.c</em></span> estiver carregado
+através da diretiva <span class="emphasis"><em>LoadModule</em></span>.
+</p><p>
+Segue abaixo uma lista de módulos padrões que acompanham do
+<span class="command"><strong>Apache</strong></span>, os módulos marcados com "*" são ativados por padrão:
+</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Criação de Ambiente</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">* mod_env</code> - Ajusta variáveis de ambiente para scripts
+CGI/SSI
+</p></li><li class="listitem"><p>
+<code class="literal">* mod_setenvif</code> - Ajusta variáveis de ambiente de acordo com
+cabeçalhos http
+</p></li><li class="listitem"><p>
+<code class="literal">mod_unique_id</code> - Gera identificadores únicos para requisições
+</p></li></ul></div></dd><dt><span class="term">Decisão de tipo de conteúdo de arquivos</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">* mod_mime</code> - Determinação de tipo/encodificação do conteúdo
+(configurado)
+</p></li><li class="listitem"><p>
+<code class="literal">mod_mime_magic</code> - Determinação de tipo/encodificação do
+conteúdo (automático)
+</p></li><li class="listitem"><p>
+<code class="literal">* mod_negotiation</code> - Seleção de conteúdo baseado nos
+cabeçalhos "HTTP Accept*"
+</p></li></ul></div></dd><dt><span class="term">Mapeamento de URL</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">* mod_alias</code> - Tradução e redirecionamento de URL simples
+</p></li><li class="listitem"><p>
+<code class="literal">mod_rewrite</code> - Tradução e redirecionamento de URL avançado
+</p></li><li class="listitem"><p>
+<code class="literal">* mod_userdir</code> - Seleção de diretórios de recursos por nome
+de usuário
+</p></li><li class="listitem"><p>
+<code class="literal">mod_speling</code> - Correção de URLs digitadas incorretamente
+</p></li><li class="listitem"><p>
+<code class="literal">mod_vhost_alias</code> - Suporte para virtual hosts dinamicamente
+configurados em massa.
+</p></li></ul></div></dd><dt><span class="term">Manipulação de Diretórios</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">* mod_dir</code> - Manipulação de Diretório e arquivo padrão de
+diretório
+</p></li><li class="listitem"><p>
+<code class="literal">* mod_autoindex</code> - Geração de índice automático de diretório
+</p></li></ul></div></dd><dt><span class="term">Controle de Acesso</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">* mod_access</code> - Controle de acesso por autorização (usuário,
+endereço, rede)
+</p></li><li class="listitem"><p>
+<code class="literal">* mod_auth</code> - Autenticação HTTP básica (usuário, senha)
+</p></li><li class="listitem"><p>
+<code class="literal">mod_auth_dbm</code> - Autenticação HTTP básica (através de arquivos
+NDBM do Unix)
+</p></li><li class="listitem"><p>
+<code class="literal">mod_auth_db</code> - Autenticação HTTP básica (através de arquivos
+Berkeley-DB)
+</p></li><li class="listitem"><p>
+<code class="literal">mod_auth_anon</code> - Autenticação HTTP básica para usuários no
+estilo anônimo
+</p></li><li class="listitem"><p>
+<code class="literal">mod_auth_digest</code> - Autenticação MD5
+</p></li><li class="listitem"><p>
+<code class="literal">mod_digest</code> - Autenticação HTTP Digest
+</p></li></ul></div></dd><dt><span class="term">Respostas HTTP</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">mod_headers</code> - Cabeçalhos de respostas HTTP (configurado)
+</p></li><li class="listitem"><p>
+<code class="literal">mod_cern_meta</code> - Cabeçalhos de respostas HTTP (arquivos no
+estilo CERN)
+</p></li><li class="listitem"><p>
+<code class="literal">mod_expires</code> - Respostas de expiração HTTP
+</p></li><li class="listitem"><p>
+<code class="literal">* mod_asis</code> - Respostas HTTP em formato simples (raw)
+</p></li></ul></div></dd><dt><span class="term">Scripts</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">* mod_include</code> - Suporte a Includes no lado do servidor (SSI
+- Server Sides Includes)
+</p></li><li class="listitem"><p>
+<code class="literal">* mod_cgi</code> - Suporte a CGI (Common Gateway Interface)
+</p></li><li class="listitem"><p>
+<code class="literal">* mod_actions</code> - Mapeia scripts CGI para funcionarem como
+'handlers' internos.
+</p></li></ul></div></dd><dt><span class="term">Manipuladores de conteúdo Interno</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">* mod_status</code> - Visualiza status do servidor em tempo de
+execução.
+</p></li><li class="listitem"><p>
+<code class="literal">mod_info</code> - Visualiza sumário de configuração do servidor.
+</p></li></ul></div></dd><dt><span class="term">Registros de Requisições</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">* mod_log_config</code> - Registro de requisições personalizáveis
+</p></li><li class="listitem"><p>
+<code class="literal">mod_log_agent</code> - Registro especializado do User-Agent HTTP
+(depreciado)
+</p></li><li class="listitem"><p>
+<code class="literal">mod_log_refer</code> - Registro especializado do Referrer HTTP
+(depreciado)
+</p></li><li class="listitem"><p>
+<code class="literal">mod_usertrack</code> - Registro de cliques de usuários através de
+Cookies HTTP
+</p></li></ul></div></dd><dt><span class="term">Outros</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">* mod_imap</code> - Suporte a Mapeamento de Imagem no lado do
+servidor.
+</p></li><li class="listitem"><p>
+<code class="literal">mod_proxy</code> - Módulo de Cache do Proxy (HTTP, HTTPS, FTP).
+</p></li><li class="listitem"><p>
+<code class="literal">mod_so</code> - Inicialização do Dynamic Shared Object (DSO)
+</p></li></ul></div></dd><dt><span class="term">Experimental</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">mod_mmap_static</code> - Cache de páginas freqüentemente servidas
+via mmap()
+</p></li></ul></div></dd><dt><span class="term">Desenvolvimento</span></dt><dd><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">mod_example</code> - Demonstração da API do Apache (somente
+desenvolvedores)
+</p></li></ul></div></dd></dl></div></div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch12s04.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch12.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch12s06.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Definindo documentos de erro personalizados </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Sistema de Log do Apache</td></tr></table></div></body></html>

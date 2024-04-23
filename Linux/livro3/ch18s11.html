@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Controle de acesso ao servidor SAMBA</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch18.html" title="Capítulo 18. SAMBA" /><link rel="prev" href="ch18s10.html" title="Compartilhamento de impressão no servidor SAMBA" /><link rel="next" href="ch18s12.html" title="Melhorando a performance do compartilhamento/servidor" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Controle de acesso ao servidor SAMBA</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch18s10.html">Anterior</a> </td><th width="60%" align="center">Capítulo 18. SAMBA</th><td width="20%" align="right"> <a accesskey="n" href="ch18s12.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch18.html">SAMBA</a></span> &gt; <span class="breadcrumb-node">Controle de acesso ao servidor SAMBA</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-samba-a"></a>Controle de acesso ao servidor SAMBA</h2></div></div></div><p>
+Este capítulo documenta o controle de acesso ao servidor samba e restrições.
+</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-a-compart"></a>Nível de acesso de usuários conectados ao SAMBA</h3></div></div></div><p>
+Quando acessa um compartilhamento, o usuário do samba é mapeado com o UID
+respectivo de usuário do sistema ou o usuário guest (especificado pela opção
+"guest account") no caso de um acesso público.  Quando isto ocorre, um processo
+filho do <span class="command"><strong>smbd</strong></span> é executado sobre o UID e GID deste usuário.
+Isto significa que em nenhuma ocasião o <span class="command"><strong>SAMBA</strong></span> dará mais
+permissões que as necessárias para o usuário (com excessão de quando é usado o
+parâmetro <code class="literal">admin users</code>, veja <a class="xref" href="ch18s07.html#s-samba-dom-admin" title="Criando uma conta de administrador de domínio">“Criando uma conta de administrador de domínio”</a>).
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-a-restrip"></a>Restringindo o acesso por IP/rede</h3></div></div></div><p>
+Esta restrição pode ser feita pelos parâmetros <span class="emphasis"><em>allow hosts</em></span>
+e <span class="emphasis"><em>deny hosts</em></span> tanto em serviços individuais ou em todo o
+servidor.  Os parâmetros <span class="emphasis"><em>hosts allow</em></span> e <span class="emphasis"><em>hosts
+deny</em></span> são equivalentes a estes acima.  O <span class="emphasis"><em>allow
+hosts</em></span> permite o acesso a máquina especificadas como argumento.  São
+permitidos os seguintes métodos para permitir o acesso a uma máquina/rede:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">192.168.1.1</code> - IP da máquina
+</p></li><li class="listitem"><p>
+<code class="literal">servidor</code> - Nome da máquina
+</p></li><li class="listitem"><p>
+<code class="literal">192.168.1.0/255.255.255.0</code> - IP com máscara de rede
+</p></li><li class="listitem"><p>
+<code class="literal">192.168.1.0/24</code> - IP com máscara de rede octal
+</p></li><li class="listitem"><p>
+<code class="literal">192.168.1.</code> - Porção de rede sem o host (como no
+<code class="filename">hosts.allow</code> e <code class="filename">hosts.deny</code>.
+</p></li><li class="listitem"><p>
+<code class="literal">@nome</code> - Pesquisa por máquinas no grupo NIS.
+</p></li></ul></div><p>
+É permitido usar mais de um endereço IP separando-os por vírgulas ou espaços.
+A palavra chave <span class="emphasis"><em>EXCEPT</em></span> pode ser usada para fazer excessão
+de um ou mais endereços IPs, por exemplo:
+</p><pre class="screen">
+hosts allow = 192.168.1. EXCEPT 192.168.1.20
+</pre><p>
+Que permite o acesso a toda as máquinas da faixa de rede
+<code class="literal">192.168.1.0/24</code> exceto para a
+<code class="literal">192.168.1.20</code>.
+</p><p>
+O <span class="emphasis"><em>deny hosts</em></span> possui a mesma sintaxe do <span class="emphasis"><em>allow
+hosts</em></span> mas bloqueia o acesso das máquinas especificadas como
+argumento.  Quando o <span class="emphasis"><em>allow hosts</em></span> e <span class="emphasis"><em>deny
+hosts</em></span> são usados juntos, as máquinas em <span class="emphasis"><em>allow
+hosts</em></span> terão prioridade (processa primeiro as diretivas em
+<span class="emphasis"><em>allow hosts</em></span> e depois em <span class="emphasis"><em>deny hosts</em></span>).
+</p><p>
+<span class="strong"><strong>OBS:</strong></span> O endereço de loopback (127.0.0.1)
+nunca é bloqueado pelas diretivas de acesso.  Provavelmente deve ter notado
+porque o endereço de loopback não pode ser bloqueado e as conseqüências disto
+para o SAMBA.
+</p><p>
+Se você está executando o SAMBA via <span class="emphasis"><em>inetd</em></span>, os arquivos
+<code class="filename">hosts.allow</code> e <code class="filename">hosts.deny</code> são
+verificados antes do controle e acesso <span class="emphasis"><em>allow hosts</em></span> e
+<span class="emphasis"><em>deny hosts</em></span> para controle de acesso ao
+<span class="command"><strong>smbd</strong></span>.  Caso estiver usando o SAMBA
+via<span class="emphasis"><em>inetd</em></span> e deseja restringir o acesso usando TCP Wrappers,
+veja <a class="xref" href="ch04s08.html#rede-seg-tcpd" title="O mecanismo de controle de acessos tcpd">“O mecanismo de controle de acessos tcpd”</a>.
+</p><p>
+<span class="strong"><strong>OBS:</strong></span> Lembre-se de usar o
+<span class="command"><strong>testparm</strong></span> para verificar a sintaxe do arquivo
+<code class="filename">smb.conf</code> sempre que desconfiar de problemas (veja <a class="xref" href="ch18s02.html#s-samba-s-testparm" title="Buscando problemas na configuração">“Buscando problemas na configuração”</a>).
+</p><div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="s-samba-a-restrip-test"></a>Testando a restrição de Acesso por IP/Redes</h4></div></div></div><p>
+Um método interessante e útil para testar se a nossa configuração vai bloquear
+o acesso a serviços é usando o <span class="command"><strong>testparm</strong></span> da seguinte forma:
+</p><pre class="screen">
+testparm /etc/samba/smb.conf IP/host
+</pre><p>
+Você precisará dizer para o <span class="command"><strong>testparm</strong></span> qual é o arquivo de
+configuração que está usando e o endereço IP/nome de host que fará a
+<code class="literal">simulação</code> de acesso.  Este método não falsifica o endereço
+IP para testes, apenas usa os valores em <span class="emphasis"><em>allow hosts</em></span> e
+<span class="emphasis"><em>deny hosts</em></span> para checagem.  Por exemplo, para verificar o
+acesso vindo do IP <code class="filename">192.168.1.50</code>:
+</p><pre class="screen">
+testparm /etc/samba/smb.conf 192.168.1.50
+Load smb config files from /etc/samba/smb.conf
+Processing section "[homes]"
+Processing section "[printers]"
+Processing section "[tmp]"
+Processing section "[cdrom]"
+Loaded services file OK.
+Allow connection from /etc/samba/smb.conf (focalinux) to homes
+Allow connection from /etc/samba/smb.conf (focalinux) to printers
+Allow connection from /etc/samba/smb.conf (focalinux) to tmp
+Allow connection from /etc/samba/smb.conf (focalinux) to cdrom
+</pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-a-restrif"></a>Restringindo o acesso por interface de rede</h3></div></div></div><p>
+Esta restrição de acesso permite que façamos o SAMBA responder requisições
+somente para a interfaces indicadas.  O método de segurança descrito em <a class="xref" href="ch18s11.html#s-samba-a-restrip" title="Restringindo o acesso por IP/rede">“Restringindo o acesso por IP/rede”</a> serão analisadas logo após esta checagem.
+</p><p>
+Para restringir o serviço SAMBA a interfaces, primeiro será necessário ativar o
+parâmetro <code class="literal">bind interfaces only</code> usando <code class="literal">1</code>,
+<code class="literal">yes</code> ou <code class="literal">true</code> (o padrão é desativado).
+Depois, definir que interfaces serão servidas pelo samba com o parâmetro
+<span class="emphasis"><em>interfaces</em></span>.  Os seguintes formatos de interfaces são
+permitidos:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">eth0, sl0, plip0, etc</code> - Um nome de interface local.  É
+permitido o uso de <code class="literal">*</code> para fazer o SAMBA monitorar todas as
+interfaces que iniciam com aquele nome (por exemplo,
+<code class="filename">eth*</code>).
+</p></li><li class="listitem"><p>
+<code class="literal">192.168.1.1, 192.168.1.2, etc</code> - Um endereço IP de interface
+local.
+</p></li><li class="listitem"><p>
+<code class="literal">192.168.1.2/24, 192.168.1.2/255.255.255.0</code> - Um par de
+endereço/máscara de rede.
+</p></li></ul></div><p>
+Mais de uma interface pode ser usada separando-as com vírgula ou espaços.  A
+escolha do uso de nome da interface ou do IP é feita de acordo com a
+configuração da máquina.  Em uma máquina DHCP por exemplo, é recomendado o uso
+do nome da interface.  Quando <span class="emphasis"><em>bind interfaces only</em></span> estiver
+ativado, o padrão é esperar conexões em todas as interfaces que permitem
+broadcast exceto a loopback.
+</p><p>
+Exemplo:
+</p><pre class="screen">
+bind interfaces only = 1
+interfaces = loopback eth0
+</pre><p>
+Permite o recebimento de requisições de acesso ao <span class="command"><strong>SAMBA</strong></span>
+somente da interface <code class="filename">loopback</code> (desnecessário, pois como
+notou durante a leitura, sempre é permitida a conexão) e
+<code class="filename">eth0</code>.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-a-restrusu"></a>Restringindo o acesso por usuários</h3></div></div></div><p>
+Permite que você controle quem poderá ou não acessar o compartilhamento da
+máquina.  Este controle é feito pelos parâmetros <span class="emphasis"><em>valid
+users</em></span> e <span class="emphasis"><em>invalid users</em></span>.
+</p><p>
+O <span class="emphasis"><em>invalid users</em></span> lista de usuário que <span class="strong"><strong>NÃO</strong></span> terão acesso ao compartilhamento.  Se o nome for
+iniciado por "+" o parâmetro será tratado como um nome de grupo UNIX
+(<code class="filename">/etc/group</code>).  O caracter "&amp;" faz ele pesquisar o nome de
+grupo no banco de dados NIS.  O caracter "@" permite fazer a busca do grupo
+primeiro no banco de dados NIS e caso ele não seja encontrado, no arquivo de
+grupos do sistema (<code class="filename">/etc/group</code>).
+</p><p>
+É possível usar a combinação de caracteres "+&amp;" e "&amp;+" para alternar a ordem de
+busca enter o <code class="filename">/etc/group</code> e o <span class="emphasis"><em>NIS</em></span>.
+</p><p>
+Exemplos:
+</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">invalid users = junior, marcio, +badusers</span></dt><dd><p>
+Não permite que os usuários especificados e os usuários do grupo
+<code class="literal">+badusers</code> tenham acesso ao compartilhamento.
+</p></dd><dt><span class="term">invalid users = &amp;;semacesso</span></dt><dd><p>
+Bloqueia o acesso de todos os usuários NIS que pertençam ao grupo
+<code class="literal">semacesso</code>.
+</p></dd><dt><span class="term">invalid users = bruno, henrique, +@users,</span></dt><dd><p>
+Bloqueia o acesso dos usuários bruno, henrique e de todos os usuários que
+pertençam ao grupo <code class="literal">users</code>.  A pesquisa de grupo é feita
+primeiro no <code class="filename">/etc/group</code> e em seguida no NIS.
+</p></dd><dt><span class="term">invalid users = @semacesso</span></dt><dd><p>
+Bloqueia o acesso dos usuários que pertencem ao grupo "semacesso".  A pesquisa
+é feita primeiro no NIS e depois no <code class="filename">/etc/group</code>
+(equivalente ao uso de "&amp;+").
+</p></dd></dl></div><p>
+O <span class="emphasis"><em>valid users</em></span> possui a mesma sintaxe de funcionamento do
+<code class="literal">invalid users</code>, mas permite somente o acesso para os
+usuários/grupos listados.  Caso a opção <code class="literal">valid users</code> não seja
+especificada ou a lista esteja vazia, o acesso é permitido.  Se um mesmo nome
+de usuário estiver na lista <code class="literal">valid users</code> e <code class="literal">invalid
+users</code>, o padrão é ser mais restritivo, negando o acesso.
+</p><pre class="screen">
+ valid users = gleydson, michelle, geo
+</pre><p>
+A segurança deste método de acesso depende muito da forma de autenticação dos
+nomes antes de passar o controle para o SAMBA, pois uma autenticação fraca põe
+em risco a segurança da sua máquina.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-a-hostsequiv"></a>Evite o uso do parâmetro <span class="emphasis"><em>hosts equiv</em></span>!</h3></div></div></div><p>
+Este parâmetro permite que máquinas tenham acesso sem senha a um servidor.
+Isto pode se tornar um *ENORME* buraco na segurança do seu sistema, pois mesmo
+usando uma senha inválida, a máquina poderá ter acesso a todos os recursos do
+compartilhamento e não é complicado fazer um ataque usando DNS spoofing.
+</p><p>
+Se realmente deseja fazer isto, tenha em mente os dados que poderão ser
+acessados daquela máquina, se realmente não existe nenhuma outra forma de
+disponibilizar o acesso de forma que mantenha o controle de restrições (usando
+todos os outros métodos), restrinja o acesso usando MAC Address com o
+<span class="command"><strong>iptables</strong></span> ou o <span class="command"><strong>arp</strong></span> (veja <a class="xref" href="ch19s07.html" title="Restrições por MAC Address/IP">“Restrições por MAC Address/IP”</a>).  O padrão é não usar nenhum arquivo
+<code class="filename">hosts.equiv</code>.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-asmba-a-nullpasswd"></a>Evite o uso de senhas em branco!</h3></div></div></div><p>
+O parâmetro <code class="literal">null passwords</code> é usado na seção
+<span class="emphasis"><em>[global]</em></span> permitindo que contas de usuários sem senha
+tenham acesso permitido ao servidor.  <span class="strong"><strong>ISTO É TOTALMENTE
+INSEGURO</strong></span> e deve ser sempre evitado.  Caso você tenha feito uma bela
+restrição em sua máquina e deseja que o seu shell script de cópia de arquivos
+funcione usando este método, você está jogando toda a segurança do seu sistema
+por ralo abaixo.
+</p><p>
+Não existe motivo para usar senhas em branco em um controle de acesso por
+usuário, a não ser que precise testar algo realmente temporário e que depurando
+algo no SAMBA.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-a-publico"></a>Criando um compartilhamento para acesso sem senha</h3></div></div></div><p>
+Em algumas situações (mesmo em instalações seguras) é preciso tornar um
+compartilhamento acessível publicamente, exemplos disto incluem um diretório
+que contém drivers de impressoras, arquivos comuns, um diretório temporário,
+etc.
+</p><p>
+Para configurar um acesso público utilizamos a opção <code class="literal">public =
+yes</code> ou <code class="literal">guest ok = yes</code> (que é um sinônimo para o
+último comando).  O UID utilizado no acesso público é especificado pelo
+parâmetro <code class="literal">guest account</code>, portanto ele deverá ser um usuário
+válido do sistema.  Caso você queira somente definir acesso guest a um
+compartilhamento, especifique a opção <code class="literal">guest only</code> para o
+serviço, desta forma, mesmo que o usuário tenha acesso, ele será mapeado para o
+usuário guest.
+</p><p>
+Uma boa medida de segurança é usar o usuário <code class="literal">nobody</code> pois a
+maioria das distribuições de <span class="command"><strong>Linux</strong></span> seguras adotam-o como
+padrão como usuário que não é dono de quaisquer arquivos/diretórios no sistema,
+não possui login, senha ou sequer um diretório home.
+</p><p>
+Veja um exemplo disponibilizando o compartilhamento
+<code class="literal">[download]</code> para acesso público com acesso a gravação:
+</p><pre class="screen">
+[global] 
+guest account = nobody
+..
+..
+
+[download]
+ path = /downloads
+ comment = Espaço público para abrigar downloads de Usuários
+ guest ok = yes (aqui poderá ser também "public = yes").
+ writable = yes
+ follow symlinks = false
+</pre><p>
+O parâmetro <code class="literal">guest account</code> também poderá ser especificado no
+compartilhamento, isto é útil quando não quiser que o usuário que acesse o
+compartilhamento não seja o mesmo usado na diretiva [global].
+</p><p>
+Caso seu servidor somente disponibiliza compartilhamentos para acesso público,
+é mais recomendado utilizar o nível <code class="literal">security = share</code> pra
+diminuir a carga máquina, pois o usuário <span class="emphasis"><em>guest</em></span> será o
+primeiro a ser checado pelas regras de acesso (ao contrário do nível
+<span class="emphasis"><em>user</em></span>, onde o acesso guest é o último checado).
+</p><p>
+<span class="strong"><strong>OBS:</strong></span> Lembre-se que o compartilhamento
+funciona de modo recursivo, ou seja, todos os arquivos e subdiretórios dentro
+do diretório que compartilhou serão disponibilizados, portanto tenha certeza da
+importância dos dados que existem no diretório, verifique se existem links
+simbólicos que apontam para ele, etc.  Recomendo dar uma olhada rápida em <a class="xref" href="ch18s11.html#s-samba-a-public-access" title="Considerações de segurança com o uso do parâmetro &quot;public = yes&quot;">“Considerações de segurança com o uso do parâmetro "public = yes"”</a>.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-a-ro"></a>Criando um compartilhamento com acesso somente leitura</h3></div></div></div><p>
+Esta proteção é útil quando não desejamos que pessoas alterem o conteúdo de um
+compartilhamento.  Isto pode ser feito de duas formas: negando o acesso de
+gravação para todo o compartilhamento ou permitindo leitura somente para
+algumas pessoas.  O parâmetro usado para fazer a restrição de acesso somente
+leitura é o <code class="literal">read only = yes</code> ou seu antônimo
+<code class="literal">writable = no</code>.  Abaixo seguem os dois exemplos comentados:
+</p><pre class="screen">
+[teste]
+ comment = Acesso a leitura para todos
+ path = /tmp
+ read only = yes
+ public = yes
+</pre><p>
+No exemplo acima, o diretório <code class="filename">/tmp</code> (<span class="emphasis"><em>path =
+/tmp</em></span>) foi compartilhado com o nome <code class="literal">teste</code>
+(<span class="emphasis"><em>[teste]</em></span>), de forma pública (acesso sem senha -
+<span class="emphasis"><em>public = yes</em></span>), e todos podem apenas ler seu conteúdo
+<span class="emphasis"><em>read only = yes</em></span>).
+</p><pre class="screen">
+[teste]
+ comment = Acesso a gravação para todos com excessões
+ path = /tmp
+ read only = no
+ read list = @users, gleydson
+ invalid users = root
+</pre><p>
+Neste, o mesmo compartilhamento <code class="literal">teste</code>
+(<span class="emphasis"><em>[teste]</em></span>) foi definido como acesso leitura/gravação para
+todos (<span class="emphasis"><em>read only = no</em></span>), mas os usuários do grupo
+<span class="emphasis"><em>@users</em></span> e o usuário <span class="emphasis"><em>gleydson</em></span> terão
+sempre acesso leitura (<span class="emphasis"><em>read list = @users, gleydson</em></span>).
+Adicionalmente foi colocada uma proteção para que o superusuário não tenha
+acesso a ele (<span class="emphasis"><em>invalid users = root</em></span>).  Esta forma de
+restrição é explicada melhor em <a class="xref" href="ch18s11.html#s-samba-a-restr" title="Excessão de acesso na permissão padrão de compartilhamento">“Excessão de acesso na permissão padrão de compartilhamento”</a>).
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-a-rw"></a>Criando um compartilhamento com acesso leitura/gravação</h3></div></div></div><p>
+Esta forma de compartilhamento permite a alteração do conteúdo do
+compartilhamento dos usuários que possuem as permissões de acesso apropriadas.
+Este controle pode ser feito de duas formas: Acesso total de gravação para os
+usuários e acesso de gravação apenas para determinados usuários.  Este controle
+é feito pela opção <code class="literal">read only = no</code> e seu antônimo equivalente
+<code class="literal">writable = yes</code>.  Abaixo dois exemplos:
+</p><pre class="screen">
+[teste]
+ comment = Acesso de gravação para todos.
+ path = /tmp
+ writable = yes
+ public = yes
+</pre><p>
+No exemplo acima, o diretório <code class="filename">/tmp</code> (path = /tmp) foi
+compartilhado com o nome <code class="literal">teste</code> ([teste]), de forma pública
+(acesso sem senha - public = yes) e todos podem ler/gravar dentro dele
+(writable = yes).
+</p><pre class="screen">
+[teste]
+ comment = Acesso a leitura para todos com excessões
+ path = /tmp
+ writable = no
+ write list = @users, gleydson
+</pre><p>
+Neste, o mesmo compartilhamento <code class="literal">teste</code>
+(<span class="emphasis"><em>[teste]</em></span>) foi definido como acesso de leitura para todos
+(<span class="emphasis"><em>writable = no</em></span>), mas os usuários do grupo
+<span class="emphasis"><em>@users</em></span> e o usuário <span class="emphasis"><em>gleydson</em></span> serão os
+únicos que terão também acesso a gravação (<span class="emphasis"><em>write list = @users,
+gleydson</em></span>).  Esta forma de restrição é explicada melhor em <a class="xref" href="ch18s11.html#s-samba-a-restr" title="Excessão de acesso na permissão padrão de compartilhamento">“Excessão de acesso na permissão padrão de compartilhamento”</a>).
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-a-restr"></a>Excessão de acesso na permissão padrão de compartilhamento</h3></div></div></div><p>
+É possível alterar o nível de acesso para determinados usuários/grupos em um
+compartilhamento, para entender melhor: Caso tenha criado um compartilhamento
+somente leitura e queira permitir que apenas alguns usuários ou grupos tenham
+acesso a gravação, isto é possível e será explicado nesta seção.  Este
+comportamento é controlado por duas opções: <code class="literal">read list</code> e
+<code class="literal">write list</code>.  Veja alguns exemplos:
+</p><pre class="screen">
+[temporario] 
+ comment = Diretório temporário
+ path = /tmp
+ writable = yes
+ read list = gleydson, root
+ browseable = no
+ available = yes
+</pre><p>
+Neste exemplo, disponibilizamos o diretório <code class="filename">/tmp</code>
+(<span class="emphasis"><em>path = /tmp</em></span>) como compartilhamento de nome
+<code class="literal">temporario</code> (<span class="emphasis"><em>[temporario]</em></span>), seu acesso
+padrão é leitura/gravação para todos (<span class="emphasis"><em>writable = yes</em></span>),
+exceto para os usuários <code class="literal">root</code> e <code class="literal">gleydson</code>
+(<span class="emphasis"><em>read list = root, gleydson</em></span>).  Em adição, tornamos o
+compartilhamento <span class="emphasis"><em>invisível</em></span> (veja <a class="xref" href="ch18s11.html#s-samba-a-invisivel" title="Criando um compartilhamento invisível">“Criando um compartilhamento invisível”</a>) no "Ambiente de Rede" do Windows
+(<span class="emphasis"><em>browseable = no</em></span>) e ele será lido e disponibilizado pelo
+SAMBA (<span class="emphasis"><em>available = yes</em></span>).
+</p><pre class="screen">
+[temporario] 
+ comment = Diretório temporário
+ path = /tmp
+ writable = no
+ write list = gleydson, @operadores
+ browseable = yes
+</pre><p>
+Neste exemplo, disponibilizamos o diretório <code class="filename">/tmp</code>
+(<span class="emphasis"><em>path = /tmp</em></span>) como compartilhamento de nome
+<code class="literal">temporario</code> (<span class="emphasis"><em>[temporario]</em></span>), seu acesso
+padrão é apenas leitura para todos (<span class="emphasis"><em>writable = no</em></span>), exceto
+para o usuário <code class="literal">gleydson</code> e usuários do grupo Unix
+<code class="literal">operadores</code>, que tem acesso a leitura/gravação
+(<span class="emphasis"><em>write list = gleydson, @operadores</em></span>).  Tornamos o
+compartilhamento <span class="emphasis"><em>visível</em></span> no "Ambiente de Rede" do Windows
+(<span class="emphasis"><em>browseable = yes</em></span> - que é o padrão).
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-a-ipc-admin"></a>Restringindo o IPC$ e ADMIN$</h3></div></div></div><p>
+É seguro restringir os serviços <code class="filename">IPC$</code> e
+<code class="filename">ADMIN$</code> para acesso somente pelas faixas de rede de
+confiança.  Isto pode ser feito através da mesma forma que a restrição em
+outros compartilhamentos.  Os efeitos desta restrição serão que somente as
+redes autorizadas possam obter a lista de máquinas, se autenticar no domínio e
+realizar tarefas administrativas gerais:
+</p><pre class="screen">
+[IPC$]
+read only = yes
+allow from 192.168.1.0/24
+
+[ADMIN$]
+read only = yes
+allow from 192.168.1.0/24
+</pre><p>
+O exemplo acima permite que os serviços <code class="literal">IPC$</code> e
+<code class="literal">ADMIN$</code> sejam acessados de qualquer máquina na faixa de rede
+<code class="literal">192.168.1.0/24</code>.  Para forçar a autenticação para acesso a
+estes serviços:
+</p><pre class="screen">
+[IPC$]
+invalid users = nobody
+valid users = gleydson michelle
+read only = yes
+allow from 192.168.1.0/24
+
+[ADMIN$]
+invalid users = nobody
+valid users = gleydson michelle
+read only = yes
+allow from 192.168.1.0/24
+</pre><p>
+Os exemplos acima são similares ao de antes, mas o acesso a listagem dos
+compartilhamentos é restringida (<span class="emphasis"><em>invalid users = nobody</em></span>),
+pois o usuário <span class="emphasis"><em>nobody</em></span> (usado para mostrar o
+compartilhamento) tem o acesso negado.  Somente os usuários
+<code class="literal">gleydson</code> e <code class="literal">michelle</code> (<span class="emphasis"><em>valid
+users = gleydson michelle</em></span>) podem listar seu conteúdo.
+</p><p>
+<span class="strong"><strong>OBS:</strong></span> Mesmo que estejam restritos, os
+serviços <code class="literal">IPC$</code> e <code class="literal">ADMIN$</code> sempre poderão ser
+acessados de 127.0.0.1, ou teríamos problemas com o funcionamento do SAMBA.
+Assim não é necessário colocar 127.0.0.1 na lista de IPs autorizados.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-a-invisivel"></a>Criando um compartilhamento invisível</h3></div></div></div><p>
+Para não exibir um compartilhamento da lista de compartilhamentos das máquinas,
+utilize o parâmetro <code class="literal">browseable = no</code>.  Por exemplo:
+</p><pre class="screen">
+[teste]
+ path = /tmp
+ comment = Diretório temporário
+ read only = yes
+ browseable = no
+</pre><p>
+Neste exemplo, o diretório <code class="filename">/tmp</code> (<span class="emphasis"><em>path =
+/tmp</em></span>) foi compartilhado através de <code class="literal">teste</code>
+(<span class="emphasis"><em>[teste]</em></span>) com acesso somente leitura (<span class="emphasis"><em>read only
+= yes</em></span>) e ele não será mostrado na listagem de compartilhamentos do
+ambiente de rede do Windows (<span class="emphasis"><em>browseable = no</em></span>).
+</p><p>
+Note que o compartilhamento continua disponível, porém ele poderá ser acessado
+da estação Windows, especificando a \\maquina\compartilhamento.  Para acessar o
+compartilhamento do exemplo acima:
+</p><pre class="screen">
+# Clique em Iniciar/Executar e digite:
+\\nome_do_servidor_samba\teste
+</pre><p>
+Ao contrário das máquinas <span class="command"><strong>Windows</strong></span> onde é necessário
+adicionar um "$" do nome de compartilhamento para criar um compartilhamento
+oculto (como <code class="literal">teste$</code>) o SAMBA cria um compartilhamento
+<span class="strong"><strong>realmente</strong></span> oculto, não aparecendo mesmo na
+listagem do <span class="command"><strong>smbclient</strong></span>.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-a-comandos"></a>Executando comandos antes e após o acesso ao compartilhamento</h3></div></div></div><p>
+Este recurso oferece uma infinidade de soluções que podem resolver desde
+problemas de praticidade até segurança usando as opções
+<code class="literal">preexec</code> e <code class="literal">postexec</code>.  Por exemplo, imagine
+que esteja compartilhando 4 unidades de CD-Rom de um servidor na rede, e deseje
+que estes CDs estejam sempre disponíveis mesmo que algum operador engraçadinho
+tenha ejetado as gavetas de propósito, podemos fazer a seguinte configuração:
+</p><pre class="screen">
+[cdrom]
+ path = /cdrom
+ comment = Unidade de CD-ROM 1
+ read only = yes
+ preexec = /bin/mount /cdrom
+ preexec close = yes
+ postexec = /bin/umount /cdrom
+</pre><p>
+Na configuração acima, o CD-ROM será compartilhado como
+<code class="literal">cdrom</code> (<span class="emphasis"><em>[cdrom]</em></span>), somente leitura
+(<span class="emphasis"><em>red only = yes</em></span>), quando o usuário acessar o
+compartilhamento ele "fechará" a gaveta do CD (<span class="emphasis"><em>preexec = /bin/mount
+/cdrom</em></span>) e desmontará o drive de CD assim que o compartilhamento for
+fechado (<span class="emphasis"><em>postexec = /bin/umount /cdrom</em></span>).  Adicionalmente,
+caso o comando <span class="command"><strong>mount</strong></span> da opção <code class="literal">preexec</code>
+tenha retornado um valor diferente de 0, a conexão do compartilhamento é
+fechada (<span class="emphasis"><em>preexec close = yes</em></span>).
+</p><p>
+A UID do processo do <code class="literal">preexec</code> e <code class="literal">postexec</code>
+será o mesmo do usuário que está acessando o compartilhamento, por este motivo
+ele deverá ter permissões para montar/desmontar o CD-ROM no sistema.  Caso
+precise executar comandos como usuário <code class="literal">root</code>, utilize a
+variante <code class="literal">root preexec</code> e <code class="literal">root postexec</code>.
+Apenas tenha consciência que os programas sendo executados são seguros o
+bastante para não comprometer o seu sistema.
+</p><p>
+Usando a mesma técnica, é possível que o sistema lhe envie e-mails alertando
+sobre acesso a compartilhamentos que em conjunto com um debug level 2 e logs
+configurados independentes por máquina, você possa ver o que a máquina tentou
+acessar (e foi negado) e o que ela conseguiu acesso.
+</p><p>
+Como bom administrador, você poderá criar scripts que façam uma checagem de
+segurança no compartilhamento e encerre automaticamente a conexão caso seja
+necessário, montar um "honney pot" para trojans, etc.
+</p><p>
+Como deve estar notando, as possibilidades do SAMBA se extendem além do simples
+compartilhamento de arquivos, se integrando com o potencial dos recursos do
+sistema UNIX.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-a-public-access"></a>Considerações de segurança com o uso do parâmetro "public = yes"</h3></div></div></div><p>
+Este parâmetro permite que você acesso um compartilhamento sem fornecer uma
+senha, ou seja, que o usuário não esteja autenticado.  NÃO utilize o parâmetro
+"public = yes" (ou um de seus sinônimos) no compartilhamento
+<code class="literal">[homes]</code>, pois abrirá brechas para que possa acessar o
+diretório home de qualquer usuário e com acesso a gravação (que é o padrão
+adotado pelos administradores para permitir o acesso ao seu diretório home
+remoto).
+</p><p>
+Recomendo utilizar o parâmetro <code class="literal">public = yes</code> somente em
+compartilhamentos onde é realmente necessário, como o [netlogon] ou outras
+áreas de acesso público onde as permissões do sistema de arquivos local estejam
+devidamente restritas.  Outra medida é não utilizar a opção <code class="literal">follow
+symlinks</code>, que poderá lhe causar problemas com usuários mal
+intencionados que tenham acesso shell.
+</p><p>
+<span class="strong"><strong>OBS:</strong></span> Tenha em mente todas as considerações
+de segurança abordadas neste capítulo, bem como as permissões de acesso ao
+sistema Unix e como elas funcionam.  A disponibilidade de arquivos em uma rede
+é simples, simples também pode ser o acesso indevido a eles caso não saiba o
+que está fazendo.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-a-passwords"></a>Senhas criptografadas ou em texto puro?</h3></div></div></div><p>
+Como regra geral, prefira sempre utilizar senhas criptografadas.  Aqui alguns
+motivos:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+A senha é enviada de uma forma que dificulta sua captura por pessoas
+maliciosas.
+</p></li><li class="listitem"><p>
+O NT não permite que você navegue no ambiente de rede em um sistema SAMBA com
+nível de acesso por usuário autenticando usando senhas em texto plano.
+</p></li><li class="listitem"><p>
+Será solicitada sempre a senha para reconexão em cada compartilhamento da
+máquina.
+</p></li><li class="listitem"><p>
+Todas as versões de Windows NT 4 a partir SP3 e Windows 95 OSR/2 utilizam
+senhas criptografadas como padrão.  É possível faze-lo utilizar senhas em texto
+plano modificando chaves no registro das máquinas clientes (veja <a class="xref" href="ch18s08.html#s-samba-senhas-plano" title="Ativando o suporte a senhas em texto plano">“Ativando o suporte a senhas em texto plano”</a> para detalhes).
+</p></li></ul></div><p>
+As vantagens da utilização da autenticação usando texto plano:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+A senha utilizada será a mesma do <code class="filename">/etc/passwd</code> (servindo
+para ftp, login, etc)
+</p></li><li class="listitem"><p>
+O servidor PDC pode ser usado para logon desde que os clientes estejam usando
+senhas em texto plano.
+</p></li><li class="listitem"><p>
+Elas não são armazenadas no disco da estação cliente.
+</p></li><li class="listitem"><p>
+Você não será perguntado por uma senha durante cada reconexão de recurso.
+</p></li></ul></div><p>
+Antes de optar por utilizar um sistema de senhas em texto plano, leve em
+consideração estes pontos.  Se você já utiliza telnet ou ftp, provavelmente a
+utilização de autenticação usando texto plano no SAMBA não trará problemas mais
+graves para você.
+</p><p>
+<span class="strong"><strong>OBS</strong></span>: Caso seu NT ou versão derivada não
+navegue no ambiente de rede (só aceitando conexões especificando diretamente o
+"\\servidor\compartilhamento") modifique sua configuração do SAMBA para
+autenticar usando senhas criptografadas (veja <a class="xref" href="ch18s08.html#s-samba-senhas-crypto" title="Ativando o suporte a senhas criptografadas">“Ativando o suporte a senhas criptografadas”</a>) para detalhes de como fazer isto.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-samba-a-usernamemap"></a>Mapeamento de nomes de usuários</h3></div></div></div><p>
+Este recurso faz a mapeamento (tradução) de nomes de usuários usados no momento
+do acesso para contas de acesso locais, bastante útil quando o nome de usuário
+enviado pela máquina não confere com NENHUMA conta local do sistema (um exemplo
+é quando o login do usuário no <span class="command"><strong>Windows</strong></span> é diferente de seu
+Login no <span class="command"><strong>Linux</strong></span>).  Outro vantagem de seu uso é permitir que
+uma categoria de usuários utilizem um mesmo nível de acesso no sistema.
+</p><p>
+Seu formato é o seguinte: <code class="literal">username map = arquivo</code>.
+</p><p>
+As seguintes regras são usadas para construir o arquivo de mapeamento de nomes:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+Um arquivo de múltiplas linhas onde o sinal de "=" separa os dois parâmetros
+principais.  O arquivo é processado linha por linha da forma tradicional, a
+diferença é o que o processamento do arquivo continua mesmo que uma condição
+confira.  Para que o processamento do resto do arquivo seja interrompido quando
+um mapeamento confira, coloque o sinal "!"  na frente do nome local.
+</p></li><li class="listitem"><p>
+O parâmetro da esquerda é a conta Unix local que será usada para fazer acesso
+ao compartilhamento.  Somente uma conta Unix poderá ser utilizada.
+</p></li><li class="listitem"><p>
+O parâmetro da direita do sinal de "=" pode conter um ou mais nomes de usuários
+separados por espaços que serão mapeados para a conta Unix local.
+</p><p>
+O parâmetro "@grupo" permite que usuários pertencentes ao grupo Unix local
+sejam mapeados para a conta de usuário do lado esquerdo.  Outro caracter
+especial é o "*" e indica que qualquer usuário será mapeado.
+</p></li></ul></div><p>
+Você pode utilizar comentários na mesma forma que no arquivo de configuração
+<code class="filename">smb.conf</code>.  Alguns exemplos:
+</p><pre class="screen">
+# Mapeia o usuário "gleydson mazioli" com o usuário local gleydson
+gleydson = gleydson mazioli
+
+# Mapeia o usuário root e adm para o usuário nobody
+nobody = root adm
+
+# Mapeia qualquer nome de usuário que pertença ao grupo smb-users para o usuário
+# samba. 
+samba = @smb-users
+
+# Utiliza todos os exemplos anteriores, se nenhum usuário conferir, ele será 
+# mapeado para o usuário nobody (como o usuário root e adm já são mapeados
+# para "nobody", este exemplo terá o mesmo efeito).
+!gleydson = gleydson mazioli
+!samba = @smb-users
+nobody = *
+</pre></div></div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch18s10.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch18.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch18s12.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Compartilhamento de impressão no servidor SAMBA </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Melhorando a performance do compartilhamento/servidor</td></tr></table></div></body></html>

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Capítulo 12. Apache</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="index.html" title="Guia Foca Linux" /><link rel="prev" href="ch11s04.html" title="Melhorando a segurança das senhas armazenadas em seu sistema" /><link rel="next" href="ch12s02.html" title="Configurações Básicas do Apache" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Capítulo 12. Apache</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch11s04.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch12s02.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-node">Apache</span></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="s-apache"></a>Capítulo 12. Apache</h1></div></div></div><div class="toc"><p><strong>Índice</strong></p><dl class="toc"><dt><span class="section"><a href="ch12.html#s-apache-intro">Introdução</a></span></dt><dd><dl><dt><span class="section"><a href="ch12.html#s-apache-versao">Versão</a></span></dt><dt><span class="section"><a href="ch12.html#s-apache-historia">Um resumo da História do Apache</a></span></dt><dt><span class="section"><a href="ch12.html#s-apache-contribuindo">Enviando Correções/Contribuindo com o projeto</a></span></dt><dt><span class="section"><a href="ch12.html#s-apache-caracteristicas">Características do Apache</a></span></dt><dt><span class="section"><a href="ch12.html#s-apache-ficha">Ficha técnica</a></span></dt><dt><span class="section"><a href="ch12.html#s-apache-hwreq">Requerimentos</a></span></dt><dt><span class="section"><a href="ch12.html#s-apache-logs">Arquivos de log criados pelo Apache</a></span></dt><dt><span class="section"><a href="ch12.html#s-apache-install">Instalação</a></span></dt><dt><span class="section"><a href="ch12.html#s-apache-rodando">Iniciando o servidor/reiniciando/recarregando a configuração</a></span></dt><dt><span class="section"><a href="ch12.html#s-apache-opcoescmd">Opções de linha de comando</a></span></dt></dl></dd><dt><span class="section"><a href="ch12s02.html">Configurações Básicas do Apache</a></span></dt><dd><dl><dt><span class="section"><a href="ch12s02.html#s-apache-port">Configurando a porta padrao</a></span></dt><dt><span class="section"><a href="ch12s02.html#s-apache-adicpagina">Adicionando uma página no Apache</a></span></dt><dt><span class="section"><a href="ch12s02.html#s-apache-bindaddress">Configurando as interfaces que o Apache atenderá</a></span></dt><dt><span class="section"><a href="ch12s02.html#s-apache-listen">Especificando endereços/portas adicionais (a diretiva <span class="emphasis"><em>Listen</em></span>)</a></span></dt></dl></dd><dt><span class="section"><a href="ch12s03.html">Restrições de Acesso</a></span></dt><dd><dl><dt><span class="section"><a href="ch12s03.html#s-apache-acesso">Especificando opções/permissões para as páginas</a></span></dt><dt><span class="section"><a href="ch12s03.html#s-apache-acesso-restr-autor">Autorização</a></span></dt><dt><span class="section"><a href="ch12s03.html#s-apache-acesso-restr-auth">Autenticação</a></span></dt><dt><span class="section"><a href="ch12s03.html#s-apache-acesso-restr-autorANDauth">Usando autorização e autenticação juntos</a></span></dt><dt><span class="section"><a href="ch12s03.html#s-apache-acesso-restr-htaccess">O arquivo <code class="filename">.htaccess</code></a></span></dt><dt><span class="section"><a href="ch12s03.html#s-apache-acesso-setenvif">Usando a diretiva SetEnvIf com Allow e Deny</a></span></dt><dt><span class="section"><a href="ch12s03.html#s-apache-acesso-limit">A diretiva &lt;Limit&gt;</a></span></dt><dt><span class="section"><a href="ch12s03.html#s-apache-acesso-limitexcept">Diretiva &lt;LimitExcept&gt;</a></span></dt></dl></dd><dt><span class="section"><a href="ch12s04.html">Definindo documentos de erro personalizados</a></span></dt><dt><span class="section"><a href="ch12s05.html">Módulos DSO</a></span></dt><dt><span class="section"><a href="ch12s06.html">Sistema de Log do Apache</a></span></dt><dd><dl><dt><span class="section"><a href="ch12s06.html#s-apache-log-agentlog">AgentLog</a></span></dt><dt><span class="section"><a href="ch12s06.html#s-apache-log-errorlog">ErrorLog</a></span></dt><dt><span class="section"><a href="ch12s06.html#s-apache-log-customlog">CustomLog</a></span></dt><dt><span class="section"><a href="ch12s06.html#s-apache-log-refererlog">RefererLog</a></span></dt><dt><span class="section"><a href="ch12s06.html#s-apache-log-rewritelog">RewriteLog</a></span></dt><dt><span class="section"><a href="ch12s06.html#s-apache-log-rewriteloglevel">RewriteLogLevel</a></span></dt><dt><span class="section"><a href="ch12s06.html#s-apache-log-scriptlog">ScriptLog</a></span></dt><dt><span class="section"><a href="ch12s06.html#s-apache-log-scriptlogbuffer">ScriptLogBuffer</a></span></dt><dt><span class="section"><a href="ch12s06.html#s-apache-log-scriptloglength">ScriptLogLength</a></span></dt><dt><span class="section"><a href="ch12s06.html#s-apache-log-logformat">LogFormat</a></span></dt><dt><span class="section"><a href="ch12s06.html#s-apache-log-transferlog">TransferLog</a></span></dt><dt><span class="section"><a href="ch12s06.html#s-apache-log-loglevel">LogLevel</a></span></dt><dt><span class="section"><a href="ch12s06.html#s-apache-log-anonylogmail">Anonymous_LogEmail</a></span></dt><dt><span class="section"><a href="ch12s06.html#s-apache-log-cookielog">CookieLog</a></span></dt><dt><span class="section"><a href="ch12s06.html#s-apache-log-webalizer">Relatório gráfico de acesso ao sistema</a></span></dt></dl></dd><dt><span class="section"><a href="ch12s07.html">Configurando o Apache como servidor proxy</a></span></dt><dd><dl><dt><span class="section"><a href="ch12s07.html#s-apache-proxy-access">Controlando o acesso ao servidor proxy</a></span></dt><dt><span class="section"><a href="ch12s07.html#s-apache-proxy-redir">Redirecionamento de conexões no Apache</a></span></dt></dl></dd><dt><span class="section"><a href="ch12s08.html">Virtual Hosts</a></span></dt><dd><dl><dt><span class="section"><a href="ch12s08.html#s-apache-vhosts-ip">Virtual hosts baseados em IP</a></span></dt><dt><span class="section"><a href="ch12s08.html#s-apache-vhosts-nome">Virtual hosts baseados em nome</a></span></dt><dt><span class="section"><a href="ch12s08.html#s-apache-vhosts-dnssec">Segurança no uso de IP's em Virtual Hosts</a></span></dt></dl></dd><dt><span class="section"><a href="ch12s09.html">Uso de criptografia SSL</a></span></dt><dd><dl><dt><span class="section"><a href="ch12s09.html#s-apache-ssl-s">Servidor apache com suporte a ssl</a></span></dt><dt><span class="section"><a href="ch12s09.html#s-apache-ssl-instal">Instalando o suporte a módulo SSL no Apache</a></span></dt><dt><span class="section"><a href="ch12s09.html#s-apache-ssl-mkcert">Gerando um certificado digital</a></span></dt><dt><span class="section"><a href="ch12s09.html#s-apache-ssl-exemplo">Exemplo de configuração do módulo mod-ssl</a></span></dt><dt><span class="section"><a href="ch12s09.html#s-apache-ssl-sslreq">Autorizando acesso somente a conexões SSL</a></span></dt><dt><span class="section"><a href="ch12s09.html#s-apache-ssl-inic">Iniciando o servidor Web com suporte a SSL</a></span></dt></dl></dd><dt><span class="section"><a href="ch12s10.html">Exemplo comentado de um arquivo de configuração do Apache</a></span></dt><dd><dl><dt><span class="section"><a href="ch12s10.html#s-apache-exemplo-httpd">httpd.conf</a></span></dt><dt><span class="section"><a href="ch12s10.html#s-apache-exemplo-srm">srm.conf</a></span></dt><dt><span class="section"><a href="ch12s10.html#s-apache-exemplo-access">access.conf</a></span></dt></dl></dd><dt><span class="section"><a href="ch12s11.html">Códigos HTTP</a></span></dt></dl></div>
+    <p>
+    Esta capítulo documenta a configuração, personalização, introdução aos
+    mecanismos de autenticação e controle de acesso do <span class="command"><strong>Apache</strong></span>,
+    sistema proxy, virtual hosting, e exemplos de configuração do servidor
+    <span class="command"><strong>httpd</strong></span>.  Ele não tem como objetivo ser uma referência
+    completa de configuração, mas sim abordar didaticamente o assunto.
+    </p>
+
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-apache-intro"></a>Introdução</h2></div></div></div><p>
+O servidor web é um programa responsável por disponibilizar páginas, fotos, ou
+qualquer outro tipo de objeto ao navegador do cliente.  Ele também pode operar
+recebendo dados do cliente, processando e enviando o resultado para que o
+cliente possa tomar a ação desejada (como em aplicações CGI's, banco de dados
+web, preenchimento de formulários, etc).
+</p><p>
+O <span class="command"><strong>Apache</strong></span> é um servidor Web extremamente configurável,
+robusto e de alta performance desenvolvido por uma equipe de voluntários
+(conhecida como <code class="literal">Apache Group</code>) buscando criar um servidor web
+com muitas características e com código fonte disponível gratuitamente via
+Internet.  Segundo a Netcraft (<a class="link" href="http://www.netcraft.com/" target="_top">http://www.netcraft.com/</a>), o
+<span class="command"><strong>Apache</strong></span> é mais usado que todos os outros servidores web do
+mundo juntos.
+</p><p>
+Este capítulo não tenta ser um guia completo ao <span class="command"><strong>Apache</strong></span>, mas
+tentará mostrar como sua estrutura é organizada, as diretivas principais de
+configuração, diretivas de segurança, virtual hosting, proxy, o uso de
+utilitários de gerenciamento do servidor, como personalizar algumas partes do
+servidor e programas úteis de terceiros para análise e diagnóstico do servidor
+web.  Não deixe também de ver <a class="xref" href="ch12s10.html" title="Exemplo comentado de um arquivo de configuração do Apache">“Exemplo comentado de um arquivo de configuração do Apache”</a> pois contém
+diretivas básicas de configuração comentadas e explicações interessante e faz
+parte do aprendizado.
+</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-versao"></a>Versão</h3></div></div></div><p>
+É assumido que esteja usando a versão 1.3.22 do <span class="command"><strong>apache</strong></span>.  As
+explicações contidas aqui podem funcionar para versões posteriores, mas é
+recomendável que leia a documentação sobre modificações no programa (changelog)
+em busca de mudanças que alterem o sentido das explicações fornecidas aqui.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-historia"></a>Um resumo da História do Apache</h3></div></div></div><p>
+O <span class="command"><strong>Apache</strong></span> tem como base o servidor web <span class="command"><strong>NCSA
+1.3</strong></span> (<span class="emphasis"><em>National Center of Supercomputing
+Applications</em></span>), que foi desenvolvido por Rob McCool.  Quando Rob
+deixou o NCSA, o desenvolvimento foi interrompido, assim muitos desenvolvedores
+buscaram personalizar sua própria versão do NCSA ou adicionar mais
+características para atender as suas necessidades.  Neste momento começa a
+história do <span class="command"><strong>Apache</strong></span> com <span class="emphasis"><em>Brian Behlendorf</em></span>
+e <span class="emphasis"><em>Cliff Skolnick</em></span> abrindo uma lista de discussão para
+interessados no desenvolvimento, conseguindo espaço em um servidor doado pela
+<span class="emphasis"><em>HotWired</em></span> e trocando patches corrigindo problemas,
+adicionando recursos e discutindo idéias com outros desenvolvedores e hackers
+interessados neste projeto.
+</p><p>
+A primeira versão oficial do <span class="command"><strong>Apache</strong></span> foi a 0.6.2, lançada em
+Abril de 1995 (neste período a NCSA retomava o desenvolvimento de seu servidor
+web, tendo como desenvolvedores <span class="emphasis"><em>Brandon Long</em></span> e
+<span class="emphasis"><em>Beth Frank</em></span> que também se tornaram membros especiais do
+grupo <span class="command"><strong>Apache</strong></span>, compartilhando idéias sobre seus projetos).
+</p><p>
+Nas versões 2.x do Apache, a escalabilidade do servidor foi ampliada suportando
+as plataformas <span class="command"><strong>Win32</strong></span> (não obtendo o mesmo desempenho que em
+plataformas UNIX mas sendo melhorado gradativamente).
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-contribuindo"></a>Enviando Correções/Contribuindo com o projeto</h3></div></div></div><p>
+Um formulário está disponível na Web para o envio de correções/sugestões em
+<code class="literal"><a class="link" href="http://www.apache.org/bug_report.html/" target="_top">http://www.apache.org/bug_report.html/</a></code>.
+Uma lista de anuncio sobre o <span class="command"><strong>Apache</strong></span> está disponível em
+<code class="email">&lt;<a class="email" href="mailto:apache-announce@apache.org">apache-announce@apache.org</a>&gt;</code> que divulgam correções, novas versões
+e realização de eventos.
+</p><p>
+Mais detalhes sobre o desenvolvimento do Apache podem ser visualizadas na URL
+<code class="literal"><a class="link" href="http://dev.apache.org/" target="_top">http://dev.apache.org/</a></code>.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-caracteristicas"></a>Características do Apache</h3></div></div></div><p>
+Abaixo estão algumas características que fazem esse servidor web o preferido
+entre os administradores de sistemas:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+Possui suporte a scripts cgi usando linguagens como <span class="emphasis"><em>Perl, PHP, Shell
+Script, ASP, etc</em></span>.
+</p></li><li class="listitem"><p>
+Suporte a autorização de acesso podendo ser especificadas restrições de acesso
+separadamente para cada endereço/arquivo/diretório acessado no servidor.
+</p></li><li class="listitem"><p>
+Autenticação requerendo um nome de usuário e senha válidos para acesso a alguma
+página/sub-diretório/arquivo (suportando criptografia via Crypto e MD5).
+</p></li><li class="listitem"><p>
+Negociação de conteúdo, permitindo a exibição da página Web no idioma
+requisitado pelo Cliente Navegador.
+</p></li><li class="listitem"><p>
+Suporte a tipos mime.
+</p></li><li class="listitem"><p>
+Personalização de logs.
+</p></li><li class="listitem"><p>
+Mensagens de erro.
+</p></li><li class="listitem"><p>
+Suporte a virtual hosting (é possível servir 2 ou mais páginas com endereços/
+portas diferentes através do mesmo processo ou usar mais de um processo para
+controlar mais de um endereço).
+</p></li><li class="listitem"><p>
+Suporte a IP virtual hosting.
+</p></li><li class="listitem"><p>
+Suporte a name virtual hosting.
+</p></li><li class="listitem"><p>
+Suporte a servidor Proxy ftp e http, com limite de acesso, caching (todas
+flexivelmente configuráveis).
+</p></li><li class="listitem"><p>
+Suporte a proxy e redirecionamentos baseados em URLs para endereços Internos.
+</p></li><li class="listitem"><p>
+Suporte a criptografia via SSL,Certificados digitais
+</p></li><li class="listitem"><p>
+Módulos DSO (Dynamic Shared Objects) permitem adicionar/remover funcionalidades
+e recursos sem necessidade de recompilação do programa.
+</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-ficha"></a>Ficha técnica</h3></div></div></div><p>
+Pacote: 
+</p><p>
+Utilitários:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">apache</code> - Servidor Web Principal
+</p></li><li class="listitem"><p>
+<code class="literal">apachectl</code> - Shell script que faz interface com o
+<span class="command"><strong>apache</strong></span> de forma mais amigável
+</p></li><li class="listitem"><p>
+<code class="literal">apacheconfig</code> - Script em Perl para configuração interativa
+básica do <span class="command"><strong>Apache</strong></span>
+</p></li><li class="listitem"><p>
+<code class="literal">htpasswd</code> - Cria/Gerencia senhas criptografadas Crypto/MD5
+</p></li><li class="listitem"><p>
+<code class="literal">htdigest</code> - Cria/Gerencia senhas criptografadas Crypto/MD5
+</p></li><li class="listitem"><p>
+<code class="literal">dbmmanage</code> - Cria/Gerencia senhas em formato DBM (Perl)
+</p></li><li class="listitem"><p>
+<code class="literal">logresolve</code> - Faz um DNS reverso dos arquivos de log do
+<span class="command"><strong>Apache</strong></span> para obter o endereço de hosts com base nos endereços
+IP's.
+</p></li><li class="listitem"><p>
+<code class="literal">ab</code> - Apache Benchmarcking - Ferramenta de medida de
+desempenho do servidor Web Apache.
+</p></li></ul></div><p>
+Por padrão, os arquivos de configuração do <span class="command"><strong>Apache</strong></span> residem no
+diretório <code class="filename">/etc/apache</code>:
+</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">httpd.conf</span></dt><dd><p>
+Arquivo de configuração principal do <span class="command"><strong>Apache</strong></span>, possui
+diretivas que controlam a operação do daemon servidor.  Um arquivo de
+configuração alternativo pode ser especificado através da opção "-f" da linha
+de comando.
+</p></dd><dt><span class="term">srm.conf</span></dt><dd><p>
+Contém diretivas que controlam a especificação de documentos que o servidor
+oferece aos clientes.  O nome desse arquivo pode ser substituído através da
+diretiva ResourceConfig no arquivo principal de configuração.
+</p></dd><dt><span class="term">access.conf</span></dt><dd><p>
+Contém diretivas que controlam o acesso aos documentos.  O nome desse arquivo
+pode ser substituído através da diretiva <span class="emphasis"><em>AccessConfig</em></span> no
+arquivo principal de configuração.
+</p></dd></dl></div><p>
+O servidor Web lê os arquivos acima na ordem que estão especificados
+(<code class="filename">httpd.conf</code>, <code class="filename">srm.conf</code> e
+<code class="filename">access.conf</code>).  As configurações também podem ser
+especificadas diretamente no arquivo <code class="filename">httpd.conf</code>.  Note que
+não é obrigatório usar os arquivos <code class="filename">srm.conf</code> e
+<code class="filename">access.conf</code>, mas isto proporciona uma melhor organização
+das diretivas do servidor, principalmente quando se tem um grande conjunto de
+diretivas.  Um exemplo comentado destes três arquivos de configuração é
+encontrado em <a class="xref" href="ch12s10.html" title="Exemplo comentado de um arquivo de configuração do Apache">“Exemplo comentado de um arquivo de configuração do Apache”</a>.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-hwreq"></a>Requerimentos</h3></div></div></div><p>
+A máquina mínima para se rodar um servidor <span class="command"><strong>Apache</strong></span> para
+atender a uma rede padrão 10MB/s é um Pentium 90, 24MB de RAM, um HD com um bom
+desempenho e espaço em disco considerável de acordo com o tamanho projetado de
+seu servidor web (considerando seu crescimento).
+</p><p>
+Uma configuração mais rápida para redes 100MB/s teria como processador um Cyrix
+MX ou Intel Pentium MMX como plataforma mínima (Cyrix é o recomendado pelo alto
+desempenho no processamento de strings), barramento de HD SCSI com uma boa
+placa controladora (Adaptec 19160 ou superior) com 64MB de RAM no mínimo.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-logs"></a>Arquivos de log criados pelo Apache</h3></div></div></div><p>
+O servidor <span class="command"><strong>httpd</strong></span> grava seus arquivos de log geralmente em
+<code class="filename">/var/log/apache</code>, não é possível descrever os arquivos de
+logs usados porque tanto seus nomes como conteúdo podem ser personalizados no
+arquivo <code class="filename">httpd.conf</code>.  Mesmo assim, os arquivos de logs
+encontrados na instalação padrão do <span class="command"><strong>Apache</strong></span> são os seguintes:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="filename">access.log</code> - Registra detalhes sobre o acesso as páginas
+do servidor <span class="command"><strong>httpd</strong></span>.
+</p></li><li class="listitem"><p>
+<code class="filename">error.log</code> - Registra detalhes saber erros de acesso as
+páginas ou erros internos do servidor.
+</p></li><li class="listitem"><p>
+<code class="filename">agent.log</code> - Registra o nome do navegador do cliente (campo
+<em class="replaceable"><code>UserAgent</code></em> do cabeçalho http).
+</p></li></ul></div><p>
+Mais referências podem ser encontradas em <a class="xref" href="ch12s06.html" title="Sistema de Log do Apache">“Sistema de Log do Apache”</a>.  Um
+bom programa para geração de estatísticas de acesso com gráficos é o <a class="xref" href="ch12s06.html#s-apache-log-webalizer" title="Relatório gráfico de acesso ao sistema">“Relatório gráfico de acesso ao sistema”</a>.
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-install"></a>Instalação</h3></div></div></div><p>
+<code class="literal">apt-get install apache apache-doc</code>
+</p><p>
+(o pacote  contém a
+documentação de referencia do <span class="command"><strong>Apache</strong></span>, é recomendável
+instala-lo se estiver curioso e deseja entender melhor seu funcionamento ou
+consultar diretivas).
+</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-rodando"></a>Iniciando o servidor/reiniciando/recarregando a configuração</h3></div></div></div><p>
+O <span class="command"><strong>Apache</strong></span> pode ser executado tanto como um servidor
+<span class="emphasis"><em>Inetd</em></span> ou como um <span class="emphasis"><em>Daemon</em></span>.  A
+inicialização de programas pelo <span class="emphasis"><em>Inetd</em></span> é uma boa estratégia
+quando você precisa de um controle de acesso básico (o fornecido pelo
+<span class="command"><strong>tcpd</strong></span>), e o serviço é pouco usado na máquina.
+</p><p>
+A segurança de um serviço iniciado pelo <span class="command"><strong>inetd</strong></span> pode ser
+substituída e melhorada por um firewall bem configurado, garantindo facilidades
+extras como um relatório de tráfego para a porta do servidor web, por exemplo.
+Mesmo assim se o servidor <span class="command"><strong>Apache</strong></span> estiver rodando como daemon
+e estiver ocioso, ele será movido para swap liberando a memória RAM para a
+execução de outros programas.
+</p><p>
+Neste capítulo será assumido seu funcionamento do <span class="command"><strong>Apache</strong></span>
+como Daemon, que é o método de funcionamento recomendado para sites de grande
+tráfego onde ele é freqüentemente requisitado e considerado um serviço crítico.
+</p><p>
+O método padrão para iniciar programas como daemons na
+<span class="command"><strong>Debian</strong></span> é através dos diretórios
+<code class="filename">/etc/rc?.d</code>.  Cada diretório deste contém os programas que
+serão executados/interrompidos no nível de execução "?"
+(<code class="filename">rc1.d/</code>, <code class="filename">rc2.d/</code> ...).  O conteúdo
+destes diretórios são links para os scripts originais em
+<code class="filename">/etc/init.d/programa</code>, o nosso programa alvo é
+<code class="filename">/etc/init.d/apache</code>.  O
+<code class="filename">/etc/init.d/apache</code> aceita os seguintes parâmetros:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">start</code> - Inicia o <span class="command"><strong>Apache</strong></span>
+</p></li><li class="listitem"><p>
+<code class="literal">stop</code> - Finaliza o <span class="command"><strong>Apache</strong></span>
+</p></li><li class="listitem"><p>
+<code class="literal">restart</code> - Reinicia o <span class="command"><strong>Apache</strong></span>, efetuando
+uma pausa de 5 segundos entre a interrupção do seu funcionamento e reinicio.
+</p></li><li class="listitem"><p>
+<code class="literal">reload</code> - Recarrega os arquivos de configuração do
+<code class="literal">Apache</code>, as alterações entram em funcionamento imediatamente.
+</p></li><li class="listitem"><p>
+<code class="literal">reload-modules</code> - Recarrega os módulos.  Basicamente é feito
+um restart no servidor.
+</p></li><li class="listitem"><p>
+<code class="literal">force-reload</code> - Faz a mesma função que o reload
+</p></li></ul></div><p>
+Para reiniciar o <span class="command"><strong>Apache</strong></span> usando o
+<code class="filename">/etc/init.d/apache</code>, digite:
+</p><p>
+./etc/init.d/apache restart
+</p><p>
+ou
+</p><p>
+<code class="literal">cd /etc/init.d;./apache restart</code>
+</p><p>
+Na realidade, o que o <code class="filename">/etc/init.d/apache</code> faz é interagir
+diretamente com o shell script <span class="command"><strong>apachectl</strong></span>.
+</p><p>
+O <span class="command"><strong>apachectl</strong></span> recebe os parâmetros enviados pelo usuário e
+converte para sinais que serão enviados para o binário
+<span class="command"><strong>apache</strong></span>.  Da mesma forma ele verifica os códigos de saída do
+<span class="command"><strong>apache</strong></span> e os transforma em mensagens de erro legíveis para o
+usuário comum.  Os seguintes comandos são aceitos pelo
+<span class="command"><strong>apachectl</strong></span>:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">httpd-server/start</code> - Inicia o <span class="command"><strong>Apache</strong></span>
+</p></li><li class="listitem"><p>
+<code class="literal">stop</code> - Finaliza o <span class="command"><strong>Apache</strong></span> (enviando um
+sinal TERM)
+</p></li><li class="listitem"><p>
+<code class="literal">restart</code> - Reinicia o <span class="command"><strong>Apache</strong></span> (enviando um
+sinal HUP)
+</p></li><li class="listitem"><p>
+<code class="literal">graceful</code> - Recarrega os arquivos de configuração do
+<span class="command"><strong>Apache</strong></span> (enviando um sinal USR1)
+</p></li><li class="listitem"><p>
+<code class="literal">fullstatus</code> - Mostra o status completo do servidor
+<span class="command"><strong>Apache</strong></span> (requer o <span class="command"><strong>lynx</strong></span> e o módulo
+<span class="emphasis"><em>mod_status</em></span> carregado).
+</p></li><li class="listitem"><p>
+<code class="literal">status</code> - Mostra o status do processo do servidor
+<span class="command"><strong>Apache</strong></span> (requer o <span class="command"><strong>lynx</strong></span> e o módulo
+<span class="emphasis"><em>mod_status</em></span> carregado).
+</p></li><li class="listitem"><p>
+<code class="literal">configtest</code> - Verifica se a sintaxe dos arquivos de
+configuração está OK (executa um <code class="literal">apache -t</code>).
+</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s-apache-opcoescmd"></a>Opções de linha de comando</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="literal">-D nome</code> - define um nome que será usado na diretiva
+&lt;IfDefine nome&gt;.
+</p></li><li class="listitem"><p>
+<code class="literal">-d diretório</code> - especifica o diretório
+<span class="emphasis"><em>ServerRoot</em></span> (substitui o do arquivo de configuração).
+</p></li><li class="listitem"><p>
+<code class="literal">-f arquivo</code> - especifica um arquivo
+<span class="emphasis"><em>ServerConfigFile</em></span> alternativo.
+</p></li><li class="listitem"><p>
+<code class="literal">-C "diretiva"</code> - processa a diretiva antes de ler os arquivo
+de configuração.
+</p></li><li class="listitem"><p>
+<code class="literal">-c "diretiva"</code> - processa a diretiva depois de ler os
+arquivos de configuração.
+</p></li><li class="listitem"><p>
+<code class="literal">-v</code> - mostra a versão do programa.
+</p></li><li class="listitem"><p>
+<code class="literal">-V</code> - mostra opções usadas na compilação do
+<span class="command"><strong>Apache</strong></span>.
+</p></li><li class="listitem"><p>
+<code class="literal">-h</code> - Mostra o help on-line do programa
+</p></li><li class="listitem"><p>
+<code class="literal">-l</code> - lista módulos compilados junto com o Apache (embutidos)
+</p></li><li class="listitem"><p>
+<code class="literal">-L</code> - lista diretivas de configurações disponíveis
+</p></li><li class="listitem"><p>
+<code class="literal">-S</code> - Mostra configurações de Virtual Hosting
+</p></li><li class="listitem"><p>
+<code class="literal">-t</code> - executa a checagem de sintaxe nos arquivos de
+configuração do Apache (incluindo a checagem da diretiva
+<span class="emphasis"><em>DocRoot</em></span>).
+</p></li><li class="listitem"><p>
+<code class="literal">-T</code> - executa a checagem de sintaxe nos arquivos de
+configuração do <span class="command"><strong>Apache</strong></span> (menos da diretiva
+<span class="emphasis"><em>DocRoot</em></span>).
+</p></li></ul></div></div></div>
+
+
+
+
+
+
+
+
+
+
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch11s04.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch12s02.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Melhorando a segurança das senhas armazenadas em seu sistema </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Configurações Básicas do Apache</td></tr></table></div></body></html>

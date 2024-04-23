@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Exemplo de uma seção CVS</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch17.html" title="Capítulo 17. CVS" /><link rel="prev" href="ch17s05.html" title="Clientes de CVS" /><link rel="next" href="ch18.html" title="Capítulo 18. SAMBA" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Exemplo de uma seção CVS</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch17s05.html">Anterior</a> </td><th width="60%" align="center">Capítulo 17. CVS</th><td width="20%" align="right"> <a accesskey="n" href="ch18.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch17.html">CVS</a></span> &gt; <span class="breadcrumb-node">Exemplo de uma seção CVS</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="s-cvs-exemplo"></a>Exemplo de uma seção CVS</h2></div></div></div><p>
+Nota: este exemplo é apenas didático, não foi feita nenhuma modificação real no
+conteúdo do repositório do <span class="command"><strong>dillo</strong></span> :-)
+</p><pre class="screen">
+# Definir o CVSROOT
+export CVSROOT=:pserver:gleydson@ima.cipsga.org.br:/var/lib/cvs
+
+# entrar no servidor
+gleydson@host:/tmp/teste$ cvs login
+Logging in to :pserver:gleydson@ima.cipsga.org.br:2401/var/lib/cvs
+CVS password: &lt;password&gt;
+
+gleydson@oberon:/tmp/teste$ 
+
+# Pegar o módulo "dillo do cvs"
+cvs -z 3 co dillo
+
+cvs server: Updating dillo
+cvs server: Updating dillo/CVSROOT
+U dillo/CVSROOT/checkoutlist
+U dillo/CVSROOT/commitinfo
+U dillo/CVSROOT/config
+U dillo/CVSROOT/cvswrappers
+U dillo/CVSROOT/editinfo
+U dillo/CVSROOT/loginfo
+U dillo/CVSROOT/modules
+U dillo/CVSROOT/notify
+U dillo/CVSROOT/rcsinfo
+U dillo/CVSROOT/taginfo
+U dillo/CVSROOT/verifymsg
+cvs server: Updating dillo/CVSROOT/Emptydir
+cvs server: Updating dillo/dillo
+U dillo/dillo/AUTHORS
+U dillo/dillo/COPYING
+U dillo/dillo/ChangeLog
+U dillo/dillo/ChangeLog.old
+U dillo/dillo/INSTALL
+U dillo/dillo/Makefile.am
+U dillo/dillo/Makefile.in
+U dillo/dillo/NEWS
+U dillo/dillo/README
+U dillo/dillo/aclocal.m4
+U dillo/dillo/config.h.in
+U dillo/dillo/configure
+U dillo/dillo/configure.in
+U dillo/dillo/depcomp
+U dillo/dillo/dillorc
+U dillo/dillo/install-sh
+U dillo/dillo/missing
+U dillo/dillo/mkinstalldirs
+U dillo/dillo/stamp-h.in
+cvs server: Updating dillo/dillo/doc
+U dillo/dillo/doc/Cache.txt
+U dillo/dillo/doc/Cookies.txt
+U dillo/dillo/doc/Dillo.txt
+U dillo/dillo/doc/Dw.txt
+U dillo/dillo/doc/DwImage.txt
+U dillo/dillo/doc/DwPage.txt
+...
+
+# Modifica o arquivo do projeto
+cd /dillo/dillo/doc
+vi Cache.txt
+
+
+# Update no arquivo para atualizar a cópia local com a remota
+cvs update Cache.txt
+M Cache.txt
+
+gleydson@host:/tmp/teste
+
+# Damos o commit no arquivo
+cvs commit Cache.txt
+
+
+# Saimos do sistema
+cvs logout
+</pre></div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch17s05.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch17.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch18.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Clientes de CVS </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Capítulo 18. SAMBA</td></tr></table></div></body></html>

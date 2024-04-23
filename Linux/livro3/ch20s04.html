@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Sistemas de arquivos criptográfico</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch20.html" title="Capítulo 20. Introdução ao uso de criptografia para transmissão/armazenamento de dados" /><link rel="prev" href="ch20s03.html" title="Alternativas seguras a serviços sem criptografia" /><link rel="next" href="ch20s05.html" title="Usando o GPG para Autenticação e Criptografia" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Sistemas de arquivos criptográfico</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch20s03.html">Anterior</a> </td><th width="60%" align="center">Capítulo 20. Introdução ao uso de criptografia para transmissão/armazenamento de dados</th><td width="20%" align="right"> <a accesskey="n" href="ch20s05.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch20.html">Introdução ao uso de criptografia para transmissão/armazenamento de dados</a></span> &gt; <span class="breadcrumb-node">Sistemas de arquivos criptográfico</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="d-cripto-criptofs"></a>Sistemas de arquivos criptográfico</h2></div></div></div>
+<p>
+Esta é uma forma excelente para armazenamento seguro de seus dados, pois
+estarão criptografados e serão somente acessados após fornecer uma senha que só
+você conhece.  O sistema usado é a montagem de um arquivo comum como um sistema
+de arquivos via loopback (veja <a class="xref" href="">???</a>) você pode
+escolher um nome de arquivo discreto para dificultar sua localização (use a
+imaginação) e poderá ser armazenado até mesmo em partições não-ext2.  Siga
+estes passos para criar seu sistema de arquivos criptografado (baseado no
+<code class="literal">Loopback-Encripted-Filesystem</code>):
+</p>
+<div class="variablelist"><dl class="variablelist"><dt><span class="term">Suporte no kernel</span></dt><dd>
+<p>
+Baixe o patch criptográfico de <a class="ulink" href="ftp://ftp.kernel.org/pub/linux/kernel/crypto" target="_top">ftp://ftp.kernel.org/pub/linux/kernel/crypto</a>
+de acordo com a sua versão do kernel e aplique os patches.  Este suporte não
+pode ser incluído nativamente no kernel devido a restrições de uso e importação
+de criptografia impostas pelos EUA e outros países, com este suporte embutido o
+kernel não poderia ser distribuído livremente.
+</p>
+<p>
+Se o patch para seu kernel não existir, pegue a versão anterior mais próxima
+(se não existir o patch para seu kernel <code class="literal">2.2.19</code>, pegue a
+versão <code class="literal">2.2.18</code> do patch internacional).  Isto certamente
+funcionará.
+</p>
+</dd><dt><span class="term">Opções de compilação do kernel</span></dt><dd>
+<p>
+Na seção <code class="literal">Crypto Support</code> ative <code class="literal">Crypto
+Ciphers</code> e ative o suporte aos ciphers <code class="literal">Twofish</code>,
+<code class="literal">blowfish</code>, <code class="literal">cast128</code>, e
+<code class="literal">serpent</code> (estes são distribuídos livremente e sem
+restrições).  Todos possuem cifragem de 128 bits, exceto o
+<code class="literal">blowfish</code> que é 64 bits.  Também é recomendado ativar os
+módulos em <code class="literal">Digest algorithms</code>.
+</p>
+<p>
+Na seção <code class="literal">Block Devices</code>: ative o suporte a
+<code class="literal">loopback</code> (necessário para montar arquivos como dispositivos
+de bloco) e <code class="literal">Use relative block numbers as basis for transfer
+functions</code> (isto permite que um backup do sistema de arquivos
+criptografado seja restaurado corretamente em outros blocos ao invés dos
+originais).  Ative também o suporte para <code class="literal">General encription
+support</code> e o suporte aos cyphers <code class="literal">cast128</code> e
+<code class="literal">twofish</code>.
+</p>
+<p>
+Não ative as opções de criptografia para a seção "Networking" (a não ser que
+saiba o que está fazendo).  Recompile e instale seu kernel (veja <a class="xref" href="">???</a>).
+</p>
+</dd><dt><span class="term">Crie um arquivo usando os números aleatórios de <code class="filename">/dev/urandom</code>:</span></dt><dd>
+<p>
+<code class="literal">dd if=/dev/urandom of=/pub/swap-fs bs=1M count=15</code>
+</p>
+<p>
+Será criado um arquivo chamado <code class="filename">swap-fs</code> (um arquivo de
+troca tem características que ajudam a esconder um sistema de arquivos
+criptografado que é o tamanho e não poderá ser montado pelo usuário comum,
+evitando desconfianças).
+</p>
+<p>
+O processo de criação deste arquivo é lento, em média de 1MB a cada 10 segundos
+em um Pentium MMX.
+</p>
+</dd><dt><span class="term">Monte o arquivo como um sistema de arquivos loop</span></dt><dd>
+<p>
+<code class="literal">losetup -e twofish /dev/loop0 /pub/swap-fs</code>
+</p>
+<p>
+O algoritmo de criptografia é selecionado pela opção <span class="emphasis"><em>-e</em></span>.
+Algoritmos recomendados são o <code class="literal">serpent</code> e
+<code class="literal">twofish</code> (ambos possuem cifragem de 128 bits), sendo o
+serpent o preferido.  O gerenciamento do sistema loop encriptado é feito
+através do módulo <code class="filename">loop_gen</code>.
+</p>
+<p>
+Quando é executado pela primeira vez, será lhe pedida uma senha que será usada
+para montagens futuras de seu sistema de arquivos.  Digite-a com atenção pois
+ela será lhe pedida apenas uma vez.  Para desativar o sistema de arquivos loop,
+execute o comando:
+</p>
+<p>
+<code class="literal">losetup -d /dev/loop0</code>
+</p>
+<p>
+<span class="strong"><strong>OBS:</strong></span> Se errou a senha será necessário
+desmontar, apagar o arquivo criado e repetir o procedimento.
+</p>
+</dd><dt><span class="term">Crie um sistema de arquivos ext2 para armazenamento de dados</span></dt><dd>
+<p>
+<code class="literal">mkfs -t ext2 /dev/loop0</code> ou <code class="literal">mkfs.ext2
+/dev/loop0</code>
+</p>
+</dd><dt><span class="term">Monte o sistema de arquivos</span></dt><dd>
+<p>
+Crie um diretório que será usado para montagem do seu sistema de arquivos, se
+preferir monta-lo dentro de seu diretório pessoal para armazenar seus arquivos,
+crie um diretório com as permissões "0700".
+</p>
+<p>
+mount /pub/swap-fs /pub/criptofs -t ext2 -o loop
+</p>
+<p>
+Agora poderá gravar seus arquivos dentro deste diretório normalmente como
+qualquer outro.  O comando <code class="literal">df -hT</code> listará a partição loop
+como uma partição do tipo <code class="literal">ext2</code> comum.
+</p>
+</dd><dt><span class="term">Desmontando/Protegendo os dados</span></dt><dd>
+<p>
+Após usar o sistema de arquivos criptográfico, desmonte-o e desative o
+dispositivo loopback:
+</p>
+<pre class="screen">
+umount /pub/criptofs
+losetup -d /dev/loop0
+</pre>
+</dd><dt><span class="term">Remontando o sistema de arquivos criptografado</span></dt><dd>
+<p>
+Execute novamente os comandos:
+</p>
+<pre class="screen">
+losetup -e twofish /dev/loop0 /pub/swap-fs
+mount /pub/swap-fs /pub/criptofs -t ext2 -o loop
+</pre>
+<p>
+Será pedida a senha que escolheu e seu sistema de arquivos será montado em
+<code class="filename">/pub/swap-fs</code>.
+</p>
+</dd></dl></div>
+<p>
+Com este sistema, seus dados estarão protegidos mesmo do usuário
+<code class="literal">root</code>.
+</p>
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch20s03.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch20.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch20s05.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Alternativas seguras a serviços sem criptografia </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Usando o <span class="command"><strong>GPG</strong></span> para Autenticação e Criptografia</td></tr></table></div></body></html>
