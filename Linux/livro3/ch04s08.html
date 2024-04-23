@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Segurança da Rede e controle de Acesso</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch04.html" title="Capítulo 4. Rede" /><link rel="prev" href="ch04s07.html" title="Serviços de Rede" /><link rel="next" href="ch04s09.html" title="Outros arquivos de configuração relacionados com a rede" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Segurança da Rede e controle de Acesso</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s07.html">Anterior</a> </td><th width="60%" align="center">Capítulo 4. Rede</th><td width="20%" align="right"> <a accesskey="n" href="ch04s09.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch04.html">Rede</a></span> &gt; <span class="breadcrumb-node">Segurança da Rede e controle de Acesso</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="rede-seg"></a>Segurança da Rede e controle de Acesso</h2></div></div></div>
+<p>
+Deixe-me iniciar esta seção lhe alertando que a segurança da rede em sua
+máquina e ataques maliciosos são uma arte complexa.  Uma regra importante é:
+"Não ofereça serviços de rede que não deseja utilizar".
+</p>
+<p>
+Muitas distribuições vem configuradas com vários tipos de serviços que são
+iniciados automaticamente.  Para melhorar, mesmo que insignificantemente, o
+nível de segurança em seu sistema você deve editar se arquivo
+<code class="filename">/etc/inetd.conf</code> e comentar (colocar uma "#") as linhas que
+contém serviços que não utiliza.
+</p>
+<p>
+Bons candidatos são serviços tais como: <code class="literal">shell</code>,
+<code class="literal">login</code>, <code class="literal">exec</code>, <code class="literal">uucp</code>,
+<code class="literal">ftp</code> e serviços de informação tais como
+<code class="literal">finger</code>, <code class="literal">netstat</code> e
+<code class="literal">sysstat</code>.
+</p>
+<p>
+Existem todos os tipos de mecanismos de segurança e controle de acesso, eu
+descreverei os mais importantes deles.
+</p>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-seg-ftpusers"></a>/etc/ftpusers</h3></div></div></div>
+<p>
+O arquivo <code class="filename">/etc/ftpusers</code> é um mecanismo simples que lhe
+permite bloquear a conexão de certos usuários via <span class="emphasis"><em>ftp</em></span>.  O
+arquivo <code class="filename">/etc/ftpusers</code> é lido pelo programa daemon ftp
+(<span class="emphasis"><em>ftpd</em></span>) quando um pedido de conexão é recebido.  O arquivo
+é uma lista simples de usuários que não tem permissão de se conectar.  Ele se
+parece com:
+</p>
+<pre class="screen">
+# /etc/ftpusers - login de usuários bloqueados via ftp
+root
+uucp
+bin
+mail
+</pre>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-seg-securetty"></a>/etc/securetty</h3></div></div></div>
+<p>
+O arquivo <code class="filename">/etc/securetty</code> lhe permite especificar que
+dispositivos <code class="filename">tty</code> que o usuário <span class="emphasis"><em>root</em></span>
+pode se conectar.  O arquivo /etc/securetty é lido pelo programa login
+(normalmente <code class="filename">/bin/login</code>).  Seu formato é uma lista de
+dispositivos <code class="filename">tty</code> onde a conexão é permitida, em todos os
+outros, a entrada do usuário <span class="emphasis"><em>root</em></span> é bloqueada.
+</p>
+<pre class="screen">
+# /etc/securetty - terminais que o usuário root pode se conectar
+tty1
+tty2
+tty3
+tty4
+</pre>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-seg-tcpd"></a>O mecanismo de controle de acessos tcpd</h3></div></div></div>
+<p>
+O programa <span class="command"><strong>tcpd</strong></span> que você deve ter visto listado no mesmo
+arquivo <code class="filename">/etc/inetd.conf</code>, oferece mecanismos de registro e
+controle de acesso para os serviços que esta configurado para proteger.  Ele é
+um tipo de firewall simples e fácil de configurar que pode evitar tipos
+indesejados de ataques e registrar possíveis tentativas de invasão.
+</p>
+<p>
+Quando é executado pelo programa inetd, ele lê dos arquivos contendo regras de
+acesso e permite ou bloqueia o acesso ao servidor protegendo adequadamente.
+</p>
+<p>
+Ele procura nos arquivos de regras até que uma regra confira.  Se nenhuma regra
+conferir, então ele assume que o acesso deve ser permitido a qualquer um.  Os
+arquivos que ele procura em seqüência são:
+<code class="filename">/etc/hosts.allow</code> e <code class="filename">/etc/hosts.deny</code>.
+Eu descreverei cada um destes arquivos separadamente.
+</p>
+<p>
+Para uma descrição completa desta facilidade, você deve verificar a página de
+manual apropriada (hosts_access (5) é um bom ponto de partida).
+</p>
+
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="rede-seg-tcpd-a"></a>/etc/hosts.allow</h4></div></div></div>
+<p>
+O arquivo <code class="filename">/etc/hosts.allow</code> é um arquivo de configuração do
+programa <code class="filename">/usr/sbin/tcpd</code>.  O arquivo
+<code class="filename">hosts.allow</code> contém regras descrevendo que hosts tem
+permissão de acessar um serviço em sua máquina.
+</p>
+<p>
+O formato do arquivo é muito simples:
+</p>
+<pre class="screen">
+# /etc/hosts.allow
+#
+# lista de serviços: lista de hosts : comando
+</pre>
+<div class="variablelist"><dl class="variablelist"><dt><span class="term">lista de serviços</span></dt><dd>
+<p>
+É uma lista de nomes de serviços separados por vírgula que esta regra se
+aplica.  Exemplos de nomes de serviços são: <code class="literal">ftpd</code>,
+<code class="literal">telnetd</code> e <code class="literal">fingerd</code>.
+</p>
+</dd><dt><span class="term">lista de hosts</span></dt><dd>
+<p>
+É uma lista de nomes de hosts separada por vírgula.  Você também pode usar
+endereços IP's aqui.  Adicionalmente, você pode especificar nomes de
+computadores ou endereço IP usando caracteres coringas para atingir grupos de
+hosts.
+</p>
+<p>
+Exemplos incluem: <code class="literal">gw.vk2ktj.ampr.org</code> para conferir com um
+endereço de computador específico, <code class="literal">.uts.edu.au</code> para atingir
+qualquer endereço de computador finalizando com aquele string.  Use
+200.200.200.  para conferir com qualquer endereço IP iniciando com estes
+dígitos.  Existem alguns parâmetros especiais para simplificar a configuração,
+alguns destes são: <code class="literal">ALL</code> atinge todos endereços,
+<code class="literal">LOCAL</code> atinge qualquer computador que não contém um "."  (ie.
+está no mesmo domínio de sua máquina) e <code class="literal">PARANOID</code> atinge
+qualquer computador que o nome não confere com seu endereço (falsificação de
+nome).  Existe também um último parâmetro que é também útil: o parâmetro
+<code class="literal">EXCEPT</code> lhe permite fazer uma lista de exceções.  Isto será
+coberto em um exemplo adiante.
+</p>
+</dd><dt><span class="term">comando</span></dt><dd>
+<p>
+É um parâmetro opcional.  Este parâmetro é o caminho completo de um comando que
+deverá ser executado toda a vez que esta regra conferir.  Ele pode executar um
+comando para tentar identificar quem esta conectado pelo host remoto, ou gerar
+uma mensagem via E-Mail ou algum outro alerta para um administrador de rede que
+alguém está tentando se conectar.
+</p>
+<p>
+Existem um número de expansões que podem ser incluídas, alguns exemplos comuns
+são: %h expande o endereço do computador que está conectado ou endereço se ele
+não possuir um nome, %d o nome do daemon sendo chamado.
+</p>
+</dd></dl></div>
+<p>
+Se o computador tiver permissão de acessar um serviço através do
+<code class="filename">/etc/hosts.allow</code>, então o
+<code class="filename">/etc/hosts.deny</code> não será consultado e o acesso será
+permitido.
+</p>
+<p>
+Como exemplo:
+</p>
+<pre class="screen">
+# /etc/hosts.allow
+#
+# Permite que qualquer um envie e-mails
+in.smtpd: ALL
+# Permitir telnet e ftp somente para hosts locais e myhost.athome.org.au
+in.telnetd, in.ftpd: LOCAL, myhost.athome.org.au
+# Permitir finger para qualquer um mas manter um registro de quem é
+in.fingerd: ALL: (finger @%h | mail -s "finger from %h" root)
+</pre>
+<p>
+Qualquer modificação no arquivo <code class="filename">/etc/hosts.allow</code> entrará
+em ação após reiniciar o daemon <span class="emphasis"><em>inetd</em></span>.  Isto pode ser
+feito com o comando <code class="literal">kill -HUP [pid do inetd]</code>, o
+<code class="literal">pid</code> do <span class="emphasis"><em>inetd</em></span> pode ser obtido com o
+comando <code class="literal">ps ax|grep inetd</code>.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="rede-seg-tcpd-d"></a>/etc/hosts.deny</h4></div></div></div>
+<p>
+O arquivo <code class="filename">/etc/hosts.deny</code> é um arquivo de configuração das
+regras descrevendo quais computadores não tem a permissão de acessar um serviço
+em sua máquina.
+</p>
+<p>
+Um modelo simples deste arquivo se parece com isto:
+</p>
+<pre class="screen">
+# /etc/hosts.deny
+#
+# Bloqueia o acesso de computadores com endereços suspeitos
+ALL: PARANOID
+#
+# Bloqueia todos os computadores
+ALL: ALL
+</pre>
+<p>
+A entrada <code class="literal">PARANOID</code> é realmente redundante porque a outra
+entrada nega tudo.  Qualquer uma destas linhas pode fazer uma segurança padrão
+dependendo de seu requerimento em particular.
+</p>
+<p>
+Tendo um padrão <span class="emphasis"><em>ALL: ALL</em></span> no arquivo
+<span class="emphasis"><em>/etc/hosts.deny</em></span> e então ativando especificamente os
+serviços e permitindo computadores que você deseja no arquivo
+<code class="filename">/etc/hosts.allow</code> é a configuração mais segura.
+</p>
+<p>
+Qualquer modificação no arquivo <code class="filename">/etc/hosts.deny</code> entrará em
+ação após reiniciar o daemon <span class="emphasis"><em>inetd</em></span>.  Isto pode ser feito
+com o comando <code class="literal">kill -HUP [pid do inetd]</code>, o
+<code class="literal">pid</code> do <span class="emphasis"><em>inetd</em></span> pode ser obtido com o
+comando <code class="literal">ps ax|grep inetd</code>.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="rede-seg-tcpd-e"></a>/etc/hosts.equiv e /etc/shosts.equiv</h4></div></div></div>
+<p>
+O arquivo <code class="filename">/etc/hosts.equiv</code> é usado para garantir/bloquear
+certos computadores e usuários o direito de acesso aos serviços "r*" (rsh,
+rexec, rcp, etc) sem precisar fornecer uma senha.  O
+<code class="filename">/etc/shosts.equiv</code> é equivalente mas é lido somente pelo
+serviço ssh.  Esta função é útil em um ambiente seguro onde você controla todas
+as máquinas, mesmo assim isto é um perigo de segurança (veja nas observações).
+O formato deste arquivo é o seguinte:
+</p>
+<pre class="screen">
+#Acesso  Máquina                   Usuário
+-        maquina2.dominio.com.br   usuario2
+-        maquina4.dominio.com.br   usuario2
++        maquina1.dominio.com.br   +@usuarios
+</pre>
+<p>
+O primeiro campo especifica se o acesso será permitido ou negado caso o segundo
+e terceiro campo confiram.  Por razões de segurança deve ser especificado o
+FQDN no caso de nomes de máquinas.  Grupos de rede podem ser especificados
+usando a sintaxe "+@grupo".
+</p>
+<p>
+Para aumentar a segurança, não use este mecanismo e encoraje seus usuários a
+também não usar o arquivo <code class="filename">.rhosts</code>.
+</p>
+<p>
+<span class="strong"><strong>ATENÇÃO</strong></span> O uso do sinal "+" sozinho significa
+permitir acesso livre a qualquer pessoa de qualquer lugar.  Se este mecanismo
+for mesmo necessário, tenha muita atenção na especificação de seus campos.
+</p>
+<p>
+Evita também A TODO CUSTO uso de nomes de usuários (a não ser para negar o
+acesso), pois é fácil forjar o login, entrar no sistema tomar conta de
+processos (como por exemplo do servidor <span class="command"><strong>Apache</strong></span> rodando sob o
+usuário <code class="literal">www-data</code> ou até mesmo o <span class="strong"><strong>root</strong></span>), causando enormes estragos.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="rede-seg-tcpd-v"></a>Verificando a segurança do TCPD e a sintaxe dos arquivos</h4></div></div></div>
+<p>
+O utilitário <span class="command"><strong>tcpdchk</strong></span> é útil para verificar problemas nos
+arquivos <code class="filename">hosts.allow</code> e <code class="filename">hosts.deny</code>.
+Quando é executado ele verifica a sintaxe destes arquivos e relata problemas,
+caso eles existam.
+</p>
+<p>
+Outro utilitário útil é o <span class="command"><strong>tcpdmatch</strong></span>, o que ele faz é
+permitir que você simule a tentativa de conexões ao seu sistema e observar ser
+ela será permitida ou bloqueada pelos arquivos <code class="filename">hosts.allow</code>
+e <code class="filename">hosts.deny</code>.
+</p>
+<p>
+É importante mostrar na prática como o <span class="command"><strong>tcpdmatch</strong></span> funciona
+através de um exemplo simulando um teste simples em um sistema com a
+configuração padrão de acesso restrito:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+O arquivo <code class="filename">hosts.allow</code> contém as seguintes linhas:
+</p>
+<pre class="screen">
+ALL: 127.0.0.1
+in.talkd, in.ntalkd: ALL
+in.fingerd: 192.168.1. EXCEPT 192.168.1.30
+</pre>
+<p>
+A primeira linha permite o loopback (127.0.0.1) acessar qualquer serviço
+TCP/UDP em nosso computador, a segunda linha permite qualquer um acessar os
+servidor TALK (nós desejamos que o sistema nos avise quando alguém desejar
+conversar) e a terceira somente permite enviar dados do
+<span class="command"><strong>finger</strong></span> para computadores dentro de nossa rede privada
+(exceto para 192.168.1.30).
+</p>
+</li><li class="listitem">
+<p>
+O arquivo <code class="filename">hosts.deny</code> contém a seguinte linha:
+</p>
+<pre class="screen">
+ALL: ALL
+</pre>
+<p>
+Qualquer outra conexão será explicitamente derrubada.
+</p>
+</li></ul></div>
+<p>
+Vamos aos testes, digitando: "tcpdmatch in.fingerd 127.0.0.1" (verificar se o
+endereço 127.0.0.1 tem acesso ao finger):
+</p>
+<pre class="screen">
+client:   address  127.0.0.1
+server:   process  in.fingerd
+matched:  /etc/hosts.allow line 1
+access:   granted
+</pre>
+<p>
+Ok, temos acesso garantido com especificado pela linha 1 do
+<code class="filename">hosts.allow</code> (a primeira linha que confere é usada).  Agora
+"tcpdmatch in.fingerd 192.168.1.29":
+</p>
+<pre class="screen">
+client:   address  192.168.1.29
+server:   process  in.fingerd
+matched:  /etc/hosts.allow line 3
+access:   granted
+</pre>
+<p>
+O acesso foi permitido através da linha 3 do <code class="filename">hosts.allow</code>.
+Agora "tcpdmatch in.fingerd 192.168.1.29":
+</p>
+<pre class="screen">
+client:   address  192.168.1.30
+server:   process  in.fingerd
+matched:  /etc/hosts.deny line 1
+access:   denied
+</pre>
+<p>
+O que aconteceu?  como a linha 2 do <code class="filename">hosts.allow</code> permite o
+acesso a todos os computadores 192.168.1.* exceto 192.168.1.30, ela não bateu,
+então o processamento partiu para o <code class="filename">hosts.deny</code> que nega
+todos os serviços para qualquer endereço.  Agora um último exemplo: "tcpdmatch
+in.talkd www.debian.org"
+</p>
+<pre class="screen">
+client:   address  www.debian.org
+server:   process  in.talkd
+matched:  /etc/hosts.allow line 2
+access:   granted
+</pre>
+<p>
+Ok, na linha 2 qualquer computador pode te chamar para conversar via talk na
+rede, mas para o endereço DNS conferir com um IP especificado, o
+<span class="command"><strong>GNU/Linux</strong></span> faz a resolução DNS, convertendo o endereço para
+IP e verificando se ele possui acesso.
+</p>
+<p>
+No lugar do endereço também pode ser usado a forma
+<code class="literal">daemon@computador</code> ou <code class="literal">cliente@computador</code>
+para verificar respectivamente o acesso de daemons e cliente de determinados
+computadores aos serviços da rede.
+</p>
+<p>
+Como pode ver o TCPD ajuda a aumentar a segurança do seu sistema, mas não
+confie nele além do uso em um sistema simples, é necessário o uso de um
+firewall verdadeiro para controlar minuciosamente a segurança do seu sistema e
+dos pacotes que atravessam os protocolos, roteamento e as interfaces de rede.
+Se este for o caso aprenda a trabalhar a fundo com firewalls e implemente a
+segurança da sua rede da forma que melhor planejar.
+</p>
+</div>
+
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-seg-firewall"></a>Firewall</h3></div></div></div>
+<p>
+Dentre todos os métodos de segurança, o <span class="emphasis"><em>Firewall</em></span> é o mais
+seguro.  A função do Firewall é bloquear determinados tipos de tráfego de um
+endereço ou para uma porta local ou permitir o acesso de determinados usuários
+mas bloquear outros, bloquear a falsificação de endereços, redirecionar tráfego
+da rede, ping da morte, etc.
+</p>
+<p>
+A implementação de um bom firewall dependerá da experiência, conhecimentos de
+rede (protocolos, roteamento, interfaces, endereçamento, masquerade, etc), da
+rede local, e sistema em geral do Administrador de redes, a segurança de sua
+rede e seus dados dependem da escolha do profissional correto, que entenda a
+fundo o TCP/IP, roteamento, protocolos, serviços e outros assuntos ligados a
+rede.
+</p>
+<p>
+Freqüentemente tem se ouvido falar de empresas que tiveram seus sistemas
+invadidos, em parte isto é devido a escolha do sistema operacional indevido mas
+na maioria das vezes o motivo é a falta de investimento da empresa em políticas
+de segurança, que algumas simplesmente consideram a segurança de seus dados e
+sigilo interno como uma <code class="literal">despesa a mais</code>.
+</p>
+<p>
+Um bom firewall que recomendo é o <span class="command"><strong>ipchains</strong></span>,
+<span class="command"><strong>Sinus</strong></span> e o <span class="command"><strong>TIS</strong></span>.  Particularmente gosto
+muito de usar o <span class="command"><strong>ipchains</strong></span> e o <span class="command"><strong>Sinus</strong></span> e é
+possível fazer coisas inimagináveis programando scripts para interagirem com
+estes programas...
+</p>
+</div>
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s07.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch04s09.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Serviços de Rede </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Outros arquivos de configuração relacionados com a rede</td></tr></table></div></body></html>

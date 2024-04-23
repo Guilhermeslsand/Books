@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Melhoria de performance</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch03.html" title="Capítulo 3. Hardware" /><link rel="prev" href="ch03s14.html" title="Descargas estáticas" /><link rel="next" href="ch03s16.html" title="Periféricos SATA" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Melhoria de performance</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s14.html">Anterior</a> </td><th width="60%" align="center">Capítulo 3. Hardware</th><td width="20%" align="right"> <a accesskey="n" href="ch03s16.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch03.html">Hardware</a></span> &gt; <span class="breadcrumb-node">Melhoria de performance</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="hard-perf"></a>Melhoria de performance</h2></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="hard-perf-part"></a>Particionamento</h3></div></div></div>
+<p>
+Para um melhor desempenho, os dados que são solicitados constantemente deverão
+ser armazenados em uma partição no inicio do disco rígido.  Esta área é a mais
+rápida e checa a ser 60% mais rápida que o final do HD (em alguns modelos).  Em
+especial, a partição de boot, swap e binários do sistema poderão ser
+armazenados nesta partição para aumentar a velocidade da carga de programas e
+não prejudicar a performance do sistema quando o uso da partição de troca
+(swap) for necessária.
+</p>
+<p>
+Em discos rígidos grandes (6GB ou maiores) é recomendável criar no mínimo uma
+partição pequena para <code class="filename">/boot</code>, outra para
+<code class="filename">/</code>, outra para <code class="literal">swap</code> e outra para
+<code class="filename">/usr</code>.  Ficando distribuídas da seguinte maneira no disco
+rígido:
+</p>
+<pre class="screen">
+BBRRRRRRRRRRRRRRRRRRRRR
+RRRRRRRRRRRRRRRRRRRRRRR
+SSSSSSSSSSUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUU
+
+B - /boot
+R - Raíz /
+S - Swap
+U - /usr
+</pre>
+<p>
+Mas a swap não ficaria ainda mais rápida sendo a primeira partição no disco?
+Sim e não: Realmente fica rápida (na teoria conforme explicado acima), mas
+levando em consideração que o deslocamento das cabeças de leitura/gravação do
+disco rígido leva certo tempo, é mais vantajoso mantê-la entre as 2 partições
+mais acessadas, isto diminui o tempo de acesso caso um programa esteja fazendo
+uso constante de <code class="filename">/</code> ou <code class="filename">/usr</code> e precisar
+trocar dados na partição <code class="literal">swap</code>.
+</p>
+<p>
+Além do mais, a partição <code class="filename">/</code> geralmente é pequena (no máximo
+800M) deixando a swap em uma área muito próxima do inicio do disco rígido.  Com
+base nisto, você poderá ter uma melhor visão técnica para a construção de suas
+partições dependendo da função do sistema.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="hard-perf-spindles"></a>Spindles</h3></div></div></div>
+<p>
+Em sistemas que utilizam um disco rígido dedicado para fazer
+<code class="literal">swap</code>, a ligação deste em uma placa controladora independente
+aumentará bastante a performance do sistema, pois enquanto o disco principal
+ligado em sua controladora estiver fazendo uma operação de leitura, o outro
+poderá estar fazendo sua operação de swap simultaneamente.  O mesmo não
+acontece quando dois discos rígidos IDE estão ligados no mesmo cabo (isto não
+acontece no SCSI).
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="hard-perf-hdparm"></a>Fazendo ajustes finos de performance do disco</h3></div></div></div>
+<p>
+O <span class="command"><strong>hdparm</strong></span> é um programa que permite modificar características
+diversas da unidade de disco rígido e de CD como modo de transferência de
+dados, leitura adiante, dma, cache, leitura simultânea de setores, hibernação,
+etc.
+</p>
+<p>
+Por padrão as transferências de dados entre a controladora do HD (a plaquinha
+que fica embaixo dele) e a controladora de periféricos é feita em 16 bits.
+Para exibir a configuração atual do disco rígido <code class="filename">/dev/hda</code>
+(por exemplo), digite o seguinte comando: <code class="literal">hdparm /dev/hda</code>
+</p>
+<pre class="screen">
+/dev/hdb:
+ multcount    =  0 (off)
+ I/O support  =  0 (16-bit)
+ unmaskirq    =  0 (off)
+ using_dma    =  1 (off)
+ keepsettings =  0 (off)
+ nowerr       =  0 (off)
+ readonly     =  0 (off)
+ readahead    =  8 (on)
+</pre>
+<p>
+Imediatamente podemos modificar os seguintes campos para melhorar sensivelmente
+o desempenho do disco rígido:
+</p>
+<div class="variablelist"><dl class="variablelist"><dt><span class="term">multcount</span></dt><dd>
+<p>
+Pode ser modificada com <span class="emphasis"><em>-m[num]</em></span> e especifica o número
+máximo de setores que serão acessados de uma só vez na operação de leitura da
+unidade.  O valor máximo recomendado é igual a capacidade máxima suportada pelo
+seu disco rígido, que pode ser obtida com o comando: <code class="literal">hdparm -i
+/dev/hda</code>
+</p>
+<pre class="screen">
+ Model=TS6324A2, FwRev=.340    , SerialNo=A99B99JA
+ Config={ HardSect NotMFM HdSw&gt;15uSec Fixed DTR&gt;10Mbs RotSpdTol&gt;.5% }
+ RawCHS=13228/15/63, TrkSize=0, SectSize=0, ECCbytes=0
+ BuffType=unknown, BuffSize=256kB, MaxMultSect=16, MultSect=16
+ CurCHS=13228/15/63, CurSects=12500460, LBA=yes, LBAsects=12500460
+ IORDY=on/off, tPIO={min:240,w/IORDY:120}, tDMA={min:120,rec:120}
+ PIO modes: pio0 pio1 pio2 pio3 pio4 
+ DMA modes: mdma0 mdma1 mdma2 udma0 udma1 *udma2 udma3 udma4 udma5
+</pre>
+<p>
+O campo <span class="emphasis"><em>MaxMultSect=16</em></span> indica o valor de 16 como máximo
+suportado em uma única operação pela unidade.  Valores maiores poderão ser
+especificados mas não trarão ganho de performance.  Para discos rígidos
+<span class="emphasis"><em>Western Digital</em></span> é recomendável deixar este valor como
+<code class="literal">0</code>, porque eles possuem um mecanismo embutido para leitura de
+setores.  Para experimentar valores fora dos padrões, coloque seu sistema de
+arquivos como somente leitura para não perder dados caso algo saia errado.
+</p>
+<p>
+Note que o comando <code class="literal">hdparm -i</code> mostra alguns detalhes
+interessantes sobre a configuração do disco rígido e modos de operação
+suportados.
+</p>
+</dd><dt><span class="term">I/O support</span></dt><dd>
+<p>
+Modificado com <span class="emphasis"><em>-c[num]</em></span>.  O número especificado pode ser
+<code class="literal">0</code> para transferência de dados em 16 bits,
+<code class="literal">1</code> para 32 bits e <code class="literal">3</code> para 32 bits com uma
+seqüencia especial de sincronismo (alguns chips requerem esta ao invés da
+<code class="literal">1</code>).
+</p>
+</dd><dt><span class="term">using_dma</span></dt><dd>
+<p>
+Modificado com <span class="emphasis"><em>-d[num]</em></span>.  Habilita ou não o uso de DMA para
+a transferência de dados do HD, ativando o controle de algumas operações pelo
+chipset livrando a CPU para processamento.  <code class="literal">0</code> desativa DMA e
+<code class="literal">1</code> ativa.  Note que nem todos os chipsets aceitam esta
+operação.  Esta usada em conjunto com a opção <code class="literal">-X</code> oferece um
+excelente ganho de performance pelo uso correto de sua controladora.
+</p>
+<p>
+A ativação de dma também pode ser feita automaticamente na recompilação do
+kernel ou especificando o parâmetro <span class="emphasis"><em>ideX=dma</em></span>
+(<code class="literal">X</code> é o número da controladora IDE) na linha de comando de
+<code class="literal">boot:</code> ou no arquivo <code class="filename">/etc/lilo.conf</code>.
+</p>
+</dd><dt><span class="term">xfermode</span></dt><dd>
+<p>
+Modificado pela opção <span class="emphasis"><em>-X[num]</em></span>.  Permite selecionar o
+melhor modo de transferência de dados do seu disco rígido, é nesta parte onde
+você seleciona o modo UltraDMA para transferência de dados, caso seu HD/CD-ROM
+suporte.  Os seguintes valores são válidos:
+</p>
+<pre class="screen">
+32 - PIO Mode 0
+33 - PIO Mode 1
+34 - PIO Mode 2
+35 - PIO Mode 3
+36 - PIO Mode 4
+64 - Ultra DMA Mode 0
+65 - Ultra DMA Mode 1
+66 - Ultra DMA Mode 2
+67 - Ultra DMA Mode 3
+68 - Ultra DMA Mode 4
+69 - Ultra DMA Mode 5
+70 - Ultra DMA Mode 6
+</pre>
+<p>
+Para descobrir os modos PIO e UltraDMA do seu HD, utilize o comando
+<code class="literal">hdparm -I /dev/hd?</code>.  NÃO UTILIZE UM MODO PIO/ULTRA DMA NÃO
+SUPORTADO PELA SUA CONTROLADORA.  CASO SUA PLACA CONTROLADORA DO HD SUPORTE UM
+MODO ALTO PIO/ULTRADMA MAS SUA CONTROLADORA IDE NÃO SUPORTA, VOCÊ DEVERÁ
+UTILIZAR O VALOR MAIS ADEQUADO PARA AMBAS.  FAÇA TESTES SEMPRE QUE ALTERAR O
+MODO DE FUNCIONAMENTO E ESTEJA ATENTO A MENSAGENS DE ERROS PARA QUE NÃO TENHA
+PERDA DE DADOS!!!
+</p>
+</dd><dt><span class="term">unmaskirq</span></dt><dd>
+<p>
+Modificado com <span class="emphasis"><em>-u[num]</em></span>.  Habilita ou não o controlador de
+disco mascarar as interrupções de processador durante o processamento das
+interrupções de disco.  <code class="literal">0</code> desativa esta função e
+<code class="literal">1</code> ativa.  Use esta opção com cuidado e sob seu próprio
+risco: algumas placas controladores de HD e controladoras de periféricos não
+trabalham bem com a taxa de transferência aumentada, podem ocorrer perda de
+dados.  Coloque o sistema de arquivos como somente leitura antes de testar esta
+característica.
+</p>
+</dd><dt><span class="term">readonly</span></dt><dd>
+<p>
+Modificado com <span class="emphasis"><em>-r[num]</em></span>.  Coloca o disco em modo somente
+leitura.  A montagem da partição com a opção <span class="emphasis"><em>ro</em></span> no
+<code class="filename">/etc/fstab</code> é preferida.
+</p>
+</dd><dt><span class="term">readahead</span></dt><dd>
+<p>
+Modificado com <span class="emphasis"><em>-a[num]</em></span>.  Configura o número de blocos que
+serão lidos antecipadamente no sistema de arquivos (por padrão é usado 8 blocos
+- 4 Kb).  Este número poderá ser modificado para se adequar a utilização do
+computador.  Em sistemas com muita procura de arquivos pequenos (servidores
+web), um valor pequeno (como o padrão) é recomendável.  Se a máquina é um
+servidor de arquivos dedicado, um valor maior trará maiores benefícios.
+</p>
+</dd></dl></div>
+<p>
+Veja mais detalhes sobre o comando <span class="command"><strong>hdparm</strong></span> em sua página de
+manual.  Depois de selecionado o melhor valor de performance, você deverá
+salvar em um arquivo que será lido na inicialização para ativação destes
+valores.  Para fazer teste de performance de leitura bruta utilize o comando
+<code class="literal">hdparm -t /dev/hd?</code>, para fazer testes com o uso de cache,
+use o comando <code class="literal">hdparm -T /dev/hd?</code>.
+</p>
+<p>
+<span class="strong"><strong>OBS:</strong></span> Se o <span class="command"><strong>Linux</strong></span> resetar o
+disco rígido, a maioria das configurações retornarão ao seu valor padrão.  Isto
+ocorre devido a opções mau utilizadas no <span class="command"><strong>hdparm</strong></span>, não
+suportadas pelo disco rígido ou por problemas no HD/controladora.
+</p>
+<pre class="screen">
+Exemplos:
+
+# Ajusta o número de setores simultâneos para 16 e o modo de transferência para 
+# 32 bits no disco rígido /dev/hda
+hdparm -c1 -m16 /dev/hda
+
+# Programa a leitura adiante do HD para 64 blocos (32Kb), o modo de transferência 
+# para 32 bits, usar DMA, e 16 setores simultâneos.
+hdparm -c1 -d1 -m16 -a64 /dev/hda
+
+#Mostra os valores de configuração atuais do disco rígido
+hdparm /dev/hda
+</pre>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="hard-perf-atime"></a>Data de acesso a arquivos/diretórios</h3></div></div></div>
+<p>
+Toda vez que acessamos um arquivo ou diretório da máquina
+<span class="command"><strong>Linux</strong></span> a data/hora é atualizada.  Em máquinas normais isto é
+OK mas em servidores onde o acesso a arquivos é constante (como no diretório
+<code class="filename">/var/spool</code> em servidores de e-mail ou
+<code class="filename">/usr/</code> em servidores diskless) é recomendável desativar
+esta característica.  Isto reduzirá a quantidade de buscas das cabeças do disco
+rígido para a atualização deste atributo e conseqüentemente aumentará a
+performance na gravação de arquivos (o disco rígido usa o sistema mecânico para
+ler/gravar dados, muito mais lento que a memória RAM eletrônica).
+</p>
+<pre class="screen">
+chattr -R +A /var/spool
+</pre>
+<p>
+O atributo <code class="literal">+A</code> desativa a gravação da "data de acesso" dos
+arquivos e sub-diretórios dentro de <code class="filename">/var/spool</code>.  Para
+desativar a atualização da "data de acesso" para toda a partição, você pode
+incluir a opção de montagem <code class="literal">noatime</code> no seu
+<code class="filename">/etc/fstab</code>:
+</p>
+<pre class="screen">
+/dev/hda1     /var/spool    ext2   defaults,noatime   0   1
+</pre>
+<p>
+<span class="strong"><strong>OBS:</strong></span> O <span class="command"><strong>Linux</strong></span> utiliza três
+atributos de data para controle de arquivos:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="literal">atime</code> - Data/Hora de acesso: é atualizado toda vez que o
+arquivo é lido ou executado.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">mtime</code> - Data/Hora da modificação, atualizado sempre que
+alguma modificação ocorre no arquivo ou no conteúdo do diretório.  Esta é mais
+interessante que a <code class="literal">ctime</code> principalmente quando temos
+hardlinks.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">ctime</code> - Data/Hora da última modificação do inodo do arquivo.
+</p>
+</li></ul></div>
+<p>
+Em partições onde a gravação é freqüente (como na própria
+<code class="filename">/var/spool</code>) a desativação do atributo
+<code class="literal">atime</code> além de melhorar o desempenho do disco, não fará muita
+falta.
+</p>
+</div>
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s14.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s16.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Descargas estáticas </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Periféricos SATA</td></tr></table></div></body></html>

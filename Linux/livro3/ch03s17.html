@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Periféricos SCSI</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch03.html" title="Capítulo 3. Hardware" /><link rel="prev" href="ch03s16.html" title="Periféricos SATA" /><link rel="next" href="ch04.html" title="Capítulo 4. Rede" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Periféricos SCSI</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s16.html">Anterior</a> </td><th width="60%" align="center">Capítulo 3. Hardware</th><td width="20%" align="right"> <a accesskey="n" href="ch04.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch03.html">Hardware</a></span> &gt; <span class="breadcrumb-node">Periféricos SCSI</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="hard-perf-SCSI"></a>Periféricos SCSI</h2></div></div></div>
+<p>
+Hardwares SCSI (Small Computer System Interfaces) representam a tecnologia
+ideal para a transferência de dados em alta velocidade e ligação de vários
+periféricos.  A taxa de transferência especificada para dispositivos SCSI é
+sempre a padrão se comparada a dispositivos IDE (quando uma taxa de 66Mb/s
+quase nunca é atingida).
+</p>
+<p>
+Estes dispositivos são classificados em 3 categorias:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="literal">SCSI I</code> - Usa um cabo de 25 condutores para a ligação de
+periféricos.  Normalmente usado em scanners, impressoras e outros dispositivos.
+A taxa de transferência não é muito alta se comparado aos outros tipos SCSI.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">SCSI II</code> - Também chamado de <span class="emphasis"><em>Fast SCSI</em></span>.
+Usa um cabo de 50 condutores para a ligação de periféricos.  Permite que sejam
+ligados até 7 periféricos em uma mesma controladora (veja <a class="xref" href="ch03s17.html#hard-perf-SCSI-IDcfg" title="Configurando uma SCSI ID e terminação">“Configurando uma SCSI ID e terminação”</a>).  É o mais comum encontrado hoje em dia, mas
+vem perdendo espaço aos poucos para a tecnologia <code class="literal">SCSI III</code>.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">SCSI III</code> - Também chamado de <span class="emphasis"><em>Fast SCSI
+SE</em></span> ou <span class="emphasis"><em>LVD</em></span>.  Usa um cabo de 68 condutores para
+ligação de periféricos (veja <a class="xref" href="ch03s17.html#hard-perf-SCSI-IDcfg" title="Configurando uma SCSI ID e terminação">“Configurando uma SCSI ID e terminação”</a>).  Permite
+que sejam ligados até 16 periféricos em uma mesma controladora.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">SATA I</code> - Esta se tornando alternativa a discos IDE (PATA).
+Possui taxa de transferência de até 150Mb/s
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">SATA II</code> - Esta se tornando alternativa a discos IDE (PATA).
+Possui taxa de transferência de até 300Mb/s
+</p>
+</li></ul></div>
+<p>
+Um cabo SCSI pode ter o comprimento de até 5 metros de extensão.  Os
+periféricos SCSI são identificados através de números chamados de identificador
+SCSI ou SCSI ID.  Estes números vão de 0 a 6 para o padrão <span class="emphasis"><em>SCSI
+2</em></span> e de 0 a 15 para o padrão <span class="emphasis"><em>SCSI 3</em></span>.
+</p>
+<p>
+Placas SCSI como a <span class="emphasis"><em>Adaptec UV 19160</em></span> permitem a ligação de
+periféricos SCSI 2 e SCSI 3 na mesma placa com a taxa de transmissão de 160
+MB/s por periférico, além de possuir um "setup" próprio para configurar as
+opções dos dispositivos da placa e a operação da própria.  A tecnologia SCSI é
+algo realmente rápido para a transferência de dados e cara também, seu uso é
+muito recomendado em servidores críticos.  Os próprios dispositivos SCSI como
+discos rígidos, gravadores de CD, cd-rom, etc.  são construídos de tal forma
+que tem a durabilidade maior que periféricos comuns, garantindo a máxima
+confiança para operação/armazenamento de dados em longos períodos de operação.
+</p>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="hard-perf-SCSI-IDcfg"></a>Configurando uma SCSI ID e terminação</h3></div></div></div>
+<p>
+Uma SCSI ID é configurada independentemente por dispositivo e consiste em 3
+jumpers (ou dip switches) que possuem os valores <code class="literal">1</code>,
+<code class="literal">2</code> e <code class="literal">4</code>.  Veja o exemplo abaixo de uma
+unidade de CD SCSI 2:
+</p>
+<pre class="screen">
++--------------------------------------------
+|
+|
+|
+|SCSI ID
+|   |
+| _____ TERM
+| | | | |
+| o o o o o o 
+| o o o o o o
+| 1 2 4 T
+|
++---------------------------------------------
+</pre>
+<p>
+Se você deixar os 3 jumpers da SCSI ID abertos, o dispositivo usará a SCSI ID
+0.  Colocando o jumper na posição 1, a unidade terá a SCSI ID 1.  Se você
+colocar um jumper na posição 1 e outro na 4, a unidade será identificada pela
+SCSI ID 5 (quando mais de um jumper é ligado, os números serão somados).
+</p>
+<p>
+A terminação SCSI funciona de forma semelhante a de uma rede BNC, o último
+periférico do cabo SCSI deve ter o jumper de terminação colocado para indicar
+que é o último periférico do cabo e evitar deflexão de dados.  Algumas placas
+SCSI modernas ajustam automaticamente a terminação de periféricos sem
+necessidade de ajustar manualmente.
+</p>
+</div>
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s16.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch04.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Periféricos SATA </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Capítulo 4. Rede</td></tr></table></div></body></html>

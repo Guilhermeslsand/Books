@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Arquivo /etc/profile</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch08.html" title="Capítulo 8. Personalização do Sistema" /><link rel="prev" href="ch08s03.html" title="alias" /><link rel="next" href="ch08s05.html" title="Arquivo .bash_profile" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Arquivo <code class="filename">/etc/profile</code></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch08s03.html">Anterior</a> </td><th width="60%" align="center">Capítulo 8. Personalização do Sistema</th><td width="20%" align="right"> <a accesskey="n" href="ch08s05.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch08.html">Personalização do Sistema</a></span> &gt; <span class="breadcrumb-node">Arquivo <code xmlns="http://www.w3.org/1999/xhtml" class="filename">/etc/profile</code></span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="pers-profile"></a>Arquivo <code class="filename">/etc/profile</code></h2></div></div></div>
+<p>
+Este arquivo contém comandos que são executados para <span class="emphasis"><em>todos</em></span>
+os usuários do sistema no momento do login.  Somente o usuário root pode ter
+permissão para modificar este arquivo.
+</p>
+<p>
+Este arquivo é lido antes do arquivo de configuração pessoal de cada usuário
+(<code class="filename">.profile</code>(root) e <code class="filename">.bash_profile</code>).
+</p>
+<p>
+Quando é carregado através de um shell que requer login (nome e senha), o
+<span class="command"><strong>bash</strong></span> procura estes arquivos em seqüência e executa os
+comandos contidos, caso existam:
+</p>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+<p>
+<code class="filename">/etc/profile</code>
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">~/.bash_profile</code>
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">~/.bash_login</code>
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">~/.profile</code>
+</p>
+</li></ol></div>
+<p>
+Ele <span class="emphasis"><em>interrompe</em></span> a pesquisa assim que localiza o primeiro
+arquivo no diretório do usuário (usando a sequência acima).  Por exemplo, se
+você tem o arquivo <code class="filename">~/.bash_login</code> e
+<code class="filename">~/.bash_profile</code> em seu diretório de usuário, ele
+processará o <code class="filename">/etc/profile</code> e após isto o
+<code class="filename">~/.bash_profile</code>, mas nunca processará o
+<code class="filename">~/.bash_login</code> (a menos que o
+<code class="filename">~/.bash_profile</code> seja apagado ou renomeado).
+</p>
+<p>
+Caso o <span class="command"><strong>bash</strong></span> seja carregado através de um shell que não
+requer login (um terminal no X, por exemplo), o seguinte arquivo é executado:
+<code class="filename">~/.bashrc</code>.
+</p>
+<p>
+Observação: Nos sistemas Debian, o profile do usuário root está configurado no
+arquivo <code class="filename">/root/.profile</code>.  A razão disto é porque se o
+<span class="command"><strong>bash</strong></span> for carregado através do comando <span class="command"><strong>sh</strong></span>,
+ele fará a inicialização clássica deste shell lendo primeiro o arquivo
+<code class="filename">/etc/profile</code> e após o <code class="filename">~/.profile</code> e
+ignorando o <code class="filename">.bash_profile</code> e <code class="filename">.bashrc</code>
+que são arquivos de configuração usados somente pelo <span class="command"><strong>Bash</strong></span>.
+Exemplo, inserindo a linha <code class="literal">mesg y</code> no arquivo
+<code class="filename">/etc/profile</code> permite que todos os usuários do sistema
+recebam pedidos de <code class="filename">talk</code> de outros usuários.  Caso um
+usuário não quiser receber pedidos de <span class="command"><strong>talk</strong></span>, basta somente
+adicionar a linha <code class="literal">mesg n</code> no arquivo pessoal
+<code class="filename">.bash_profile</code>.
+</p>
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch08s03.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch08.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch08s05.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">alias </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Arquivo <code class="filename">.bash_profile</code></td></tr></table></div></body></html>

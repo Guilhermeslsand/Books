@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Arquivos de inicialização</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch07.html" title="Capítulo 7. A distribuição Debian GNU/Linux" /><link rel="prev" href="ch07s05.html" title="Programas de configuração" /><link rel="next" href="ch07s07.html" title="Níveis de Execução" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Arquivos de inicialização</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch07s05.html">Anterior</a> </td><th width="60%" align="center">Capítulo 7. A distribuição Debian GNU/Linux</th><td width="20%" align="right"> <a accesskey="n" href="ch07s07.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch07.html">A distribuição Debian GNU/Linux</a></span> &gt; <span class="breadcrumb-node">Arquivos de inicialização</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="deb-startup"></a>Arquivos de inicialização</h2></div></div></div>
+<p>
+Os arquivos de inicialização da distribuição <span class="command"><strong>Debian</strong></span> (e
+baseadas nela) estão localizados no diretório <code class="filename">/etc/init.d</code>.
+Cada daemon (programa residente na memória) ou configuração específica possui
+um arquivo de onde pode ser ativado/desativado.  Os sistemas residentes neste
+diretório não são ativados diretamente, mas sim através de links existentes nos
+diretórios <code class="filename">/etc/rc?.d</code> onde cada diretório consiste em um
+nível de execução do sistema (veja também a <a class="xref" href="ch07s07.html" title="Níveis de Execução">“Níveis de Execução”</a>).
+</p>
+<p>
+Por padrão, você pode usar as seguintes palavras chaves com os arquivos de
+configuração:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="literal">start</code> - Inicia o daemon ou executa a configuração
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">stop</code> - Interrompe a execução de um daemon ou desfaz a
+configuração feita anteriormente (se possível).
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">restart</code> - Reinicia a execução de um daemon.  É equivalente
+ao uso de <code class="literal">stop</code> e <code class="literal">start</code> mas se aplicam
+somente a alguns daemons e configurações, que permitem a interrupção de
+execução e reinicio.
+</p>
+</li></ul></div>
+<p>
+Por exemplo, para reconfigurar as interfaces de rede do computador, podemos
+utilizar os seguintes comandos:
+</p>
+<pre class="screen">
+cd /etc/init.d
+./networking restart
+</pre>
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch07s05.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch07.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch07s07.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Programas de configuração </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Níveis de Execução</td></tr></table></div></body></html>

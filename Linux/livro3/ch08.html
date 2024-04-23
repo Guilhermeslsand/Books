@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Capítulo 8. Personalização do Sistema</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="index.html" title="Guia Foca Linux" /><link rel="prev" href="ch07s11.html" title="Lista de pacotes para uma instalação rápida e manual" /><link rel="next" href="ch08s02.html" title="Modificando o Idioma usado em seu sistema" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Capítulo 8. Personalização do Sistema</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch07s11.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch08s02.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-node">Personalização do Sistema</span></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="pers"></a>Capítulo 8. Personalização do Sistema</h1></div></div></div><div class="toc"><p><strong>Índice</strong></p><dl class="toc"><dt><span class="section"><a href="ch08.html#pers-varamb">Variáveis de Ambientes</a></span></dt><dt><span class="section"><a href="ch08s02.html">Modificando o Idioma usado em seu sistema</a></span></dt><dt><span class="section"><a href="ch08s03.html">alias</a></span></dt><dt><span class="section"><a href="ch08s04.html">Arquivo <code class="filename">/etc/profile</code></a></span></dt><dt><span class="section"><a href="ch08s05.html">Arquivo <code class="filename">.bash_profile</code></a></span></dt><dt><span class="section"><a href="ch08s06.html">Arquivo <code class="filename">.bashrc</code></a></span></dt><dt><span class="section"><a href="ch08s07.html">Arquivo <code class="filename">.hushlogin</code></a></span></dt><dt><span class="section"><a href="ch08s08.html">Arquivo <code class="filename">/etc/environment</code></a></span></dt><dt><span class="section"><a href="ch08s09.html">Diretório <code class="filename">/etc/skel</code></a></span></dt></dl></div>
+<p>
+Este capítulo ensina como personalizar algumas características de seu sistema
+<span class="command"><strong>GNU/Linux</strong></span>.
+</p>
+
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="pers-varamb"></a>Variáveis de Ambientes</h2></div></div></div>
+<p>
+É um método simples e prático que permite a especificação de opções de
+configuração de programas sem precisar mexer com arquivos no disco ou opções.
+Algumas variáveis do <span class="command"><strong>GNU/Linux</strong></span> afetam o comportamento de
+todo o Sistema Operacional, como o idioma utilizado e o path (veja <a class="xref" href="">???</a>) .  Variáveis de ambientes são nomes que contém algum
+valor e tem a forma <code class="literal">Nome=Valor</code>.  As variáveis de ambiente
+são individuais para cada usuário do sistema ou consoles virtuais e permanecem
+residentes na memória RAM até que o usuário saia do sistema (logo-off) ou até
+que o sistema seja desligado.
+</p>
+<p>
+As variáveis de ambiente são visualizadas/criadas através do comando
+<span class="command"><strong>set</strong></span> ou <code class="literal">echo $NOME</code> (apenas visualiza) e
+exportadas para o sistemas com o comando <code class="literal">export NOME=VALOR</code>.
+</p>
+<p>
+Nos sistemas <span class="command"><strong>Debian</strong></span>, o local usado para especificar
+variáveis de ambiente é o <code class="filename">/etc/environment</code> (veja <a class="xref" href="ch08s08.html" title="Arquivo /etc/environment">“Arquivo <code class="filename">/etc/environment</code>”</a>).  Todas as variáveis especificadas neste arquivos
+serão inicializadas e automaticamente exportadas na inicialização do sistema.
+</p>
+<p>
+Exemplo: Para criar uma variável chamada <code class="filename">TESTE</code> que
+contenha o valor <code class="literal">123456</code> digite: <code class="literal">export
+TESTE=123456</code>.  Agora para ver o resultado digite: <code class="literal">echo
+$TESTE</code> ou <code class="literal">set|grep TESTE</code>.  Note que o
+<code class="literal">$</code> que antecede o nome <code class="filename">TESTE</code> serve para
+identificar que se trata de uma variável e não de um arquivo comum.
+</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch07s11.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch08s02.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Lista de pacotes para uma instalação rápida e manual </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Modificando o Idioma usado em seu sistema</td></tr></table></div></body></html>

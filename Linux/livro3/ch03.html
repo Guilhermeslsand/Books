@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Capítulo 3. Hardware</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="index.html" title="Guia Foca Linux" /><link rel="prev" href="ch02.html" title="Capítulo 2. Explicações Básicas" /><link rel="next" href="ch03s02.html" title="Nomes de dispositivos" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Capítulo 3. Hardware</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch03s02.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-node">Hardware</span></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="hardw"></a>Capítulo 3. Hardware</h1></div></div></div><div class="toc"><p><strong>Índice</strong></p><dl class="toc"><dt><span class="section"><a href="ch03.html#hardw-placas">Placa de expansão</a></span></dt><dt><span class="section"><a href="ch03s02.html">Nomes de dispositivos</a></span></dt><dt><span class="section"><a href="ch03s03.html">Configuração de Hardware</a></span></dt><dd><dl><dt><span class="section"><a href="ch03s03.html#hardw-cfg-irq">IRQ - Requisição de Interrupção</a></span></dt><dt><span class="section"><a href="ch03s03.html#hardw-cfg-dma">DMA - Acesso Direto a Memória</a></span></dt><dt><span class="section"><a href="ch03s03.html#hardw-cfg-io">I/O - Porta de Entrada/Saída</a></span></dt></dl></dd><dt><span class="section"><a href="ch03s04.html">Hardwares configuráveis por jumpers, dip-switches, jumperless e Plug-and-Play.</a></span></dt><dd><dl><dt><span class="section"><a href="ch03s04.html#hardw-metodoscfg-jumpers">Jumpers</a></span></dt><dt><span class="section"><a href="ch03s04.html#hardw-metodoscfg-dipswitche">Dip-Switches</a></span></dt><dt><span class="section"><a href="ch03s04.html#hardw-metodoscfg-jumperless">Jumperless (sem jumper)</a></span></dt><dt><span class="section"><a href="ch03s04.html#hardw-metodoscfg-plug-and-play">Plug-and-Play</a></span></dt></dl></dd><dt><span class="section"><a href="ch03s05.html">Listando as placas e outros hardwares em um computador</a></span></dt><dt><span class="section"><a href="ch03s06.html">Conflitos de hardware</a></span></dt><dt><span class="section"><a href="ch03s07.html">Barramento</a></span></dt><dt><span class="section"><a href="ch03s08.html">Placas on-board / off-board</a></span></dt><dt><span class="section"><a href="ch03s09.html">Hardwares específicos ou "For Windows"</a></span></dt><dt><span class="section"><a href="ch03s10.html">Dispositivos específicos para GNU/Linux</a></span></dt><dt><span class="section"><a href="ch03s11.html">Configurações de Dispositivos</a></span></dt><dd><dl><dt><span class="section"><a href="ch03s11.html#hardw-cfgdisp-rede">Configurando uma placa de rede</a></span></dt><dt><span class="section"><a href="ch03s11.html#hardw-cfgdisp-som">Configurando uma placa de SOM no Linux</a></span></dt><dt><span class="section"><a href="ch03s11.html#hardw-cfgdisp-cdwritter">Configurando um gravador de CD/DVD no Linux</a></span></dt><dt><span class="section"><a href="ch03s11.html#hardw-cfgdisp-apm">Configurando o gerenciamento de energia usando o APM</a></span></dt><dt><span class="section"><a href="ch03s11.html#hardw-cfgdisp-acpi">Configurando o gerenciamento de energia usando ACPI</a></span></dt><dt><span class="section"><a href="ch03s11.html#hardw-cfgdisp-wol">Ativando WakeUP on Lan</a></span></dt></dl></dd><dt><span class="section"><a href="ch03s12.html">Aterramento</a></span></dt><dd><dl><dt><span class="section"><a href="ch03s12.html#hard-aterram-condut">Condutores de eletricidade</a></span></dt></dl></dd><dt><span class="section"><a href="ch03s13.html">Tomadas</a></span></dt><dt><span class="section"><a href="ch03s14.html">Descargas estáticas</a></span></dt><dt><span class="section"><a href="ch03s15.html">Melhoria de performance</a></span></dt><dd><dl><dt><span class="section"><a href="ch03s15.html#hard-perf-part">Particionamento</a></span></dt><dt><span class="section"><a href="ch03s15.html#hard-perf-spindles">Spindles</a></span></dt><dt><span class="section"><a href="ch03s15.html#hard-perf-hdparm">Fazendo ajustes finos de performance do disco</a></span></dt><dt><span class="section"><a href="ch03s15.html#hard-perf-atime">Data de acesso a arquivos/diretórios</a></span></dt></dl></dd><dt><span class="section"><a href="ch03s16.html">Periféricos SATA</a></span></dt><dt><span class="section"><a href="ch03s17.html">Periféricos SCSI</a></span></dt><dd><dl><dt><span class="section"><a href="ch03s17.html#hard-perf-SCSI-IDcfg">Configurando uma SCSI ID e terminação</a></span></dt></dl></dd></dl></div>
+<p>
+Hardware é tudo que diz respeito a parte física do computador.  Nesta seção
+serão abordados assuntos relacionados com a configuração de hardwares, escolha
+de bons hardwares, dispositivos for Windows, etc.
+</p>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="hardw-placas"></a>Placa de expansão</h2></div></div></div>
+<p>
+É um circuito eletrônico encaixado na placa mãe que tem por objetivo adicionar
+novas funcionalidades ao computador.  Esta placa pode ser uma:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="literal">placa de som</code> - para fazer o computador emitir sons, músicas,
+ligar um joystick, etc.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">Placa de vídeo 3D</code> - Para obter imagens mais rápidas para
+jogos e ambientes de desktop 3 dimensões
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">Placa de captura</code> - Para assistir televisão/rádio e gravar a
+programação de TV em seu micro.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">fax-modem</code> - para enviar/receber fax, conectar-se a internet,
+acesso remoto, bina, etc.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">rede</code> - para permitir a comunicação com outros computadores
+em uma rede interna
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">controladora de periféricos</code> - Para ligar discos rígidos,
+unidades de disquete, impressora, mouse, joystick, etc.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">SCSI</code> - Para ligar unidades de disco rígidos e periféricos de
+alto desempenho.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">Controladora de Scanner</code> - Para ligar um Scanner externo ao
+micro computador.
+</p>
+</li></ul></div>
+<p>
+O encaixe da placa mãe que recebe as placas de expansão são chamados de
+<span class="emphasis"><em>Slots</em></span>.
+</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch03s02.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Capítulo 2. Explicações Básicas </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Nomes de dispositivos</td></tr></table></div></body></html>

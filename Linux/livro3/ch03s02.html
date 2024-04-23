@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Nomes de dispositivos</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch03.html" title="Capítulo 3. Hardware" /><link rel="prev" href="ch03.html" title="Capítulo 3. Hardware" /><link rel="next" href="ch03s03.html" title="Configuração de Hardware" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Nomes de dispositivos</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03.html">Anterior</a> </td><th width="60%" align="center">Capítulo 3. Hardware</th><td width="20%" align="right"> <a accesskey="n" href="ch03s03.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch03.html">Hardware</a></span> &gt; <span class="breadcrumb-node">Nomes de dispositivos</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="hardw-nomesdisp"></a>Nomes de dispositivos</h2></div></div></div>
+<p>
+Seria terrível se ao configurar CADA programa que utilize o mouse ou o modem
+precisássemos nos se referir a ele pela IRQ, I/O, etc...  para evitar isso são
+usados os <span class="emphasis"><em>nomes de dispositivos</em></span>.
+</p>
+<p>
+Os <span class="emphasis"><em>nomes de dispositivos</em></span> no sistema
+<span class="command"><strong>GNU/Linux</strong></span> são acessados através do diretório
+<code class="filename">/dev</code>.  Após configurar corretamente o modem, com sua porta
+I/O 0x2F8 e IRQ 3, ele é identificado automaticamente por
+<code class="filename">/dev/ttyS1</code> (equivalente a <code class="filename">COM2</code> no
+<span class="command"><strong>DOS</strong></span>).  Daqui para frente basta se referir a
+<code class="filename">/dev/ttyS1</code> para fazer alguma coisa com o modem.
+</p>
+<p>
+Você também pode fazer um link de <code class="filename">/dev/ttyS1</code> para um
+arquivo chamado <code class="filename">/dev/modem</code> usando: <code class="literal">ln -s
+/dev/ttyS1 /dev/modem</code>, faça a configuração dos seus programas usando
+<code class="filename">/dev/modem</code> ao invés de <code class="filename">/dev/ttyS1</code> e
+se precisar reconfigurar o seu modem e a porta serial mudar para
+<code class="filename">/dev/ttyS3</code>, será necessário somente apagar o link
+<code class="filename">/dev/modem</code> antigo e criar um novo apontando para a porta
+serial <code class="filename">/dev/ttyS3</code>.
+</p>
+<p>
+Não será necessário reconfigurar os programas que usam o modem pois eles estão
+usando <code class="filename">/dev/modem</code> que está apontando para a localização
+correta.  Isto é muito útil para um bom gerenciamento do sistema.
+</p>
+<p>
+Abaixo uma tabela com o nome do dispositivo no <span class="command"><strong>GNU/Linux</strong></span>,
+portas I/O, IRQ, DMA e nome do dispositivo no <span class="command"><strong>DOS</strong></span> (os nomes
+de dispositivos estão localizados no diretório <code class="filename">/dev</code>):
+</p>
+<pre class="screen">
+Dispos.   Dispos.
+ Linux     DOS       IRQ     DMA     I/O
+
+ttyS0      COM1       4       -      0x3F8
+ttyS1      COM2       3       -      0x2F8
+ttyS2      COM3       4       -      0x3E8
+ttyS3      COM4       3       -      0x2E8
+lp0        LPT1       7      3(ECP)  0x378
+lp1        LPT2       5      3(ECP)  0x278
+/dev/hda1  C:        14       -      0x1F0,0x3F6
+/dev/hda2  D: *      14       -      0x1F0,0x3F6
+/dev/hdb1  D: *      15       -      0x170,0x376
+</pre>
+<p>
+* A designação de letras de unidade do <span class="command"><strong>DOS</strong></span> não segue o
+padrão do <span class="command"><strong>GNU/Linux</strong></span> e depende da existência de outras
+unidades físicas/lógicas no computador.
+</p>
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s03.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Capítulo 3. Hardware </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Configuração de Hardware</td></tr></table></div></body></html>

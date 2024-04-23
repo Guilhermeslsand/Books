@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Capítulo 5. Configurações especiais de Rede</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="index.html" title="Guia Foca Linux" /><link rel="prev" href="ch04s11.html" title="RFCs de referência sobre protocolos de rede" /><link rel="next" href="ch05s02.html" title="Bridge" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Capítulo 5. Configurações especiais de Rede</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s11.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch05s02.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-node">Configurações especiais de Rede</span></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="cfgrede"></a>Capítulo 5. Configurações especiais de Rede</h1></div></div></div><div class="toc"><p><strong>Índice</strong></p><dl class="toc"><dt><span class="section"><a href="ch05.html#cfgrede-ipalias">IP Alias</a></span></dt><dt><span class="section"><a href="ch05s02.html">Bridge</a></span></dt><dd><dl><dt><span class="section"><a href="ch05s02.html#cfgs-bridge-req">Requerimentos para a Instalação</a></span></dt><dt><span class="section"><a href="ch05s02.html#cfgs-bridge-cfg">Configuração da bridge</a></span></dt><dt><span class="section"><a href="ch05s02.html#cfgs-bridge-cfgadv">Configurações mais avançadas de bridge</a></span></dt><dt><span class="section"><a href="ch05s02.html#cfgs-bridge-cfgmanual">Configuração manual da bridge</a></span></dt><dt><span class="section"><a href="ch05s02.html#cfgs-bridge-fw">Usando o iptables para construir um firewall na máquina da bridge</a></span></dt><dt><span class="section"><a href="ch05s02.html#cfgs-bridge-filternoip">Filtrando pacotes não IP na bridge</a></span></dt></dl></dd><dt><span class="section"><a href="ch05s03.html">Conectando dois computadores usando a porta paralela</a></span></dt><dd><dl><dt><span class="section"><a href="ch05s03.html#cfgs-plip-cabo">Construindo um cabo LapLink Paralelo</a></span></dt></dl></dd><dt><span class="section"><a href="ch05s04.html">Conectando dois computadores usando a porta serial</a></span></dt><dd><dl><dt><span class="section"><a href="ch05s04.html#cfgs-slattach-cabo">Construindo um cabo LapLink Serial</a></span></dt></dl></dd></dl></div>
+<p>
+Este capítulo descreve alguns tipos de configurações que podem ser feitas em
+rede utilizando os recursos disponíveis do <span class="command"><strong>Linux</strong></span>.  Aqui não
+estão todas as aplicações, pois o sistema é bastante flexível e o próprio time
+de desenvolvimento do kernel não demonstrou limitações quanto as formas de se
+construir uma rede :-)
+</p>
+
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="cfgrede-ipalias"></a>IP Alias</h2></div></div></div>
+<p>
+Este recurso permite configurar uma interface de rede para responder por um ou
+mais IPs, que não precisam pertencer a mesma faixa.  Para usuários externos, a
+impressão é que a rede tem "muitas" máquinas, quando na realidade apenas uma
+responde por todos estes endereços virtuais.  Podemos citar algumas utilizações
+úteis deste recurso:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+Simular uma rede com diversas máquinas
+</p>
+</li><li class="listitem">
+<p>
+Construir virtual hosts baseados em IP
+</p>
+</li><li class="listitem">
+<p>
+Definir endereçamentos secundários para fins de análise e depuração de pacotes
+(principalmente como armadilhas para trojans)
+</p>
+</li><li class="listitem">
+<p>
+Colocação de serviços com operação restritas a interfaces em funcionamento
+através de faixas específicas usando as configurações da interface virtual
+</p>
+</li><li class="listitem">
+<p>
+Transição de IP de servidores de forma transparente
+</p>
+</li><li class="listitem">
+<p>
+Entre muitas outras.  A idéia aqui é mostrar a simplicidade de se configurar
+este recurso e entender o processo, que é bastante simples.
+</p>
+</li></ul></div>
+<p>
+Para configurar o recurso de <span class="emphasis"><em>IP Alias</em></span> é necessário apenas
+que a opção <span class="emphasis"><em>IP Aliasing Support</em></span> seja habilitada no kernel
+(como módulo ou embutida).  Em nosso exemplo abaixo, temos uma rede com a
+interface <code class="filename">eth0</code> configurada com o IP
+<span class="emphasis"><em>192.168.1.1</em></span> (classe C privada) e queremos adicionar uma
+interface virtual que atenda pelo IP <span class="emphasis"><em>172.16.0.1</em></span> (classe B
+privada) e depois seguir os seguintes passos:
+</p>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+<p>
+Ative a interface de rede com <span class="command"><strong>ifconfig</strong></span> ou
+<span class="command"><strong>ifup</strong></span> (caso esteja usando a <span class="command"><strong>Debian</strong></span>).
+</p>
+</li><li class="listitem">
+<p>
+Crie uma interface virtual usando o comando <code class="literal">ifconfig eth0:0
+172.16.0.1</code>.  Isto criará uma nova interface chamada
+<code class="literal">eth0:0</code> que passará a responder pelo IP 172.6.0.1.  É
+permitido o uso de nomes para especificar a interface virtual, como:
+<code class="literal">eth0:rede1</code>, <code class="literal">eth0:rede2</code>,
+<code class="literal">eth0:escritório</code>.
+</p>
+</li><li class="listitem">
+<p>
+Digite <code class="literal">ifconfig</code> para ver as configurações de sua nova
+interface de rede.  Use o ping também para vê-la: <code class="literal">ping
+172.16.0.1</code>.
+</p>
+<pre class="screen">
+eth0       Encapsulamento do Link: Ethernet  Endereço de HW 00:80:AE:B3:AA:AA
+          inet end.: 192.168.1.1  Bcast:192.168.1.255  Masc:255.255.255.0
+          UP BROADCASTRUNNING MULTICAST  MTU:1500  Métrica:1
+          RX packets:979 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:1228 errors:0 dropped:0 overruns:0 carrier:0
+          colisões:1 txqueuelen:100 
+          RX bytes:71516 (69.8 Kb)  TX bytes:1146031 (1.0 Mb)
+          IRQ:10 Endereço de E/S:0x300 
+
+eth0:0    Encapsulamento do Link: Ethernet  Endereço de HW 00:80:AE:B3:AA:AA
+          inet end.: 192.168.1.10  Bcast:192.168.1.255  Masc:255.255.255.0
+          UP BROADCASTRUNNING MULTICAST  MTU:1500  Métrica:1
+          IRQ:10 Endereço de E/S:0x300
+</pre>
+<p>
+Note que o MAC Address da placa <code class="filename">eth0</code> e
+<code class="filename">eth0:0</code> são o mesmo, indicando que a mesma interface atende
+ambos os IPs.
+</p>
+</li><li class="listitem">
+<p>
+Se necessário ajuste as rotas ou gateway com o comando <span class="command"><strong>route</strong></span>
+(veja <a class="xref" href="ch04s05.html#rede-rota-c" title="Configurando uma rota no Linux">“Configurando uma rota no Linux”</a>).
+</p>
+</li></ol></div>
+<p>
+Para desativar uma interface de rede virtual, utilize a sintaxe:
+<code class="literal">ifconfig eth0:0 down</code> ou <code class="literal">ifdown eth0:0</code>
+(caso esteja usando a <span class="command"><strong>Debian</strong></span>).
+</p>
+<p>
+Se o teste com o <span class="command"><strong>ping</strong></span> não funcionar, verifique se possui o
+suporte a <span class="emphasis"><em>IP Alias</em></span> no kernel, se o módulo precisa ser
+carregado manualmente (caso seu kernel não esteja compilado com o
+<span class="command"><strong>kmod</strong></span>) ou se existe um firewall restritivo bloqueando seu IP.
+</p>
+<p>
+Na distribuição <span class="command"><strong>Debian</strong></span> a configuração de uma interface
+virtual pode ser feita de forma idêntica a interfaces estáticas padrão:
+</p>
+<pre class="screen">
+auto eth0
+iface eth0 inet static
+ address 192.168.1.1
+ netmask 255.255.255.0
+ network 192.168.1.0
+ broadcast 192.168.1.255
+
+auto eth0:0
+iface eth0:0 inet static
+ address 172.16.0.1
+ netmask 255.255.0.0
+ network 172.16.0.1
+ broadcast 172.16.255.255
+</pre>
+<p>
+<span class="strong"><strong>OBS1:</strong></span> Quando você desativa uma interface
+física (<code class="filename">eth0</code>), todas as interfaces virtuais também são
+desativadas.
+</p>
+<p>
+<span class="strong"><strong>OBS2:</strong></span> Caso utilize um firewall
+(principalmente com a política padrão permissiva), esteja atento as
+modificações que precisa realizar para não comprometer a segurança de sua
+máquina.  Caso tenha dados considerados seguros em sua máquina e esteja em
+dúvida sobre as implicações de segurança do <span class="emphasis"><em>IP Alias</em></span> em
+sua máquina, consulte seu administrador de redes.
+</p>
+<p>
+<span class="strong"><strong>OBS3:</strong></span> Note que somente os 4 primeiros
+caracteres serão mostrados na saída do <span class="command"><strong>ifconfig</strong></span>, desta forma
+procure utilizar no máximo esta quantidade de caracteres para evitar problemas
+durante uma futura administração do servidor, no caso de esquecimento do nome
+completo da interface virtual).
+</p>
+</div>
+
+
+
+
+
+
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s11.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch05s02.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">RFCs de referência sobre protocolos de rede </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Bridge</td></tr></table></div></body></html>

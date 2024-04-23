@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Lista de pacotes para uma instalação rápida e manual</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch07.html" title="Capítulo 7. A distribuição Debian GNU/Linux" /><link rel="prev" href="ch07s10.html" title="Onde encontrar a Debian para Download?" /><link rel="next" href="ch08.html" title="Capítulo 8. Personalização do Sistema" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Lista de pacotes para uma instalação rápida e manual</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch07s10.html">Anterior</a> </td><th width="60%" align="center">Capítulo 7. A distribuição Debian GNU/Linux</th><td width="20%" align="right"> <a accesskey="n" href="ch08.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch07.html">A distribuição Debian GNU/Linux</a></span> &gt; <span class="breadcrumb-node">Lista de pacotes para uma instalação rápida e manual</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="deb-lista-pacotes"></a>Lista de pacotes para uma instalação rápida e manual</h2></div></div></div>
+<p>
+Esta seção contém uma lista de pacotes necessários que atendem a maioria dos
+usuários normais da <span class="command"><strong>Debian</strong></span> em um <span class="strong"><strong>sistema padrão</strong></span> sem desperdício de espaço e sabendo
+exatamente o que está instalando.
+</p>
+<p>
+Estou assumindo que você concluiu a instalação da <span class="command"><strong>Debian</strong></span> 10.0
+(Buster) mas preferiu pular o passo de seleção de pacotes do
+<span class="command"><strong>dselect</strong></span> e fazer uma instalação manual.
+</p>
+<p>
+A lista de pacotes está dividida por categorias e você precisa ter o programa
+<span class="command"><strong>apt</strong></span> configurado corretamente para que os comandos funcionem
+(veja <a class="xref" href="">???</a> para detalhes).
+</p>
+<p>
+Se pretende usar a lista de pacotes para fazer a instalação da
+<span class="command"><strong>Debian</strong></span> em muitos computadores, você tem duas opções:
+</p>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+<p>
+Copiar o conteúdo das seções que seguem e fazer um script de instalação
+personalizado para automatizar a instalação de pacotes da
+<span class="command"><strong>Debian</strong></span> em outras máquinas
+</p>
+</li><li class="listitem">
+<p>
+Após a instalação dos pacotes no computador, utilize o comando <code class="literal">dpkg
+--get-selections &gt;Lista-Pacotes.txt</code> para gerar o arquivo
+<code class="filename">Lista-Pacotes.txt</code> contendo a lista de pacotes instalados.
+</p>
+<p>
+Então no computador que pretende fazer a instalação de pacotes, use o comando
+<code class="literal">dpkg --set-selections &lt;Lista-Pacotes.txt</code> e então digitar
+<code class="literal">apt-get -f install</code> ou escolher a opção
+<code class="literal">Install</code> no <span class="command"><strong>dselect</strong></span>.
+</p>
+</li></ol></div>
+<p>
+Para mais detalhes veja <a class="xref" href="">???</a> e a <a class="xref" href="">???</a>.  É importante usar o comando <code class="literal">apt-get
+clean</code> após a instalação de pacotes para remover os pacotes baixados
+pelo <span class="command"><strong>apt</strong></span> de <code class="filename">/var/cache/apt/archives</code>
+(exceto na instalação de pacotes através do disco rígido local).
+</p>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s20.11.1"></a>Pacotes Básicos (Altamente Recomendado)</h3></div></div></div>
+<pre class="screen">
+apt-get install cpio info libident libncurses4 man-db manpages whois vim
+                hdparm mc postfix linuxlogo less kbd mutt bzip2 
+                cron gpm 
+</pre>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s20.11.2"></a>Compilação do Kernel e programas em linguagem C</h3></div></div></div>
+<pre class="screen">
+apt-get install perl, gcc libc6-dev bin86 make
+</pre>
+<p>
+Se pretender utilizar o 
+para compilar o kernel mais facilmente, então você precisará dos seguintes
+pacotes:
+</p>
+<pre class="screen">
+apt-get install kernel-package dpkg-dev
+</pre>
+<p>
+Veja <a class="xref" href="">???</a> para entender como compilar seu
+próprio kernel.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s20.11.3"></a>X11 (básico)</h3></div></div></div>
+<pre class="screen">
+apt-get install xbase-clients xserver-xorg xfonts-75dpi xfonts-base 
+                xserver-common xterm xfstt xdm
+</pre>
+<p>
+Caso suas fontes sejam mostradas em tamanho exagerado, remova o pacotes
+ ou ajuste a seção
+<code class="literal">Files</code> do arquivo <code class="filename">/etc/X11/xorg.conf</code>
+apropriadamente.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s20.11.4"></a>Window Managers para o X</h3></div></div></div>
+<pre class="screen">
+apt-get install wmaker wmakerconf wmaker-data wmavload 
+                eterm enlightenment enlightenment-theme-bluesteel asclock
+		afterstep
+</pre>
+<p>
+OBS: Existem também gerenciadores de seção como o <span class="command"><strong>gnome</strong></span>,
+<span class="command"><strong>kde</strong></span>, ocupam bastante espaço em disco
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s20.11.5"></a>Impressão (texto e gráfico com sistema de spool)</h3></div></div></div>
+<pre class="screen">
+apt-get install lprng magicfilter gs gsfonts
+</pre>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s20.11.6"></a>Som (mixer, mp3, Midi, wav, CD-Player)</h3></div></div></div>
+<pre class="screen">
+xmms playmidi cam aumix alsa-base alsa-oss alsamixergui xmcd sox
+</pre>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s20.11.7"></a>Programas de Internet (clientes)</h3></div></div></div>
+<pre class="screen">
+apt-get install xchat gaim firefox fetchmail procmail mime-support
+</pre>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s20.11.8"></a>Acessórios</h3></div></div></div>
+<pre class="screen">
+apt-get install gimp gimp-nonfree gnotepad openoffice freefont
+</pre>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="s20.11.9"></a>Rede</h3></div></div></div>
+<pre class="screen">
+apt-get install finger, talk, talkd, telnet
+</pre>
+</div>
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch07s10.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch07.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch08.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Onde encontrar a Debian para Download? </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Capítulo 8. Personalização do Sistema</td></tr></table></div></body></html>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Capítulo 4. Rede</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="index.html" title="Guia Foca Linux" /><link rel="prev" href="ch03s17.html" title="Periféricos SCSI" /><link rel="next" href="ch04s02.html" title="Protocolo de Rede" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Capítulo 4. Rede</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s17.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch04s02.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-node">Rede</span></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="rede"></a>Capítulo 4. Rede</h1></div></div></div><div class="toc"><p><strong>Índice</strong></p><dl class="toc"><dt><span class="section"><a href="ch04.html#rede-oque">O que é uma rede</a></span></dt><dt><span class="section"><a href="ch04s02.html">Protocolo de Rede</a></span></dt><dt><span class="section"><a href="ch04s03.html">Endereço IP</a></span></dt><dd><dl><dt><span class="section"><a href="ch04s03.html#rede-ip-classes">Classes de Rede IP</a></span></dt><dt><span class="section"><a href="ch04s03.html#rede-ip-masks">Referência rápida de máscara de redes</a></span></dt><dt><span class="section"><a href="ch04s03.html#rede-ip-nova">Para instalar uma máquina usando o Linux em uma rede existente</a></span></dt><dt><span class="section"><a href="ch04s03.html#rede-ip-privada">Endereços reservados para uso em uma rede Privada</a></span></dt></dl></dd><dt><span class="section"><a href="ch04s04.html">Interface de rede</a></span></dt><dd><dl><dt><span class="section"><a href="ch04s04.html#rede-interfaces-lo">A interface loopback</a></span></dt><dt><span class="section"><a href="ch04s04.html#rede-interfaces-c">Atribuindo um endereço de rede a uma interface (ifconfig)</a></span></dt></dl></dd><dt><span class="section"><a href="ch04s05.html">Roteamento</a></span></dt><dd><dl><dt><span class="section"><a href="ch04s05.html#rede-rota-c">Configurando uma rota no Linux</a></span></dt></dl></dd><dt><span class="section"><a href="ch04s06.html">Resolvedor de nomes (DNS)</a></span></dt><dd><dl><dt><span class="section"><a href="ch04s06.html#rede-dns-oque">O que é um nome?</a></span></dt><dt><span class="section"><a href="ch04s06.html#rede-dns-a">Arquivos de configuração usados na resolução de nomes</a></span></dt><dt><span class="section"><a href="ch04s06.html#rede-dns-servdns">Executando um servidor de nomes</a></span></dt></dl></dd><dt><span class="section"><a href="ch04s07.html">Serviços de Rede</a></span></dt><dd><dl><dt><span class="section"><a href="ch04s07.html#rede-servicos-daemon">Serviços iniciados como Daemons de rede</a></span></dt><dt><span class="section"><a href="ch04s07.html#rede-servicos-inetd">Serviços iniciados através do inetd</a></span></dt></dl></dd><dt><span class="section"><a href="ch04s08.html">Segurança da Rede e controle de Acesso</a></span></dt><dd><dl><dt><span class="section"><a href="ch04s08.html#rede-seg-ftpusers">/etc/ftpusers</a></span></dt><dt><span class="section"><a href="ch04s08.html#rede-seg-securetty">/etc/securetty</a></span></dt><dt><span class="section"><a href="ch04s08.html#rede-seg-tcpd">O mecanismo de controle de acessos tcpd</a></span></dt><dt><span class="section"><a href="ch04s08.html#rede-seg-firewall">Firewall</a></span></dt></dl></dd><dt><span class="section"><a href="ch04s09.html">Outros arquivos de configuração relacionados com a rede</a></span></dt><dd><dl><dt><span class="section"><a href="ch04s09.html#rede-outros-services">/etc/services</a></span></dt><dt><span class="section"><a href="ch04s09.html#rede-outros-protocols">/etc/protocols</a></span></dt></dl></dd><dt><span class="section"><a href="ch04s10.html">Camadas de Rede</a></span></dt><dt><span class="section"><a href="ch04s11.html">RFCs de referência sobre protocolos de rede</a></span></dt></dl></div>
+<p>
+Este capítulo descreve o que é uma rede, os principais dispositivos de rede no
+<span class="command"><strong>GNU/Linux</strong></span>, a identificação de cada um, como configurar os
+dispositivos, escolha de endereços IP, roteamento.
+</p>
+<p>
+Parte deste capítulo, uns 70% pelo menos, é baseado no documento NET3-4-HOWTO.
+(seria perda de tempo reescrever este assunto pois existe um material desta
+qualidade já disponível).
+</p>
+
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="rede-oque"></a>O que é uma rede</h2></div></div></div>
+<p>
+Rede é a conexão de duas ou mais máquinas com o objetivo de compartilhar
+recursos entre uma máquina e outra.  Os recursos podem ser:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+Compartilhamento do conteúdo de seu disco rígido (ou parte dele) com outros
+usuários.  Os outros usuários poderão acessar o disco como se estivesse
+instalado na própria máquina).  Também chamado de servidor de arquivos.
+</p>
+</li><li class="listitem">
+<p>
+Compartilhamento de uma impressora com outros usuários.  Os outros usuários
+poderão enviar seus trabalhos para uma impressora da rede.  Também chamado de
+servidor de impressão.
+</p>
+</li><li class="listitem">
+<p>
+Compartilhamento de acesso a Internet.  Outros usuários poderão navegar na
+Internet, pegar seus e-mails, ler noticias, bate-papo no IRC, ICQ através do
+servidor de acesso Internet.  Também chamado de servidor Proxy.
+</p>
+</li><li class="listitem">
+<p>
+Servidor de Internet/Intranet.  Outros usuários poderão navegar nas páginas
+Internet localizadas em seu computador, pegar e-mails, usar um servidor de IRC
+para chat na rede, servidor de ICQ, etc
+</p>
+</li></ul></div>
+<p>
+Com os ítens acima funcionando é possível criar permissões de acesso da rede,
+definindo quem terá ou não permissão para acessar cada compartilhamento ou
+serviço existente na máquina (www, ftp, irc, icq, etc), e registrando/avisando
+sobre eventuais tentativas de violar a segurança do sistema, firewalls, pontes,
+etc.
+</p>
+<p>
+Entre outras ilimitadas possibilidades que dependem do conhecimento do
+indivíduo no ambiente <span class="command"><strong>GNU/Linux</strong></span>, já que ele permite muita
+flexibilidade para fazer qualquer coisa funcionar em rede.
+</p>
+<p>
+A comunicação entre computadores em uma rede é feita através do
+<span class="emphasis"><em>Protocolo de Rede</em></span>.
+</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s17.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch04s02.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Periféricos SCSI </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Protocolo de Rede</td></tr></table></div></body></html>

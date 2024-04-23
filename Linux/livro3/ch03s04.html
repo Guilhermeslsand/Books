@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Hardwares configuráveis por jumpers, dip-switches, jumperless e Plug-and-Play.</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch03.html" title="Capítulo 3. Hardware" /><link rel="prev" href="ch03s03.html" title="Configuração de Hardware" /><link rel="next" href="ch03s05.html" title="Listando as placas e outros hardwares em um computador" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Hardwares configuráveis por jumpers, dip-switches, jumperless e Plug-and-Play.</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s03.html">Anterior</a> </td><th width="60%" align="center">Capítulo 3. Hardware</th><td width="20%" align="right"> <a accesskey="n" href="ch03s05.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch03.html">Hardware</a></span> &gt; <span class="breadcrumb-node">Hardwares configuráveis por jumpers, dip-switches, jumperless e Plug-and-Play.</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="hardw-metodoscfg"></a>Hardwares configuráveis por jumpers, dip-switches, jumperless e Plug-and-Play.</h2></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="hardw-metodoscfg-jumpers"></a>Jumpers</h3></div></div></div>
+<p>
+Hardwares configuráveis por <span class="emphasis"><em>jumpers</em></span> (pinos metálicos
+protegidos por uma capa plástica) tem sua configuração alterada através da
+colocação, retirada ou mudança de posição física do pino.  Este tipo de
+hardware, antigamente presente em placas ISA e VESA, não é mais usado
+atualmente devido a configuração Plug and Play de dispositivos PCI, PCI
+express, etc.
+</p>
+<p>
+As disposição dos jumpers são normalmente definidas em
+<span class="emphasis"><em>fechado/aberto</em></span> e <span class="emphasis"><em>multi-posição</em></span>.  Na
+disposição <span class="emphasis"><em>fechado/aberto</em></span>, o jumper pode ou não ser
+colocado, definindo a configuração do dispositivo:
+</p>
+<pre class="screen">
+::|::
+</pre>
+<p>
+Esta disposição é facilmente encontrada na seleção de IRQ e I/O em placas de
+fax-modem.
+</p>
+<p>
+Na disposição <span class="emphasis"><em>multi-posição</em></span>, os pinos de encaixe são
+numerados de 1 a 3 (ou 1 a 4, 1 a 5, etc) e os pinos podem ou não ser colocados
+na placa e a posição que são colocados também influencia os valores escolhidos
+para o funcionamento do dispositivo (a posição 1-2 especificam um valor
+enquanto 2-3 especificam outro).  A associação entre a posição dos jumpers e a
+configuração desejada é feita consultando o mapa desenhado no circuito impresso
+da placa ou o manual de instruções da placa.
+</p>
+<p>
+A configuração de jumper através de multi-posição é normalmente usada em placas
+mãe para definir a <span class="emphasis"><em>freqüência de operação do barramento</em></span>, a
+<span class="emphasis"><em>freqüência de multiplicação</em></span> ou o <span class="emphasis"><em>tipo do
+processador</em></span>.
+</p>
+<p>
+Se não possuir o mapa de configuração de sua placa e/ou o manual de instruções,
+será necessário fazer um mapeamento manual da placa, mas para isto você
+precisará conhecer detalhadamente a configuração de portas I/O, DMA, IRQ usadas
+na máquina que será usada e anotar as diferenças obtidas através da modificação
+da pinagem do dispositivo.  Isto não é fácil, mas técnicos de informática
+experientes conhecerão as <code class="literal">armadilhas</code> encontradas pelo
+mapeamento manual de placas e farão o esquema de configuração completo do
+dispositivo, obtendo um excelente manual de instruções.  Nesta hora a
+experiência conta mais que o uso de programas de diagnóstico.
+</p>
+<p>
+Outra característica de hardwares configurados através de jumpers é que
+raramente apresentam problemas de funcionamento, a não ser que seus parâmetros
+como IRQ, DMA, ou I/O estejam em conflitos com outro dispositivo, mas isso não
+é culpa do fabricante e nem mesmo do dispositivo...
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="hardw-metodoscfg-dipswitche"></a>Dip-Switches</h3></div></div></div>
+<p>
+É a mesma coisa que os hardwares configuráveis por jumpers exceto que são
+usados <span class="emphasis"><em>dip-switches</em></span> no lugar de jumpers.  O
+<span class="emphasis"><em>dip-switches</em></span> é um conjunto de chaves numeradas que podem
+ser colocadas para cima ou para baixo (como um disjuntor ou vários
+interruptores <span class="emphasis"><em>LIGA/DESLIGA</em></span> colocados um ao lado do outro)
+para se modificar a configuração do dispositivo.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="hardw-metodoscfg-jumperless"></a>Jumperless (sem jumper)</h3></div></div></div>
+<p>
+Os hardwares <span class="emphasis"><em>jumperless</em></span> não possuem jumpers e são
+configurados através de um programa que acompanha a própria placa.  Neste
+programa é escolhida a IRQ, DMA, I/O e a configuração é salva na própria placa
+ou restaurada após cada inicialização por um programa carregado na memória.
+Devido a configuração via software, se obtém uma configuração fixa com muito
+mais facilidade do que via jumpers (por não haver a necessidade de se retirar a
+placa).
+</p>
+<p>
+A maioria das placas jumperless podem funcionar também como Plug-and-Play.
+Existem muitas placas de rede, fax-modem, scanner jumperless no mercado.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="hardw-metodoscfg-plug-and-play"></a>Plug-and-Play</h3></div></div></div>
+<p>
+O <span class="emphasis"><em>Plug-and-Play</em></span> é um protocolo que lê os valores de
+operação disponíveis para a placa e permitem que o usuário possa especificar
+facilmente qual será sua IRQ, DMA, I/O.  Hardwares PCI possuem configuração
+Plug-and-Play nativa, registrando suas interrupções, portas e dma na tabela de
+hardwares PCI do sistema.
+</p>
+<p>
+A diferença em relação ao modo jumperless é que toda a configuração do hardware
+(IRQ, DMA e I/O) é feita pelo kernel do <span class="command"><strong>Linux</strong></span>, onde ele
+passa a configuração detectada durante a inicialização do sistema para os
+módulos carregados, garantindo o perfeito funcionamento do dispositivos e
+evitando conflitos.  Na época de hardwares ISA e VESA, o programa
+<span class="command"><strong>isapnp</strong></span> era a preferencia para a configuração de placas ISA
+Plug and Play.
+</p>
+<p>
+Veja a próxima seção para entender como funciona o arquivo de configuração
+<code class="filename">isapnp.conf</code> e assim poder ativar seu dispositivo
+Plug-and-Play.
+</p>
+</div>
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s03.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s05.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Configuração de Hardware </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Listando as placas e outros hardwares em um computador</td></tr></table></div></body></html>

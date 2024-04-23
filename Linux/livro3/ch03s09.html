@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Hardwares específicos ou "For Windows"</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch03.html" title="Capítulo 3. Hardware" /><link rel="prev" href="ch03s08.html" title="Placas on-board / off-board" /><link rel="next" href="ch03s10.html" title="Dispositivos específicos para GNU/Linux" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Hardwares específicos ou "For Windows"</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s08.html">Anterior</a> </td><th width="60%" align="center">Capítulo 3. Hardware</th><td width="20%" align="right"> <a accesskey="n" href="ch03s10.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch03.html">Hardware</a></span> &gt; <span class="breadcrumb-node">Hardwares específicos ou "For Windows"</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="hard-forwindows"></a>Hardwares específicos ou "For Windows"</h2></div></div></div>
+<p>
+Esta seção foi retirada do manual de instalação da Debian GNU/Linux.  Uma
+tendência que perturba é a proliferação de Modens e impressoras específicos
+para Windows.  Em muitos casos estes são especialmente fabricados para operar
+com o Sistema Operacional Microsoft Windows e costumam ter a legenda
+<code class="literal">WinModem</code>, <code class="literal">for Windows</code>, ou <code class="literal">Feito
+especialmente para computadores baseados no Windows</code>.
+</p>
+<p>
+Geralmente estes dispositivos são feitos retirando os processadores embutidos
+daquele hardware e o trabalho deles são feitos por drivers do Windows que são
+executados pelo processador principal do computador.  Esta estratégia torna o
+hardware menos caro, mas o que é poupado não é passado para o usuário e este
+hardware pode até mesmo ser mais caro quanto dispositivos equivalentes que
+possuem inteligência embutida.
+</p>
+<p>
+Você deve evitar o hardware baseado no Windows por duas razões:
+</p>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+<p>
+O primeiro é que aqueles fabricantes não tornam os recursos disponíveis para
+criar um driver para Linux.  Geralmente, o hardware e a interface de software
+para o dispositivo é proprietária, e a documentação não é disponível sem o
+acordo de não revelação, se ele estiver disponível.  Isto impede seu uso como
+software livre, desde que os escritores de software grátis descubram o código
+fonte destes programas.
+</p>
+</li><li class="listitem">
+<p>
+A segunda razão é que quando estes dispositivos tem os processadores embutidos
+removidos, o sistema operacional deve fazer o trabalho dos processadores
+embutidos, freqüentemente em prioridade de tempo real, e assim a CPU não esta
+disponível para executar programas enquanto ela esta controlando estes
+dispositivos.
+</p>
+<p>
+Assim o usuário típico do Windows não obtém um multi-processamento tão
+intensivo como um usuário do Linux, o fabricante espera que aquele usuário do
+Windows simplesmente não note a carga de trabalho que este hardware põe naquela
+CPU.  No entanto, qualquer sistema operacional de multi-processamento, até
+mesmo Windows 9X, XP e Vista, são prejudicados quando fabricantes de
+periféricos retiram o processador embutido de suas placas e colocam o
+processamento do hardware na CPU.
+</p>
+</li></ol></div>
+<p>
+Você pode ajudar a reverter esta situação encorajando estes fabricantes a
+lançarem a documentação e outros recursos necessários para nós desenvolvermos
+drivers para estes hardwares, mas a melhor estratégia é simplesmente evitar
+estes tipos de hardwares até que ele esteja listado no HOWTO de hardwares
+compatíveis com Linux.
+</p>
+<p>
+Note que hoje já existem muitos drivers para WinModems e outros hardwares for
+Windows para o Linux.  Veja a lista de hardwares compatíveis no HARDWARE-HOWTO
+ou procure o driver no site do fabricante de seu dispositivo.  Mesmo assim a
+dica é evitar hardwares for Windows e comprar hardwares inteligentes onde cada
+um faz sua função sem carregar a CPU.
+</p>
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s08.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s10.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Placas on-board / off-board </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Dispositivos específicos para GNU/Linux</td></tr></table></div></body></html>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Aterramento</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch03.html" title="Capítulo 3. Hardware" /><link rel="prev" href="ch03s11.html" title="Configurações de Dispositivos" /><link rel="next" href="ch03s13.html" title="Tomadas" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Aterramento</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s11.html">Anterior</a> </td><th width="60%" align="center">Capítulo 3. Hardware</th><td width="20%" align="right"> <a accesskey="n" href="ch03s13.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch03.html">Hardware</a></span> &gt; <span class="breadcrumb-node">Aterramento</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="hard-aterram"></a>Aterramento</h2></div></div></div>
+<p>
+O aterramento correto da instalação elétrica é <span class="emphasis"><em>essencial</em></span>
+para garantir a proteção de seu microcomputador (e outros aparelhos que
+requerem isto).  Muitos usuários simplesmente removem o pino central da tomada
+de seu computador, ou ligam o terra junto ao neutro da rede elétrica, isto é
+errado e pode trazer sérias conseqüências.  O computador possui componentes
+sensíveis que geram descargas estáticas durante seu funcionamento (fonte,
+discos, placas, etc), estas descargas e ruídos são absorvidas pelo sistema de
+aterramento (que é ligado no gabinete do computador e outros componentes
+internos).  Sem aterramento o seu gabinete passará a dar choques elétricos
+(teste com uma chave de testes, ela acenderá indicando a circulação de corrente
+elétrica) e a corrente acumulada poderá queimar componentes internos sensíveis
+(placa mãe, HD, memórias, placas expansoras).
+</p>
+<p>
+A ligação do terra ao neutro da rede é menos perigosa em condições normais, mas
+se um raio cair na rede elétrica as conseqüências poderão ser piores.  Mesmo a
+rede de iluminação pública tendo aterramento em cada poste isto pode não ser o
+suficiente para reduzir a carga de um raio que caia nas proximidades.
+</p>
+<p>
+O sistema de aterramento residencial para PC deve ser feito com uma estaca de
+cobre com no mínimo 2 metros de altura.  O cobre é um ótimo condutor de
+eletricidade, perdendo somente para a prata (veja <a class="xref" href="ch03s12.html#hard-aterram-condut" title="Condutores de eletricidade">“Condutores de eletricidade”</a>).  Cave um buraco no solo com a ajuda de uma
+cavadeira (hehe, nunca ouviu falar nisso?  :-), se estiver com dificuldades
+para cavar por causa de solo ressecado, molhe a terra para facilitar as coisas.
+Com a estaca enterrada, prenda um cabo elétrico em sua extremidade.
+</p>
+<p>
+O ideal para testar este sistema de aterramento seria ter um equipamento
+chamado <code class="literal">terrômetro</code> (medidor de aterramento), mas
+utilizaremos 2 alternativas mais acessíveis:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+Ligue uma lâmpada incandescente de 100W em um bocal com uma ponta ligada na
+extremidade positiva da rede elétrica (fase) e a outra ponta no fio da barra de
+cobre.  O aterramento está bem feito quando a lâmpada acender quase em sua
+potência total.  Ligue o fio do aterramento no pino central da tomada de seu
+computador.
+</p>
+<p>
+<span class="strong"><strong>OBS:</strong></span> Cuidado para não tomar um baita choque
+durante esta operação em alguns casos pode ser fatal.  Utilize sandalhas ou
+sapatos de borracha (materiais isolantes) isto evitará tomar o choque caso
+aconteça.
+</p>
+</li><li class="listitem">
+<p>
+Ligue a outra extremidade do fio que vem da barra de cobre no pino central da
+tomada de seu computador e ligue-o.  Consiga um multímetro (analógico ou
+digital) e coloque para medir em escala DC 10V.  Coloque a ponta negativa
+(preta) no <span class="emphasis"><em>neutro</em></span> da rede elétrica e encoste a ponta
+positiva (vermelha) no gabinete de seu computador.  O aterramento estará
+aprovado caso o valor medido seja de no máximo 2.5 volts.
+</p>
+</li></ul></div>
+<p>
+Caso algo ocorra errado, cheque novamente os passos acima.  Se desconfiar das
+condições do solo, use uma barra maior ou ligue 2 barras de cobre juntas.
+</p>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="hard-aterram-condut"></a>Condutores de eletricidade</h3></div></div></div>
+<p>
+A tabela abaixo está classificada em ordem do material que possui melhor
+condução de eletricidade (elétrons com circulaçãos livres) baseada no fator
+mm2/m.  (da mais condutora para a menos condutora).
+</p>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+<p>
+Prata - 0,0164
+</p>
+</li><li class="listitem">
+<p>
+Cobre - 0,0172
+</p>
+</li><li class="listitem">
+<p>
+Ouro - 0,0230
+</p>
+</li><li class="listitem">
+<p>
+Alumínio - 0,0283
+</p>
+</li><li class="listitem">
+<p>
+Zinco - 0,0600
+</p>
+</li><li class="listitem">
+<p>
+Platina - 0,0950
+</p>
+</li><li class="listitem">
+<p>
+Ferro - 0,1200
+</p>
+</li><li class="listitem">
+<p>
+Chumbo - 0,2100
+</p>
+</li><li class="listitem">
+<p>
+mercúrio - 0,9680
+</p>
+</li></ol></div>
+</div>
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s11.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s13.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Configurações de Dispositivos </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Tomadas</td></tr></table></div></body></html>

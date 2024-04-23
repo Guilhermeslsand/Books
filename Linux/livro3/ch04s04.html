@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Interface de rede</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch04.html" title="Capítulo 4. Rede" /><link rel="prev" href="ch04s03.html" title="Endereço IP" /><link rel="next" href="ch04s05.html" title="Roteamento" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Interface de rede</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s03.html">Anterior</a> </td><th width="60%" align="center">Capítulo 4. Rede</th><td width="20%" align="right"> <a accesskey="n" href="ch04s05.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch04.html">Rede</a></span> &gt; <span class="breadcrumb-node">Interface de rede</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="rede-interfaces"></a>Interface de rede</h2></div></div></div>
+<p>
+As interfaces de rede no <span class="command"><strong>GNU/Linux</strong></span> estão localizadas no
+diretório <code class="filename">/dev</code> e a maioria é criada dinamicamente pelos
+softwares quando são requisitadas.  Este é o caso das interfaces
+<code class="literal">ppp</code> e <code class="literal">plip</code> que são criadas dinamicamente
+pelos softwares.
+</p>
+<p>
+Abaixo a identificação de algumas interfaces de rede no Linux (a
+<code class="literal">?</code> significa um número que identifica as interfaces
+seqüencialmente, iniciando em 0):
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="filename">eth?</code> - Placa de rede Ethernet e WaveLan.
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">ppp?</code> - Interface de rede PPP (protocolo ponto a ponto).
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">slip?</code> - Interface de rede serial
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">eql</code> - Balanceador de tráfego para múltiplas linhas
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">plip?</code> - Interface de porta paralela
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">arc?e, arc?s</code> - Interfaces Arcnet
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">sl?, ax?</code> - Interfaces de rede AX25 (respectivamente para
+kernels 2.0.xx e 2.2.xx.
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">fddi?</code> - Interfaces de rede FDDI.
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">dlci??, sdla?</code> - Interfaces Frame Relay, respectivamente
+para para dispositivos de encapsulamento DLCI e FRAD.
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">nr?</code> - Interface Net Rom
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">rs?</code> - Interfaces Rose
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">st?</code> - Interfaces Strip (Starmode Radio IP)
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">tr?</code> - Token Ring
+</p>
+</li></ul></div>
+<p>
+Para maiores detalhes sobre as interfaces acima, consulte o documento
+<span class="emphasis"><em>NET3-4-HOWTO</em></span>.
+</p>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-interfaces-lo"></a>A interface loopback</h3></div></div></div>
+<p>
+A interface <span class="emphasis"><em>loopback</em></span> é um tipo especial de interface que
+permite fazer conexões com você mesmo.  Todos os computadores que usam o
+protocolo TCP/IP utilizam esta interface e existem várias razões porque precisa
+fazer isto, por exemplo, você pode testar vários programas de rede sem
+interferir com ninguém em sua rede.  Por convenção, o endereço IP 127.0.0.1 foi
+escolhido especificamente para a loopback, assim se abrir uma conexão telnet
+para 127.0.0.1, abrirá uma conexão para o próprio computador local.
+</p>
+<p>
+A configuração da interface loopback é simples e você deve ter certeza que fez
+isto (mas note que esta tarefa é normalmente feita pelos scripts padrões de
+inicialização existentes em sua distribuição).
+</p>
+<pre class="screen">
+ifconfig lo 127.0.0.1
+</pre>
+<p>
+Caso a interface loopback não esteja configurada, você poderá ter problemas
+quando tentar qualquer tipo de conexão com as interfaces locais, tendo
+problemas até mesmo com o comando <span class="command"><strong>ping</strong></span>.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-interfaces-c"></a>Atribuindo um endereço de rede a uma interface (ifconfig)</h3></div></div></div>
+<p>
+Após configurada fisicamente, a interface precisa receber um endereço IP para
+ser identificada na rede e se comunicar com outros computadores, além de outros
+parâmetros como o endereço de <span class="emphasis"><em>broadcast</em></span> e a
+<span class="emphasis"><em>máscara de rede</em></span>.  O comando usado para fazer isso é o
+<span class="command"><strong>ifconfig</strong></span> (interface configure).
+</p>
+<p>
+Para configurar a interface de rede Ethernet (<code class="filename">eth0</code>) com o
+endereço 192.168.1.1, máscara de rede 255.255.255.0, podemos usar o comando:
+</p>
+<pre class="screen">
+ifconfig eth0 192.168.1.1 netmask 255.255.255.0 up
+</pre>
+<p>
+O comando acima ativa a interface de rede.  A palavra <code class="literal">up</code>
+pode ser omitida, pois a ativação da interface de rede é o padrão.  Para
+desativar a mesma interface de rede, basta usar usar o comando:
+</p>
+<pre class="screen">
+ifconfig eth0 down
+</pre>
+<p>
+Digitando <code class="literal">ifconfig</code> são mostradas todas as interfaces ativas
+no momento, pacotes enviados, recebidos e colisões de datagramas.  Para mostrar
+a configuração somente da interface eth0, use o comando: <code class="literal">ifconfig
+eth0</code> Em sistemas <span class="command"><strong>Debian</strong></span>, o arquivo correto para
+especificar os dados das interfaces é o
+<code class="filename">/etc/network/interfaces</code> (veja <a class="xref" href="">???</a>).
+</p>
+<p>
+Para mais detalhes, veja a página de manual do <span class="command"><strong>ifconfig</strong></span> ou o
+<span class="emphasis"><em>NET3-4-HOWTO</em></span>.
+</p>
+</div>
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s03.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch04s05.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Endereço IP </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Roteamento</td></tr></table></div></body></html>

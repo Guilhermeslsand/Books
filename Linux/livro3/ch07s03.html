@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>O que é sid/testing/frozen/stable?</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch07.html" title="Capítulo 7. A distribuição Debian GNU/Linux" /><link rel="prev" href="ch07s02.html" title="Pacotes existentes na Debian" /><link rel="next" href="ch07s04.html" title="Como obter a Debian" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">O que é sid/testing/frozen/stable?</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch07s02.html">Anterior</a> </td><th width="60%" align="center">Capítulo 7. A distribuição Debian GNU/Linux</th><td width="20%" align="right"> <a accesskey="n" href="ch07s04.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch07.html">A distribuição Debian GNU/Linux</a></span> &gt; <span class="breadcrumb-node">O que é sid/testing/frozen/stable?</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="deb-suf"></a>O que é sid/testing/frozen/stable?</h2></div></div></div>
+<p>
+Para o lançamento de uma nova distribuição <span class="command"><strong>Debian</strong></span>, o
+seguinte processo ocorre: <code class="literal">sid =&gt; testing =&gt; stable</code> (sendo a
+<span class="emphasis"><em>stable</em></span> sempre o lançamento oficial e sem bugs da
+distribuição).
+</p>
+<div class="variablelist"><dl class="variablelist"><dt><span class="term">sid</span></dt><dd>
+<p>
+Durante o desenvolvimento de uma nova distribuição <span class="command"><strong>Debian</strong></span>,
+ela é chamada de <span class="emphasis"><em>sid</em></span>.  A <span class="emphasis"><em>sid</em></span> é a
+versão <span class="emphasis"><em>Unstable</em></span>, isto não significa instabilidade, mas sim
+que a distribuição esta sofrendo modificações para se tornar uma versão
+estável, recebendo novos pacotes, etc.
+</p>
+<p>
+Quando os pacotes não são modificados após um determinado período, os scripts
+da Debian copiam estes pacotes (novos ou atualizados) para a
+<span class="emphasis"><em>testing</em></span>.
+</p>
+<p>
+Não use a distribuição <span class="emphasis"><em>sid</em></span> (<span class="emphasis"><em>unstable</em></span>)
+ao menos que tenha experiência no <span class="command"><strong>Linux</strong></span> para corrigir
+problemas, que certamente aparecerão.
+</p>
+</dd><dt><span class="term">testing</span></dt><dd>
+<p>
+A <span class="emphasis"><em>testing</em></span> recebe os pacotes que não são modificados
+durante algum tempo da <span class="emphasis"><em>unstable</em></span>, isto significa que eles
+possuem alguma estabilidade.
+</p>
+<p>
+A <span class="emphasis"><em>testing</em></span> é uma espécie de congelamento permanente
+(freeze) durante o desenvolvimento da <span class="emphasis"><em>Unstable</em></span>.
+</p>
+<p>
+Os novos pacotes que entram na <span class="emphasis"><em>unstable</em></span> também caem na
+<span class="emphasis"><em>testing</em></span> após certo tempo.
+</p>
+<p>
+Mesmo assim, podem existir falhas graves na <span class="emphasis"><em>testing</em></span>, se
+você precisa de um ambiente realmente livre de falhas, use a
+<span class="emphasis"><em>stable</em></span>.
+</p>
+</dd><dt><span class="term">frozen (congelada)</span></dt><dd>
+<p>
+Na data programada pela equipe de lançamento da <span class="command"><strong>Debian</strong></span>, a
+distribuição <span class="emphasis"><em>testing</em></span> é congelada: nenhum pacote novo da
+<span class="emphasis"><em>unstable</em></span> cai na <span class="emphasis"><em>testing</em></span> e começa a
+procura de falhas na distribuição <span class="emphasis"><em>testing</em></span>.  Nenhuma nova
+característica é implementada nos pacotes (a não ser que seja extremamente
+necessário) e os developers se dedicam a correção de erros nos pacotes.
+</p>
+<p>
+A distribuição <span class="emphasis"><em>testing</em></span> congelada se tornará a futura
+<span class="emphasis"><em>stable</em></span> após todas as falhas serem corrigidas.  É
+considerado seguro usar a <span class="emphasis"><em>frozen</em></span> após 1 mês de
+"congelamento".
+</p>
+<p>
+Quando a <span class="emphasis"><em>testing</em></span> é congelada, o ciclo de desenvolvimento
+da <span class="emphasis"><em>unstable</em></span> continua para que a próxima distribuição da
+<span class="command"><strong>Debian</strong></span> seja lançada.
+</p>
+</dd><dt><span class="term">stable</span></dt><dd>
+<p>
+Quando todos os bugs da <span class="emphasis"><em>testing</em></span> congelada são eliminados,
+ela é lançada como <span class="emphasis"><em>stable</em></span>, a nova <span class="emphasis"><em>versão
+Oficial</em></span> da <span class="command"><strong>Debian</strong></span>.
+</p>
+<p>
+A <span class="emphasis"><em>stable</em></span> é o resultado final do desenvolvimento, das
+correção de falhas/segurança e que passou por todos os ciclos de testes para
+ser lançada.  Resumindo é a distribuição pronta para ser usada com toda a
+segurança.
+</p>
+</dd></dl></div>
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch07s02.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch07.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch07s04.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Pacotes existentes na Debian </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Como obter a Debian</td></tr></table></div></body></html>

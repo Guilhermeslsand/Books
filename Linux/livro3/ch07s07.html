@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Níveis de Execução</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch07.html" title="Capítulo 7. A distribuição Debian GNU/Linux" /><link rel="prev" href="ch07s06.html" title="Arquivos de inicialização" /><link rel="next" href="ch07s08.html" title="Rede no sistema Debian" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Níveis de Execução</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch07s06.html">Anterior</a> </td><th width="60%" align="center">Capítulo 7. A distribuição Debian GNU/Linux</th><td width="20%" align="right"> <a accesskey="n" href="ch07s08.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch07.html">A distribuição Debian GNU/Linux</a></span> &gt; <span class="breadcrumb-node">Níveis de Execução</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="deb-runlevels"></a>Níveis de Execução</h2></div></div></div>
+<p>
+Os <span class="emphasis"><em>Níveis de execução</em></span> (run levels) são diferentes modos de
+funcionamento do <span class="command"><strong>GNU/Linux</strong></span> com programas, daemons e recursos
+específicos.  Em geral, os sistemas <span class="command"><strong>GNU/Linux</strong></span> possuem sete
+níveis de execução numerados de 0 a 6.  O daemon <span class="command"><strong>init</strong></span> é o
+primeiro programa executado no <span class="command"><strong>GNU/Linux</strong></span> (veja através do
+<code class="literal">ps ax|grep init</code>) e responsável pela carga de todos daemons
+de inicialização e configuração do sistema.
+</p>
+<p>
+O nível de execução padrão em uma distribuição <span class="command"><strong>GNU/Linux</strong></span> é
+definido através do arquivo de configuração do
+<code class="filename">/etc/inittab</code> (<a class="xref" href="">???</a>) através da
+linha
+</p>
+<pre class="screen">
+id:2:initdefault:
+</pre>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="deb-runlevels-e"></a>Entendendo o funcionamento dos níveis de execução do sistema (runlevels)</h3></div></div></div>
+<p>
+Os nível de execução atual do sistema pode ser visualizado através do comando
+<span class="command"><strong>runlevel</strong></span> e modificado através dos programas
+<span class="command"><strong>init</strong></span> ou <span class="command"><strong>telinit</strong></span>.  Quando é executado, o
+<span class="command"><strong>runlevel</strong></span> lê o arquivo <code class="filename">/var/run/utmp</code> e
+adicionalmente lista o nível de execução anterior ou a letra
+<code class="literal">N</code> em seu lugar (caso ainda não tenha ocorrido a mudança do
+nível de execução do sistema).
+</p>
+<p>
+Na <span class="command"><strong>Debian</strong></span>, os diretórios <code class="filename">/etc/rc0.d</code> a
+<code class="filename">/etc/rc6.d</code> contém os links simbólicos para arquivos em
+<code class="filename">/etc/init.d</code> que são acionados pelo nível de execução
+correspondente.
+</p>
+<p>
+Por exemplo, o arquivo <code class="filename">S10sysklogd</code> em
+<code class="filename">/etc/rc2.d</code>, é um link simbólico para
+<code class="filename">/etc/init.d/sysklogd</code>.
+</p>
+<p>
+O que aconteceria se você removesse o arquivo
+<code class="filename">/etc/rc2.d/S10sysklogd</code>?  Simplesmente o daemon
+<span class="command"><strong>sysklogd</strong></span> deixaria de ser executado no nível de execução 2 do
+sistema (que é o padrão da <span class="command"><strong>Debian</strong></span>).
+</p>
+<p>
+A <span class="command"><strong>Debian</strong></span> segue o seguinte padrão para definir se um link
+simbólico em <code class="filename">/etc/rc[0-6].d</code> iniciará ou interromperá a
+execução de um serviço em <code class="filename">/etc/init.d</code>, que é o seguinte:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+Se um link é iniciado com a letra <code class="literal">K</code> (kill), quer dizer que o
+serviço será interrompido naquele nível de execução.  O que ele faz é executar
+o daemon em <code class="filename">/etc/init.d</code> seguido de
+<code class="literal">stop</code>.
+</p>
+</li><li class="listitem">
+<p>
+Se um link é iniciado com a letra <code class="literal">S</code> (start), quer dizer que
+o serviço será iniciado naquele nível de execução (é equivalente a executar o
+daemon seguido de <code class="literal">start</code>).
+</p>
+</li></ul></div>
+<p>
+Primeiro os links com a letra <code class="literal">K</code> são executado e depois os
+<code class="literal">S</code>.  A ordem que os links são executados dependem do valor
+numérico que acompanha o link, por exemplo, os seguintes arquivos são
+executados em seqüência:
+</p>
+<pre class="screen">
+S10sysklogd
+S12kerneld
+S20inetd
+S20linuxlogo
+S20logoutd
+S20lprng
+S89cron
+S99xdm
+</pre>
+<p>
+Note que os arquivos que iniciam com o mesmo número (<code class="literal">S20*</code>)
+são executados alfabeticamente.  O nível de execução do sistema pode ser
+modificado usando-se o comando <span class="command"><strong>init</strong></span> ou
+<span class="command"><strong>telinit</strong></span>.  Os seguinte níveis de execução estão disponíveis
+na <span class="command"><strong>Debian</strong></span>:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="literal">0</code> - Interrompe a execução do sistema.  todos os programas e
+daemons finalizados.  É acionado pelo comando <code class="literal">shutdown -h</code>
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">1</code> - Modo monousuário, útil para manutenção dos sistema.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">2</code> - Modo multiusuário (padrão da Debian)
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">3</code> - Modo multiusuário
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">4</code> - Modo multiusuário
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">5</code> - Modo multiusuário com login gráfico
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">6</code> - Reinicialização do sistema.  Todos os programas e
+daemons são encerrados e o sistema é reiniciado.  É acionado pelo comando
+<code class="literal">shutdown -r</code> e o pressionamento de
+<code class="literal">CTRL</code>+<code class="literal">ALT</code>+<code class="literal">DEL</code>.
+</p>
+</li></ul></div>
+<p>
+Por exemplo, para listar o nível de execução atual do sistema digite:
+<code class="literal">runlevel</code>.  O <span class="command"><strong>runlevel</strong></span> deverá listar algo
+como:
+</p>
+<pre class="screen">
+N 2
+</pre>
+<p>
+Agora para mudar para o nível de execução 1, digite: <code class="literal">init 3</code>.
+Agora confira a mudança digitando: <code class="literal">runlevel</code>.  Você deverá
+ver este resultado:
+</p>
+<pre class="screen">
+2 3
+</pre>
+<p>
+Isto quer dizer que o nível de execução anterior era o <code class="literal">2</code> e o
+atual é o <code class="literal">3</code>.
+</p>
+</div>
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch07s06.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch07.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch07s08.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Arquivos de inicialização </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Rede no sistema Debian</td></tr></table></div></body></html>

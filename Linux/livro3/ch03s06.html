@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Conflitos de hardware</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch03.html" title="Capítulo 3. Hardware" /><link rel="prev" href="ch03s05.html" title="Listando as placas e outros hardwares em um computador" /><link rel="next" href="ch03s07.html" title="Barramento" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Conflitos de hardware</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s05.html">Anterior</a> </td><th width="60%" align="center">Capítulo 3. Hardware</th><td width="20%" align="right"> <a accesskey="n" href="ch03s07.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch03.html">Hardware</a></span> &gt; <span class="breadcrumb-node">Conflitos de hardware</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="hardw-conflitos"></a>Conflitos de hardware</h2></div></div></div>
+<p>
+Ocorre quando um ou mais dispositivos usam a mesma <span class="emphasis"><em>IRQ</em></span>,
+<span class="emphasis"><em>I/O</em></span> ou <span class="emphasis"><em>DMA</em></span>.  Um sistema com
+configurações de hardware em conflito tem seu funcionamento instável,
+travamentos constantes, mal funcionamento de um ou mais dispositivos e até
+mesmo, em casos mais graves, a perda de dados.  Conflitos geralmente ocorriam
+em placas ISA, VESA onde era necessário conhecer e usar uma tabela de valores
+padrões para a configuração de periféricos (como a mostrada no inicio desse
+capítulo).
+</p>
+<p>
+Para resolver conflitos de hardware é necessário conhecer a configuração de
+cada dispositivo em seu sistema.  Os comandos <code class="literal">cat
+/proc/interrupts</code>, <code class="literal">cat /proc/dma</code> e <code class="literal">cat
+/proc/ioports</code> podem ser úteis para se verificar as configurações
+usadas.
+</p>
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s05.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s07.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Listando as placas e outros hardwares em um computador </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Barramento</td></tr></table></div></body></html>

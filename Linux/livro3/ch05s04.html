@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Conectando dois computadores usando a porta serial</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch05.html" title="Capítulo 5. Configurações especiais de Rede" /><link rel="prev" href="ch05s03.html" title="Conectando dois computadores usando a porta paralela" /><link rel="next" href="ch06.html" title="Capítulo 6. Arquivos e daemons de Log" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Conectando dois computadores usando a porta serial</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch05s03.html">Anterior</a> </td><th width="60%" align="center">Capítulo 5. Configurações especiais de Rede</th><td width="20%" align="right"> <a accesskey="n" href="ch06.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch05.html">Configurações especiais de Rede</a></span> &gt; <span class="breadcrumb-node">Conectando dois computadores usando a porta serial</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="cfgs-slattach"></a>Conectando dois computadores usando a porta serial</h2></div></div></div>
+<p>
+Este método permite criar uma rede ponto a ponto usando a porta serial da
+máquina, que funcionará de forma semelhante a mostrada em <a class="xref" href="ch05s03.html" title="Conectando dois computadores usando a porta paralela">“Conectando dois computadores usando a porta paralela”</a>.
+</p>
+<p>
+O método que irei descrever é bastante simples e utiliza o
+<span class="command"><strong>slattach</strong></span> e o protocolo <span class="emphasis"><em>slip</em></span> para
+comunicação entre as duas máquinas, mas nada impede que seja usado o
+<span class="emphasis"><em>ppp</em></span> para comunicação, apenas acrescentará um pouco mais de
+complexibilidade para esta configuração para obter o mesmo resultado.
+</p>
+<p>
+Usando o método descrito, será criada uma interface chamada
+<code class="filename">sl?</code> (interface SLIP, onde <code class="literal">?</code> é o número
+da interface recém configurada).
+</p>
+<p>
+A rede via porta serial pode atingir em média 115.200kbps/s mas é prático
+quando não tem outras opções para fazer uma rede ponto a ponto.  Segue algumas
+características deste tipo de rede:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+Pode ser configurado em qualquer máquina, pois sempre haverá uma porta serial
+disponível.
+</p>
+</li><li class="listitem">
+<p>
+É possível fazer a instalação de <span class="command"><strong>Linux</strong></span> em máquinas sem
+CD-ROM e acesso a rede, onde não é possível gerar disquetes para instalar o
+resto dos pacotes necessários, embora seja limitado a 11Kb/s.  No momento da
+instalação é preciso somente alternar para um console, executar os passos
+descritos aqui e continuar com o processo de instalação normal :)
+</p>
+</li><li class="listitem">
+<p>
+É uma boa solução quando as duas máquinas até em ambientes próximos.
+</p>
+</li><li class="listitem">
+<p>
+O custo para montagem desta rede é extremamente baixo, bastando um cabo Lap
+Link Serial custa em média R$20,00 o cabo de 4 metros.  Se você também é um
+amante da eletrônica, estou descrevendo o esquema de montagem do cabo em <a class="xref" href="ch05s04.html#cfgs-slattach-cabo" title="Construindo um cabo LapLink Serial">“Construindo um cabo LapLink Serial”</a>.
+</p>
+</li><li class="listitem">
+<p>
+Você poderá fazer qualquer coisa que faria em uma rede normal (incluindo
+roteamento entre redes, MASQUERADING, etc)
+</p>
+</li><li class="listitem">
+<p>
+É mais uma prova das capacidades de rede que é possível usando o
+<span class="command"><strong>Linux</strong></span>.
+</p>
+</li></ul></div>
+<p>
+Agora, os contras da conexão via porta serial:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+A porta serial não estará disponível para ser usada para conexão de mouses,
+impressoras seriais, dispositivos eletrônicos e inteligentes, etc.
+</p>
+</li><li class="listitem">
+<p>
+O comprimento máximo do cabo é de 15 metros.  Acima dessa comprimento, você
+pode colocar sua controladora em risco além da perda de sinal.  Por segurança,
+o tamanho máximo recomendável é 13 metros
+</p>
+</li></ul></div>
+<p>
+Para configurar uma conexão via cabo serial entre duas máquinas, vamos assumir
+que a primeira máquina terá o IP 192.168.2.1 e a segunda máquina 192.168.2.2:
+</p>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+<p>
+Conecte o cabo Lap Link serial em cada uma das portas seriais.
+</p>
+</li><li class="listitem">
+<p>
+Verifique se o seu kernel está compilado com o suporte a rede
+<code class="filename">slip</code> e também com suporte a <code class="literal">cslip</code> (slip
+compactado, que melhora a taxa de transferência dependendo dos dados sendo
+transmitidos).  Caso não tenha o suporte a <span class="emphasis"><em>slip</em></span>, você
+poderá usar o <span class="emphasis"><em>ppp</em></span> nas duas pontas do link fazendo algumas
+adaptações para usar a interface <code class="filename">ppp?</code>, como é simples não
+será descrito neste guia :) (veja o manual do <span class="command"><strong>slattach</strong></span>)
+</p>
+</li><li class="listitem">
+<p>
+Interrompa qualquer programa que esteja usando a porta serial.
+</p>
+</li><li class="listitem">
+<p>
+Execute o comando <code class="literal">slattach -s 115200 /dev/ttyS1 &amp;</code>.  A função
+do <span class="command"><strong>slattach</strong></span> é associar uma interface de rede a um
+dispositivo, neste caso associamos o dispositivo
+<code class="filename">/dev/ttyS1</code> (segunda porta serial) a interface
+<code class="filename">sl0</code> (verifique se a interface foi criada usando o comando
+<code class="literal">ifconfig sl0</code>.
+</p>
+<p>
+A opção <code class="literal">-p</code> especifica um protocolo alternativo para o
+<span class="command"><strong>slattach</strong></span>, o padrão é o <span class="emphasis"><em>cslip</em></span>.  Outros
+tipos disponíveis são <span class="emphasis"><em>slip</em></span>, <span class="emphasis"><em>adaptive</em></span>
+<span class="emphasis"><em>ppp</em></span> e <span class="emphasis"><em>kiss</em></span> (usado em conexões de
+rádio AX.25).  Recomendo ver a página de manual do <span class="command"><strong>slattach</strong></span>.
+</p>
+</li><li class="listitem">
+<p>
+Nesse ponto a interface está ativa, mas a nossa máquina não conhece nada sobre
+a rede ou como alcançar a máquina 192.168.2.2.  Como a conexão é ponto a ponto,
+precisamos adicionar uma rota direta para esta máquina com o comando:
+<code class="literal">route add -host 192.168.2.2 sl0</code>.
+</p>
+<p>
+Este comando diz para criar uma rota com o destino
+<code class="literal">192.168.2.2</code> usando a interface <code class="filename">sl0</code>.
+</p>
+</li><li class="listitem">
+<p>
+Configure a outra máquina seguindo os passos acima, apenas invertendo os 2
+endereços IPs usados.
+</p>
+</li></ol></div>
+<p>
+Pronto, agora verifique se cada uma das máquinas se comunica com a outra usando
+o comando <code class="literal">ping 192.168.2.x</code>.  Se ocorrer um erro, verifique
+os seguintes ítens:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+Se as velocidade e o protocolo especificado em ambos os lados do link estão
+iguais.
+</p>
+</li><li class="listitem">
+<p>
+Se já existe um processo <span class="command"><strong>slattach</strong></span> rodando em segundo plano.
+</p>
+</li><li class="listitem">
+<p>
+Se existe um firewall bloqueando os pacotes da nova interface
+</p>
+</li><li class="listitem">
+<p>
+Se o cabo Lap Link serial está em bom estado.
+</p>
+</li></ul></div>
+<p>
+O número máximo de interfaces <code class="filename">sl?</code> depende da quantidade de
+portas seriais da sua máquina.  Caso utilize uma placa multi serial, o número
+máximo de conexões de rede se torna grande (mas isto é apenas para curiosidade,
+pois não compensa uma multi serial para ligar uma quantidade grande de máquinas
+a baixa velocidade).
+</p>
+<p>
+Para derrubar a conexão, basta derrubar a interface serial com o
+<code class="literal">ifconfig sl0 down</code>, dar um kill no daemon do
+<span class="command"><strong>slattach</strong></span> e remover o módulo <code class="filename">slip</code> e
+<code class="filename">cslip</code> com o comando <span class="command"><strong>rmmod</strong></span>.  Assim sua
+porta serial será liberada e poderá ser usada por outros aplicativos.
+</p>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="cfgs-slattach-cabo"></a>Construindo um cabo LapLink Serial</h3></div></div></div>
+<p>
+Se você é uma pessoa que sabe mexer com eletrônica, poderá construir seu
+próprio cabo LapLink serial para fazer os testes desta seção.  Os materiais
+necessários são:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="literal">2</code> - Conectores seriais DB9 fêmea
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">2</code> - Capas para os conectores acima.
+</p>
+</li><li class="listitem">
+<p>
+Fios para ligação dos conectores.  Uma forma que utilizei para montar este cabo
+foi aproveitar um carretel de cabo SCSI aproveitando 10 metros desfiando
+somente 9 dos 50 fios que acompanha o cabo (deixei um fio extra no caso de
+algum outro se romper).
+</p>
+</li><li class="listitem">
+<p>
+Ferro de solda e solda para as ligações.
+</p>
+</li><li class="listitem">
+<p>
+Concentração e paciência para a confecção correta dos cabos.
+</p>
+</li></ul></div>
+<p>
+Este é o conector fêmea DB9 (tomada que liga na máquina) visto por trás (hora
+de mostrar novamente meu talento com arte ASCII :))
+</p>
+<pre class="screen">
+  --------------
+1 \ o o o o o  / 5
+6  \ o o o o  / 9
+    ----------
+</pre>
+<p>
+A figura acima mostra a posição dos pinos como referência para a soldagem dos
+terminais.  A tabela abaixo mostra a ligação dos fios nos cabos das 2 pontas.
+Note que cada ponta pode ter a opção da serial de 9 ou 25 pinos (ou as duas):
+</p>
+<pre class="screen">
+ 
++--------+--------+---------+
+|Ponta 1 |        |  Ponta 2|
++---+----+--------+----+----+
+| 9 | 25 |        | 25 |  9 |
++---+----+--------+----+----+
+| 5 |  7 |        |  7 |  5 |
+| 3 |  2 |        |  3 |  2 |
+| 7 |  4 |        |  5 |  8 |
+| 6 |  6 |        | 20 |  4 |
+| 2 |  3 |        |  2 |  3 |
+| 8 |  5 |        |  4 |  7 |
+| 4 | 20 |        |  6 |  6 |
++---+----+--------+----+----+
+</pre>
+</div>
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch05s03.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch05.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch06.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Conectando dois computadores usando a porta paralela </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Capítulo 6. Arquivos e daemons de Log</td></tr></table></div></body></html>

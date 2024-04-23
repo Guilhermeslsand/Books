@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Barramento</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch03.html" title="Capítulo 3. Hardware" /><link rel="prev" href="ch03s06.html" title="Conflitos de hardware" /><link rel="next" href="ch03s08.html" title="Placas on-board / off-board" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Barramento</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s06.html">Anterior</a> </td><th width="60%" align="center">Capítulo 3. Hardware</th><td width="20%" align="right"> <a accesskey="n" href="ch03s08.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch03.html">Hardware</a></span> &gt; <span class="breadcrumb-node">Barramento</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="hard-barramento"></a>Barramento</h2></div></div></div>
+<p>
+O tipo de <span class="emphasis"><em>slot</em></span> varia de acordo com o barramento usado no
+sistema, que pode ser um(s) do(s) seguinte(s):
+</p>
+<div class="variablelist"><dl class="variablelist"><dt><span class="term">ISA 8 Bits</span></dt><dd>
+<p>
+<code class="literal">Industry Standard Architecture</code> - É o padrão mais antigo,
+encontrado em computadores PC/XT.
+</p>
+</dd><dt><span class="term">ISA 16 Bits</span></dt><dd>
+<p>
+Evolução do padrão ISA 8 Bits, possui um conector maior e permite a conexão de
+placas de 8 bits.  Sua taxa de transferência chega a 2MB/s.
+</p>
+</dd><dt><span class="term">VESA</span></dt><dd>
+<p>
+<code class="literal">Video Electronics Standard Association</code> - É uma interface
+feita inicialmente para placas de vídeo rápidas.  O barramento VESA é
+basicamente um ISA com um encaixe extra no final.  Sua taxa de transferência
+pode chegar a 132MB/s.
+</p>
+</dd><dt><span class="term">EISA</span></dt><dd>
+<p>
+<code class="literal">Enhanced Industry Standard Architecture</code> - É um barramento
+mais encontrado em servidores.  Tem a capacidade de bus mastering, que
+possibilita a comunicação das placas sem a interferência da CPU.
+</p>
+</dd><dt><span class="term">MCA</span></dt><dd>
+<p>
+<code class="literal">Micro Channel Architecture</code> - Barramento 32 bits proprietário
+da IBM.  Você não pode usar placas ISA nele, possui a característica de bus
+mastering, mas pode procurar por dispositivos conectados a ele, procurando
+configuração automática.
+</p>
+<p>
+Este barramento estava presente no PS/1 e PS/2, hoje não é mais usado.
+</p>
+</dd><dt><span class="term">PCI</span></dt><dd>
+<p>
+<code class="literal">Peripheral Component Interconnect</code> - É outro barramento
+rápido produzido pela Intel com a mesma velocidade que o VESA.  O barramento
+possui um chipset de controle que faz a comunicação entre os slots PCI e o
+processador.  O barramento se configura automaticamente (através do
+Plug-and-Play).  O PCI é o barramento mais usado por Pentiums e está se
+tornando uma padrão no PC.
+</p>
+</dd><dt><span class="term">PCI Express</span></dt><dd>
+<p>
+<code class="literal">Peripheral Component Interconnect Express</code> - Identico ao
+barramento PCI, funcionando nativamente no clock de 64 bits.
+</p>
+</dd><dt><span class="term">AGP</span></dt><dd>
+<p>
+<code class="literal">Accelerated Graphics Port</code> - É um novo barramento criado
+exclusivamente para a ligação de placas de video.  É um slot marrom (em sua
+maioria) que fica mais separado do ponto de fixação das placas no chassis
+(comparado ao PCI).  Estas placas permitem obter um desempenho elevado de vídeo
+se comparado as placas onboards com memória compartilhada e mesmo PCI externas.
+O consumo de potência em placas AGP x4 podem chegar até a 100W, portanto é
+importante dimensionar bem o sistema e ter certeza que a fonte de alimentação
+pode trabalhar com folga.
+</p>
+</dd><dt><span class="term">PCMCIA</span></dt><dd>
+<p>
+<code class="literal">Personal Computer Memory Card International Association</code> - É
+um slot especial usado para conexões de placas externas (normalmente revestivas
+de plástico) e chamadas de <span class="emphasis"><em>cartões PCMCIA</em></span>.  Estes cartões
+podem adicionar mais memória ao sistema, conter um fax-modem, placa de rede,
+disco rígido, etc.
+</p>
+<p>
+Os cartões PCMCIA são divididos em 3 tipos:
+</p>
+<div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">Tipo 1</code></span></dt><dd>
+<p>
+Tem a espessura de 3.3 milímetros, e podem conter mais memória RAM ou memória
+Flash.
+</p>
+</dd><dt><span class="term"><code class="literal">Tipo 2</code></span></dt><dd>
+<p>
+Tem a espessura de 5 milímetros e capacidade de operações I/O.  É um tipo usado
+para placas de fax-modem, rede, som.  Computadores que aceitam cartões PCMCIA
+do tipo 2, mantém a compatibilidade com o tipo 1.
+</p>
+</dd><dt><span class="term"><code class="literal">Tipo 3</code></span></dt><dd>
+<p>
+Tem a espessura de 10.5 milímetros e normalmente usado para discos rígidos
+PCMCIA.  Slots PCMCIA do tipo 3 mantém a compatibilidade com o tipo 2 e 1.
+</p>
+</dd></dl></div>
+</dd><dt><span class="term">AMR</span></dt><dd>
+<p>
+<code class="literal">Audio Modem Raise</code> - Pequeno barramento criado pela Intel
+para a conexão de placas de som e modem.  Placas de som e modem AMR usam o HSP
+(host signal processor) e são como as Placas on-board e todo o processamento é
+feito pela CPU do computador (veja detalhes em <a class="xref" href="ch03s08.html" title="Placas on-board / off-board">“Placas on-board / off-board”</a> e <a class="xref" href="ch03s09.html" title="Hardwares específicos ou &quot;For Windows&quot;">“Hardwares específicos ou "For Windows"”</a>.
+</p>
+<p>
+Sua vantagem é o preço: um modem ou placa de som AMR custa em torno de R$
+25,00.
+</p>
+</dd><dt><span class="term">CNR</span></dt><dd>
+<p>
+<code class="literal">Communication and Networking Rise</code> - Pequeno barramento
+criado pela Intel para a conexão de placas de som, modens e placas de rede.
+Este é um pequenino slot marrom que é localizado no ponto de fixação das placas
+no chassis do gabinete.  Elas são como as Placas on-board e todo o
+processamento é feito pela CPU do computador (veja detalhes em <a class="xref" href="ch03s08.html" title="Placas on-board / off-board">“Placas on-board / off-board”</a> e <a class="xref" href="ch03s09.html" title="Hardwares específicos ou &quot;For Windows&quot;">“Hardwares específicos ou "For Windows"”</a>.
+</p>
+</dd></dl></div>
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s06.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s08.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Conflitos de hardware </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Placas on-board / off-board</td></tr></table></div></body></html>

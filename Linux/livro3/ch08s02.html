@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Modificando o Idioma usado em seu sistema</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch08.html" title="Capítulo 8. Personalização do Sistema" /><link rel="prev" href="ch08.html" title="Capítulo 8. Personalização do Sistema" /><link rel="next" href="ch08s03.html" title="alias" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Modificando o Idioma usado em seu sistema</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch08.html">Anterior</a> </td><th width="60%" align="center">Capítulo 8. Personalização do Sistema</th><td width="20%" align="right"> <a accesskey="n" href="ch08s03.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch08.html">Personalização do Sistema</a></span> &gt; <span class="breadcrumb-node">Modificando o Idioma usado em seu sistema</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="pers-idioma"></a>Modificando o Idioma usado em seu sistema</h2></div></div></div>
+<p>
+O idioma usado em seu sistema pode ser modificado facilmente através das
+variáveis de ambiente.  Atualmente a maioria dos programas estão sendo
+<span class="emphasis"><em>localizados</em></span>.  A localização é um recurso que especifica
+arquivos que contém as mensagens do programas em outros idiomas.  Você pode
+usar o comando <span class="command"><strong>locale</strong></span> para listar as variáveis de
+localização do sistema e seus respectivos valores.  As principais variáveis
+usadas para determinar qual idioma os programas <code class="literal">localizados</code>
+utilizarão são:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="filename">LANG</code> - Especifica o idioma_PAIS local.  Podem ser
+especificados mais de um idioma na mesma variável separando-os com
+<code class="literal">:</code>, desta forma caso o primeiro não esteja disponível para o
+programa o segundo será verificado e assim por diante.  A língua Inglesa é
+identificada pelo código <code class="literal">C</code> e usada como padrão caso nenhum
+locale seja especificado.
+</p>
+<p>
+Por exemplo: <code class="literal">export LANG=pt_BR</code>, <code class="literal">export
+LANG=pt_BR:pt_PT:C</code>
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">LC_MESSAGES</code> - Especifica o idioma que serão mostradas as
+mensagens dos programas.  Seu formato é o mesmo de <code class="filename">LANG</code>.
+</p>
+</li><li class="listitem">
+<p>
+<code class="filename">LC_ALL</code> - Configura todas as variáveis de localização de
+uma só vez.  Seu formato é o mesmo de <code class="filename">LANG</code>.
+</p>
+</li></ul></div>
+<p>
+As mensagens de localização estão localizadas em arquivos individuais de cada
+programa em <code class="filename">/usr/share/locale/[Idioma]/LC_MESSAGES</code> .  Elas
+são geradas através de arquivos <code class="literal">potfiles</code> (arquivos com a
+extensão <code class="filename">.po</code> ou <code class="filename">.pot</code> e são gerados
+catálogos de mensagens <code class="filename">.mo</code>.  As variáveis de ambiente
+podem ser especificadas no arquivo <code class="filename">/etc/environment</code> desta
+forma as variáveis serão carregadas toda a vez que seu sistema for iniciado.
+Você também pode especificar as variáveis de localização em seu arquivos de
+inicialização <code class="filename">.bash_profile</code>, <code class="filename">.bashrc</code>
+ou <code class="filename">.profile</code> assim toda a vez que entrar no sistema, as
+variáveis de localização personalizadas serão carregadas.
+</p>
+<p>
+Siga as instruções a seguir de acordo com a versão de sua distribuição
+<span class="command"><strong>Debian</strong></span>:
+</p>
+<div class="variablelist"><dl class="variablelist"><dt><span class="term">Debian 4.0</span></dt><dd>
+<p>
+Acrescente a linha <code class="literal">pt_BR ISO-8859-1</code> no arquivo
+<code class="filename">/etc/locale.gen</code>, rode o utilitário
+<span class="command"><strong>locale-gen</strong></span> para gerar os locales.  Agora acrescente as
+variáveis de localização no arquivo <code class="filename">/etc/locale.def</code>
+seguindo a forma:
+</p>
+<pre class="screen">
+export LANG=pt_BR
+export LC_ALL=pt_BR
+export LC_MESSAGES=pt_BR
+</pre>
+<p>
+Note que o arquivo <code class="filename">/etc/environment</code> também pode ser usado
+para tal tarefa, mas o <code class="filename">locales.def</code> foi criado
+especialmente para lidar com variáveis de localização na
+<span class="command"><strong>Debian</strong></span> 4.0.
+</p>
+</dd></dl></div>
+<p>
+Para as mensagens e programas do X-Window usarem em seu idioma local, é preciso
+colocar as variáveis no arquivo <code class="filename">~/.xserverrc</code> do diretório
+home de cada usuário e dar a permissão de execução neste arquivo
+(<code class="literal">chmod 755 .xserverrc</code>).  Lembre-se de incluir o caminho
+completo do arquivo executável do seu gerenciador de janelas na última linha
+deste arquivo (sem o <code class="literal">&amp;</code> no final), caso contrário o Xserver
+será finalizado logo após ler este arquivo.
+</p>
+<p>
+Abaixo exemplos de localização com as explicações:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="literal">export LANG=pt_BR</code> - Usa o idioma pt_BR como língua padrão do
+sistema.  Caso o idioma Portugues do Brasil não esteja disponível, C é usado
+(Inglês).
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">export LANG=C</code> - Usa o idioma Inglês como padrão (é a mesma
+coisa de não especificar <code class="filename">LANG</code>, pois o idioma Inglês é
+usado como padrão).
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">export LANG=pt_BR:pt_PT:es_ES:C</code> - Usa o idioma Português do
+Brasil como padrão, caso não esteja disponível usa o Português de Portugal, se
+não estiver disponível usa o Espanhol e por fim o Inglês.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">LANG=es_ES ls --help</code> - Executa apenas o comando <code class="literal">ls
+--help</code> usando o idioma es_ES (sem alterar o locale do sistema).
+</p>
+</li></ul></div>
+<p>
+É recomendável usar a variável <code class="filename">LC_ALL</code> para especificar o
+idioma, desta forma todos os outras variáveis (<code class="filename">LANG, MESSAGES,
+LC_MONETARY, LC_NUMERIC, LC_COLLATE, LC_CTYPE e LC_TIME</code>) serão
+configuradas automaticamente.
+</p>
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch08.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch08.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch08s03.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Capítulo 8. Personalização do Sistema </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> alias</td></tr></table></div></body></html>

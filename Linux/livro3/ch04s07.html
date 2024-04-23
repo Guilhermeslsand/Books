@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Serviços de Rede</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch04.html" title="Capítulo 4. Rede" /><link rel="prev" href="ch04s06.html" title="Resolvedor de nomes (DNS)" /><link rel="next" href="ch04s08.html" title="Segurança da Rede e controle de Acesso" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Serviços de Rede</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s06.html">Anterior</a> </td><th width="60%" align="center">Capítulo 4. Rede</th><td width="20%" align="right"> <a accesskey="n" href="ch04s08.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch04.html">Rede</a></span> &gt; <span class="breadcrumb-node">Serviços de Rede</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="rede-servicos"></a>Serviços de Rede</h2></div></div></div>
+<p>
+<span class="emphasis"><em>Serviços de rede</em></span> é o que está disponível para ser acessado
+pelo usuário.  No TCP/IP, cada serviço é associado a um número chamado
+<span class="emphasis"><em>porta</em></span> que é onde o servidor espera pelas conexões dos
+computadores clientes.  Uma porta de rede pode se referenciada tanto pelo
+número como pelo nome do serviço.
+</p>
+<p>
+Abaixo, alguns exemplos de portas padrões usadas em serviços TCP/IP:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="literal">21</code> - FTP (transferência de arquivos)
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">23</code> - Telnet (terminal virtual remoto)
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">25</code> - Smtp (envio de e-mails)
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">53</code> - DNS (resolvedor de nomes)
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">79</code> - Finger (detalhes sobre usuários do sistema)
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">80</code> - http (protocolo www - transferência de páginas
+Internet)
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">110</code> - Pop-3 (recebimento de mensagens)
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">119</code> - NNTP (usado por programas de noticias)
+</p>
+</li></ul></div>
+<p>
+O arquivo padrão responsável pelo mapeamento do nome dos serviços e das portas
+mais utilizadas é o <code class="filename">/etc/services</code> (para detalhes sobre o
+seu formato, veja a <a class="xref" href="ch04s09.html#rede-outros-services" title="/etc/services">“/etc/services”</a>).
+</p>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-servicos-daemon"></a>Serviços iniciados como Daemons de rede</h3></div></div></div>
+<p>
+Serviços de rede iniciados como <span class="emphasis"><em>daemons</em></span> ficam residente o
+tempo todo na memória <code class="literal">esperando</code> que alguém se conecte
+(também chamado de <span class="emphasis"><em>modo standalone</em></span>).  Um exemplo de
+<span class="emphasis"><em>daemon</em></span> é o servidor proxy <span class="command"><strong>squid</strong></span> e o
+servidor web <span class="command"><strong>Apache</strong></span> operando no modo
+<span class="emphasis"><em>daemon</em></span>.
+</p>
+<p>
+Alguns programas servidores oferecem a opção de serem executados como
+<span class="emphasis"><em>daemons</em></span> ou através do <span class="emphasis"><em>inetd</em></span>.  É
+recomendável escolher <span class="emphasis"><em>daemon</em></span> se o serviço for solicitado
+freqüentemente (como é o caso dos servidores web ou proxy).
+</p>
+<p>
+Para verificar se um programa está rodando como <span class="emphasis"><em>daemon</em></span>,
+basta digitar <code class="literal">ps ax</code> e procurar o nome do programa, em caso
+positivo ele é um <span class="emphasis"><em>daemon</em></span>.
+</p>
+<p>
+Normalmente os programas que são iniciados como daemons possuem seus próprios
+recursos de segurança/autenticação para decidir quem tem ou não permissão de se
+conectar.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-servicos-inetd"></a>Serviços iniciados através do inetd</h3></div></div></div>
+<p>
+Serviços iniciados pelo <span class="emphasis"><em>inetd</em></span> são carregados para a
+memória somente quando são solicitados.  O controle de quais serviços podem ser
+carregados e seus parâmetros, são feitos através do arquivo
+<code class="filename">/etc/inetd.conf</code>.
+</p>
+<p>
+Um <span class="emphasis"><em>daemon</em></span> chamado <code class="literal">inetd</code> lê as
+configurações deste arquivo e permanece residente na memória, esperando pela
+conexão dos clientes.  Quando uma conexão é solicitada, o daemon
+<span class="emphasis"><em>inetd</em></span> verifica as permissões de acesso nos arquivos
+<code class="filename">/etc/hosts.allow</code> e <code class="filename">/etc/hosts.deny</code> e
+carrega o programa servidor correspondente no arquivo
+<code class="filename">/etc/inetd.conf</code>.  Um arquivo também importante neste
+processo é o <code class="filename">/etc/services</code> que faz o mapeamento das portas
+e nomes dos serviços.
+</p>
+<p>
+Alguns programas servidores oferecem a opção de serem executados como
+<span class="emphasis"><em>daemons</em></span> ou através do <span class="emphasis"><em>inetd</em></span>.  É
+recomendável escolher <span class="emphasis"><em>inetd</em></span> se o serviço não for
+solicitado freqüentemente (como é o caso de servidores <code class="literal">ftp</code>,
+<code class="literal">telnet</code>, <code class="literal">talk</code>, etc).
+</p>
+
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="rede-servicos-inetd-c"></a>/etc/inetd.conf</h4></div></div></div>
+<p>
+O arquivo <code class="filename">/etc/inetd.conf</code> é um arquivo de configuração
+para o daemon servidor <span class="emphasis"><em>inetd</em></span>.  Sua função é dizer ao
+<span class="command"><strong>inetd</strong></span> o que fazer quando receber uma requisição de conexão
+para um serviço em particular.  Para cada serviço que deseja aceitar conexões,
+você precisa dizer ao <span class="emphasis"><em>inetd</em></span> qual daemon servidor executar
+e como executa-lo.
+</p>
+<p>
+Seu formato é também muito simples.  É um arquivo texto com cada linha
+descrevendo um serviço que deseja oferecer.  Qualquer texto em uma linha
+seguindo uma "#" é ignorada e considerada um comentário.  Cada linha contém
+sete campos separados por qualquer número de espaços em branco (tab ou
+espaços).  O formato geral é o seguinte:
+</p>
+<pre class="screen">
+serviço  tipo_soquete  proto  opções.num  usuário  caminho_serv. opções_serv.
+</pre>
+<div class="variablelist"><dl class="variablelist"><dt><span class="term">serviço</span></dt><dd>
+<p>
+É o serviço relevante a este arquivo de configuração pego do arquivo
+<code class="filename">/etc/services</code>.
+</p>
+</dd><dt><span class="term">tipo_soquete</span></dt><dd>
+<p>
+Este campo descreve o tipo do soquete que este item utilizará, valores
+permitidos são: <code class="literal">stream</code>, <code class="literal">dgram</code>,
+<code class="literal">raw</code>, <code class="literal">rdm</code>, ou
+<code class="literal">seqpacket</code>.  Isto é um pouco técnico de natureza, mas como
+uma regra geral, todos os serviços baseados em <span class="emphasis"><em>tcp</em></span> usam
+<code class="literal">stream</code> e todos os protocolos baseados em
+<span class="emphasis"><em>udp</em></span> usam <code class="literal">dgram</code>.  Somente alguns tipos
+de daemons especiais de servidores usam os outros valores.
+</p>
+</dd><dt><span class="term">protocolo</span></dt><dd>
+<p>
+O protocolo é considerado válido para esta item.  Isto deve bater com um item
+apropriado no arquivo <code class="filename">/etc/services</code> e tipicamente será tcp
+ou udp.  Servidores baseados no Sun RPC (<span class="emphasis"><em>Remote Procedure
+Call</em></span>), utilizam rpc/tcp ou rpc/udp.
+</p>
+</dd><dt><span class="term">opções</span></dt><dd>
+<p>
+Existem somente duas configurações para este campo.  A configuração deste campo
+diz ao <span class="emphasis"><em>inetd</em></span> se o programa servidor de rede libera o
+soquete após ele ser iniciado e então se inetd pode iniciar outra cópia na
+próxima requisição de conexão, ou se o inetd deve aguardar e assumir que
+qualquer servidor já em execução pegará a nova requisição de conexão.
+</p>
+<p>
+Este é um pequeno truque de trabalho, mas como uma regra, todos os servidores
+tcp devem ter este parâmetro ajustado para <span class="emphasis"><em>nowait</em></span> e a
+maior parte dos servidores udp deve tê-lo ajustado para
+<span class="emphasis"><em>wait</em></span>.  Foi alertado que existem algumas excessões a isto,
+assim deixo isto como exemplo se não estiver seguro.
+</p>
+<p>
+O <span class="emphasis"><em>número</em></span> especificado após o "."  é opcional e define a
+quantidade máxima de vezes que o serviço poderá ser executado durante 1 minuto.
+Se o serviço for executado mais vezes do que este valor, ele será
+automaticamente desativado pelo inetd e uma mensagem será mostrada no log do
+sistema avisando sobre o fato.
+</p>
+<p>
+Para reativar o serviço interrompido, reinicie o <span class="command"><strong>inetd</strong></span> com:
+<code class="literal">killall -HUP inetd</code>.  O valor padrão é <code class="literal">40</code>.
+</p>
+</dd><dt><span class="term">usuário</span></dt><dd>
+<p>
+Este campo descreve que conta de usuário usuário no arquivo
+<code class="filename">/etc/passwd</code> será escolhida como <span class="emphasis"><em>dono</em></span>
+do daemon de rede quando este for iniciado.  Isto é muito útil se você deseja
+diminuir os riscos de segurança.  Você pode ajustar o usuário de qualquer item
+para o usuário <span class="emphasis"><em>nobody</em></span>, assim se a segurança do servidor de
+redes é quebrada, a possibilidade de problemas é minimizada.  Normalmente este
+campo é ajustado para <span class="emphasis"><em>root</em></span>, porque muitos servidores
+requerem privilégios de usuário root para funcionarem corretamente.
+</p>
+</dd><dt><span class="term">caminho_servidor</span></dt><dd>
+<p>
+Este campo é o caminho para o programa servidor atual que será executado.
+</p>
+</dd><dt><span class="term">argumentos_servidor</span></dt><dd>
+<p>
+Este campo inclui o resto da linha e é opcional.  Você pode colocar neste campo
+qualquer argumento da linha de comando que deseje passar para o daemon servidor
+quando for iniciado.
+</p>
+</dd></dl></div>
+<p>
+Uma dica que pode aumentar significativamente a segurança de seu sistema é
+comentar (colocar uma <code class="literal">#</code>no inicio da linha) os serviços que
+não serão utilizados.
+</p>
+<p>
+Abaixo um modelo de arquivo <code class="filename">/etc/inetd.conf</code> usado em
+sistemas <span class="command"><strong>Debian</strong></span>:
+</p>
+<pre class="screen">
+# /etc/inetd.conf:  veja inetd(8) para mais detalhes.
+#
+# Banco de Dados de configurações do servidor Internet
+#
+#
+# Linhas iniciando com "#:LABEL:" ou "#&lt;off&gt;#" não devem 
+# ser alteradas a não ser que saiba o que está fazendo!
+#
+#
+# Os pacotes devem modificar este arquivo usando update-inetd(8)
+#
+# &lt;nome_serviço&gt; &lt;tipo_soquete&gt; &lt;proto&gt; &lt;opções&gt; &lt;usuário&gt; &lt;caminho_servidor&gt; &lt;args&gt;
+#
+#:INTERNO: Serviços internos
+#echo           stream  tcp nowait  root    internal
+#echo           dgram   udp wait    root    internal
+#chargen        stream  tcp nowait  root    internal
+#chargen        dgram   udp wait    root    internal
+#discard        stream  tcp nowait  root    internal
+#discard        dgram   udp wait    root    internal
+#daytime        stream  tcp nowait  root    internal
+#daytime        dgram   udp wait    root    internal
+time		stream	tcp nowait  root    internal
+#time		dgram	udp wait    root    internal
+
+#:PADRÕES: Estes são serviços padrões.
+
+#:BSD: Shell, login, exec e talk são protocolos BSD.
+#shell          stream  tcp nowait  root     /usr/sbin/tcpd  /usr/sbin/in.rshd
+#login          stream  tcp nowait  root     /usr/sbin/tcpd  /usr/sbin/in.rlogind
+#exec           stream  tcp nowait  root     /usr/sbin/tcpd  /usr/sbin/in.rexecd
+talk            dgram   udp wait.10    nobody.tty  /usr/sbin/tcpd  /usr/sbin/in.talkd
+ntalk           dgram   udp wait.10    nobody.tty  /usr/sbin/tcpd  /usr/sbin/in.ntalkd
+
+#:MAIL: Mail, news e serviços uucp.
+smtp		stream	tcp	nowait.60	mail	/usr/sbin/exim exim -bs
+
+#:INFO: Serviços informativos
+
+#:BOOT: O serviço Tftp é oferecido primariamente para a inicialização. Alguns sites
+# o executam somente em máquinas atuando como "servidores de inicialização".
+
+#:RPC: Serviços baseados em RPC
+
+#:HAM-RADIO: serviços de rádio amador
+
+#:OTHER: Outros serviços
+</pre>
+</div>
+
+</div>
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s06.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch04s08.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Resolvedor de nomes (DNS) </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Segurança da Rede e controle de Acesso</td></tr></table></div></body></html>

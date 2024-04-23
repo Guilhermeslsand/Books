@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Camadas de Rede</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch04.html" title="Capítulo 4. Rede" /><link rel="prev" href="ch04s09.html" title="Outros arquivos de configuração relacionados com a rede" /><link rel="next" href="ch04s11.html" title="RFCs de referência sobre protocolos de rede" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Camadas de Rede</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s09.html">Anterior</a> </td><th width="60%" align="center">Capítulo 4. Rede</th><td width="20%" align="right"> <a accesskey="n" href="ch04s11.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch04.html">Rede</a></span> &gt; <span class="breadcrumb-node">Camadas de Rede</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="rede-camadas"></a>Camadas de Rede</h2></div></div></div>
+<p>
+São organizações do protocolo TCP/IP que visam organizar e simplificar seu
+padrão e implementação pelos desenvolvedores.
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+Um <span class="emphasis"><em>padrão</em></span> TCP é o conjunto de regras que devem ser
+seguidas para garantir a homogeneidade da comunicação entre diversos sistemas
+de diversos fabricantes (por exemplo, <span class="emphasis"><em>Mac</em></span> com
+<span class="emphasis"><em>Windows</em></span>, <span class="emphasis"><em>Windows</em></span> com
+<span class="emphasis"><em>Linux</em></span>, etc.).
+</p>
+</li><li class="listitem">
+<p>
+A <span class="emphasis"><em>implementação</em></span> é o código escrito por cada desenvolvedor
+para integração ao sistema operacional seguindo as regras do padrão para
+garantir a comunicação entre as máquinas, portanto, a
+<span class="emphasis"><em>implementação</em></span> do protocolo TCP varia de fabricante para
+fabricante.
+</p>
+</li></ul></div>
+<p>
+Existem dois tipos de padrões TCP: <span class="emphasis"><em>Darpa</em></span> e
+<span class="emphasis"><em>OSI</em></span>.  O padrão <span class="emphasis"><em>Darpa</em></span> é dividido em 4
+camadas e ainda é o padrão atualmente utilizado.  O padrão
+<span class="emphasis"><em>OSI</em></span> é mais recente, dividido em 7 camadas, mas ainda não
+se tornou um padrão como o <span class="emphasis"><em>Darpa</em></span>.
+</p>
+<p>
+Segue abaixo os padrões e a descrição de cada uma das camadas:
+</p>
+<div class="variablelist"><dl class="variablelist"><dt><span class="term"><span class="emphasis"><em>Darpa</em></span></span></dt><dd>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="literal">Aplicação</code> - <span class="emphasis"><em>www</em></span>,
+<span class="emphasis"><em>ftp</em></span>, <span class="emphasis"><em>dns</em></span>, etc.  Fazem interface com
+as aplicações do sistema.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">Transporte</code> - Protocolo <span class="emphasis"><em>tcp</em></span> e
+<span class="emphasis"><em>udp</em></span>.  Cuidam da parte de transporte dos dados do sistema.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">Rede</code> - <span class="emphasis"><em>IP</em></span>, <span class="emphasis"><em>icmp</em></span>,
+<span class="emphasis"><em>igmp</em></span>, <span class="emphasis"><em>arp</em></span>.  Cuida de levar o pacote
+para seu destino (rotas) e condições de transmissão.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">Interface de Rede</code> - <span class="emphasis"><em>Ethernet</em></span>,
+<span class="emphasis"><em>FDDI</em></span>, <span class="emphasis"><em>Token Ring</em></span>.  Define qual o
+método que a mensagem transmitida será encapsulada para envio ao seu destino.
+</p>
+</li></ul></div>
+</dd></dl></div>
+<p>
+Apesar dos padrões <span class="emphasis"><em>Darpa</em></span> e <span class="emphasis"><em>OSI</em></span>, o
+protocolo <span class="emphasis"><em>TCP/IP</em></span> é oficialmente independente destas
+camadas.
+</p>
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s09.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch04s11.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Outros arquivos de configuração relacionados com a rede </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> RFCs de referência sobre protocolos de rede</td></tr></table></div></body></html>

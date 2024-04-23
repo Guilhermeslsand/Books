@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Endereço IP</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch04.html" title="Capítulo 4. Rede" /><link rel="prev" href="ch04s02.html" title="Protocolo de Rede" /><link rel="next" href="ch04s04.html" title="Interface de rede" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Endereço IP</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s02.html">Anterior</a> </td><th width="60%" align="center">Capítulo 4. Rede</th><td width="20%" align="right"> <a accesskey="n" href="ch04s04.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch04.html">Rede</a></span> &gt; <span class="breadcrumb-node">Endereço IP</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="rede-ip"></a>Endereço IP</h2></div></div></div>
+<p>
+O <span class="emphasis"><em>endereço IP</em></span> são números que identificam seu computador
+em uma rede.  Inicialmente você pode imaginar o IP como um número de telefone.
+O IP é compostos por quatro bytes e a convenção de escrita dos números é
+chamada de "notação decimal pontuada".  Por convenção, cada interface (placa
+usada p/ rede) do computador ou roteador tem um endereço IP.  Também é
+permitido que o mesmo endereço IP seja usado em mais de uma interface de uma
+mesma máquina mas normalmente cada interface tem seu próprio endereço IP.
+</p>
+<p>
+As Redes do Protocolo Internet são seqüências contínuas de endereços IP's.
+Todos os endereços dentro da rede tem um número de dígitos dentro dos endereços
+em comum.  A porção dos endereços que são comuns entre todos os endereços de
+uma rede são chamados de <span class="emphasis"><em>porção da rede</em></span>.  Os dígitos
+restantes são chamados de <span class="emphasis"><em>porção dos hosts</em></span>.  O número de
+bits que são compartilhados por todos os endereços dentro da rede são chamados
+de <span class="emphasis"><em>netmask</em></span> (máscara da rede) e o papel da
+<span class="emphasis"><em>netmask</em></span> é determinar quais endereços pertencem ou não a
+rede.  Por exemplo, considere o seguinte:
+</p>
+<pre class="screen">
+-----------------  ---------------
+Endereço do Host   192.168.110.23
+Máscara da Rede    255.255.255.0
+Porção da Rede     192.168.110.
+Porção do Host                .23
+-----------------  ---------------
+Endereço da Rede   192.168.110.0
+Endereço Broadcast 192.168.110.255
+-----------------  ---------------
+</pre>
+<p>
+Qualquer endereço que é finalizado em zero em sua <span class="emphasis"><em>netmask</em></span>,
+revelará o <span class="emphasis"><em>endereço da rede</em></span> que pertence.  O endereço e
+rede é então sempre o menor endereço numérico dentro da escalas de endereços da
+rede e sempre possui a <span class="emphasis"><em>porção host</em></span> dos endereços
+codificada como zeros.
+</p>
+<p>
+O endereço de <span class="emphasis"><em>broadcast</em></span> é um endereço especial que cada
+computador em uma rede "escuta" em adição a seu próprio endereço.  Este é um
+endereço onde os datagramas enviados são recebidos por todos os computadores da
+rede.  Certos tipos de dados como informações de roteamento e mensagens de
+alerta são transmitidos para o endereço <span class="emphasis"><em>broadcast</em></span>, assim
+todo computador na rede pode recebe-las simultaneamente.
+</p>
+<p>
+Existe dois padrões normalmente usados para especificar o endereço de
+<span class="emphasis"><em>broadcast</em></span>.  O mais amplamente aceito é para usar o
+endereço <code class="literal">mais alto</code> da rede como endereço broadcast.  No
+exemplo acima este seria 192.168.110.255.  Por algumas razões outros sites tem
+adotado a convenção de usar o <code class="literal">endereço de rede</code> como o
+endereço broadcast.  Na prática não importa muito se usar este endereço, mas
+você deve ter certeza que todo computador na rede esteja configurado para
+escutar o mesmo <span class="emphasis"><em>endereço broadcast</em></span>.
+</p>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-ip-classes"></a>Classes de Rede IP</h3></div></div></div>
+<p>
+Por razões administrativas após algum pouco tempo no desenvolvimento do
+protocolo IP alguns grupos arbitrários de endereços foram formados em redes e
+estas redes foram agrupadas no que foram chamadas de
+<span class="emphasis"><em>classes</em></span>.  Estas classes armazenam um tamanho padrão de
+redes que podem ser usadas.  As faixas alocadas são:
+</p>
+<pre class="screen">
++--------------------------------------------------------+
+| Classe  | Máscara de    | Endereço da Rede             |
+|         | Rede          |                              |
++--------------------------------------------------------+
+|    A    | 255.0.0.0     | 0.0.0.0    - 127.255.255.255 |
+|    B    | 255.255.0.0   | 128.0.0.0  - 191.255.255.255 |
+|    C    | 255.255.255.0 | 192.0.0.0  - 223.255.255.255 |
+|Multicast| 240.0.0.0     | 224.0.0.0  - 239.255.255.255 |
++--------------------------------------------------------+
+</pre>
+<p>
+O tipo de endereço que você deve utilizar depende exatamente do que estiver
+fazendo.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-ip-masks"></a>Referência rápida de máscara de redes</h3></div></div></div>
+<p>
+A tabela abaixo faz referência as máscaras de rede mais comuns e a quantidade
+de máquinas máximas que ela atinge.  Note que a especificação da máscara tem
+influência direta na classe de rede usada:
+</p>
+<pre class="screen">
+Máscara  Máscara                 Número 
+(Forma   (Forma                  Máximo de 
+octal)   32 bits)                Máquinas
+
+Classe A:
+/8       /255.0.0.0              16,777,215
+
+Classe B:
+/16      /255.255.0.0            65,535
+/17      /255.255.128.0          32,767
+/18      /255.255.192.0          16,383
+/19      /255.255.224.0          8,191
+/20      /255.255.240.0          4,095
+/21      /255.255.248.0          2,047
+/22      /255.255.252.0          1,023
+/23      /255.255.254.0          511
+
+Classe C
+/24      /255.255.255.0          255
+/25      /255.255.255.128        127
+/26      /255.255.255.192        63
+/27      /255.255.255.224        31
+/28      /255.255.255.240        15
+/29      /255.255.255.248        7
+/30      /255.255.255.252        3
+/32      /255.255.255.255        1
+</pre>
+<p>
+Qualquer outra máscara fora desta tabela (principalmente para a classe A),
+deverá ser redimensionada com uma calculadora de IP para chegar a um número
+aproximado de redes/máquinas aproximados que deseja.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-ip-nova"></a>Para instalar uma máquina usando o Linux em uma rede existente</h3></div></div></div>
+<p>
+Se você quiser instalar uma máquina <span class="command"><strong>GNU/Linux</strong></span> em uma rede
+TCP/IP existente então você deve contactar qualquer um dos administradores da
+sua rede e perguntar o seguinte:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+Endereço IP de sua máquina
+</p>
+</li><li class="listitem">
+<p>
+Endereço IP da rede
+</p>
+</li><li class="listitem">
+<p>
+Endereço IP de broadcast
+</p>
+</li><li class="listitem">
+<p>
+Máscara da Rede IP
+</p>
+</li><li class="listitem">
+<p>
+Endereço do Roteador
+</p>
+</li><li class="listitem">
+<p>
+Endereço do Servidor de Nomes (DNS)
+</p>
+</li></ul></div>
+<p>
+Você deve então configurar seu dispositivo de rede <span class="command"><strong>GNU/Linux</strong></span>
+com estes detalhes.  Você não pode simplesmente escolhe-los e esperar que sua
+configuração funcione.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-ip-privada"></a>Endereços reservados para uso em uma rede Privada</h3></div></div></div>
+<p>
+Se você estiver construindo uma rede privada que nunca será conectada a
+Internet, então você pode escolher qualquer endereço que quiser.  No entanto,
+para sua segurança e padronização, existem alguns endereços IP's que foram
+reservados especificamente para este propósito.  Eles estão especificados no
+RFC1597 e são os seguintes:
+</p>
+<pre class="screen">
++---------------------------------------------------------+
+|       ENDEREÇOS RESERVADOS PARA REDES PRIVADAS          |
++---------------------------------------------------------+
+| Classe  | Máscara de    | Endereço da Rede              |
+| de Rede | Rede          |                               |
++---------+---------------+-------------------------------+
+|    A    | 255.0.0.0     | 10.0.0.0    - 10.255.255.255  |
+|    B    | 255.255.0.0   | 172.16.0.0  - 172.31.255.255  |
+|    C    | 255.255.255.0 | 192.168.0.0 - 192.168.255.255 |
++---------------------------------------------------------+
+</pre>
+<p>
+Você deve decidir primeiro qual será a largura de sua rede e então escolher a
+classe de rede que será usada.
+</p>
+</div>
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s02.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch04s04.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Protocolo de Rede </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Interface de rede</td></tr></table></div></body></html>

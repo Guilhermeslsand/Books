@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Roteamento</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch04.html" title="Capítulo 4. Rede" /><link rel="prev" href="ch04s04.html" title="Interface de rede" /><link rel="next" href="ch04s06.html" title="Resolvedor de nomes (DNS)" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Roteamento</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s04.html">Anterior</a> </td><th width="60%" align="center">Capítulo 4. Rede</th><td width="20%" align="right"> <a accesskey="n" href="ch04s06.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch04.html">Rede</a></span> &gt; <span class="breadcrumb-node">Roteamento</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="rede-rota"></a>Roteamento</h2></div></div></div>
+<p>
+Roteamento é quando uma máquina com múltiplas conexões de rede decide onde
+entregar os pacotes IP que recebeu, para que cheguem ao seu destino.
+</p>
+<p>
+Pode ser útil ilustrar isto com um exemplo.  Imagine um simples roteador de
+escritório, ele pode ter um link intermitente com a Internet, um número de
+segmentos ethernet alimentando as estações de trabalho e outro link PPP
+intermitente fora de outro escritório.  Quando o roteador recebe um datagrama
+de qualquer de suas conexões de rede, o mecanismo que usa determina qual a
+próxima interface deve enviar o datagrama.  Computadores simples também
+precisam rotear, todos os computadores na Internet tem dois dispositivos de
+rede, um é a interface <span class="emphasis"><em>loopback</em></span> (explicada acima) o outro
+é um usado para falar com o resto da rede, talvez uma ethernet, talvez uma
+interface serial PPP ou SLIP.
+</p>
+<p>
+OK, viu como o roteamento funciona?  cada computador mantém uma lista de regras
+especiais de roteamento, chamada <span class="emphasis"><em>tabela de roteamento</em></span>.
+Esta tabela contém colunas que tipicamente contém no mínimo três campos, o
+primeiro é o <span class="emphasis"><em>endereço de destino</em></span>, o segundo é o
+<span class="emphasis"><em>nome da interface</em></span> que o datagrama deve ser roteado e o
+terceiro é opcionalmente o <span class="emphasis"><em>endereço IP</em></span> da outra máquina
+que levará o datagrama em seu próximo passo através da rede.  No
+<span class="command"><strong>GNU/Linux</strong></span> você pode ver a tabela de roteamento usando um dos
+seguintes comandos:
+</p>
+<pre class="screen">
+cat /proc/net/route
+route -n
+netstat -r
+</pre>
+<p>
+O processo de roteamento é muito simples: um datagrama (pacote IP) é recebido,
+o endereço de destino (para quem ele é) é examinado e comparado com cada item
+da tabela de roteamento.  O item que mais corresponder com o endereço é
+selecionado e o datagrama é direcionado a interface especificada.
+</p>
+<p>
+Se o campo <span class="emphasis"><em>gateway</em></span> estiver preenchido, então o datagrama é
+direcionado para aquele computador pela interface especificada, caso contrário
+o endereço de destino é assumido sendo uma rede suportada pela interface.
+</p>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-rota-c"></a>Configurando uma rota no Linux</h3></div></div></div>
+<p>
+A configuração da rota é feita através da ferramenta <span class="command"><strong>route</strong></span>.
+Para adicionar uma rota para a rede 192.168.1.0 acessível através da interface
+eth0 basta digitar o comando:
+</p>
+<pre class="screen">
+route add -net 192.168.1.0 eth0
+</pre>
+<p>
+Para apagar a rota acima da <span class="emphasis"><em>tabela de roteamento</em></span>, basta
+substituir a palavra <code class="literal">add</code> por <code class="literal">del</code>.  A
+palavra <code class="literal">net</code> quer dizer que 192.168.1.0 é um endereço de rede
+(lembra-se das explicações em <a class="xref" href="ch04s03.html" title="Endereço IP">“Endereço IP”</a>?)) para especificar uma
+máquina de destino, basta usar a palavra <code class="literal">-host</code>.  Endereços
+de máquina de destino são muito usadas em conexões de rede apenas entre dois
+pontos (como ppp, plip, slip).  Por padrão, a interface é especificada como
+último argumento.  Caso a interface precise especifica-la em outro lugar, ela
+deverá ser precedida da opção <code class="literal">-dev</code>.
+</p>
+<p>
+Para adicionar uma rota padrão para um endereço que não se encontre na tabela
+de roteamento, utiliza-se o <span class="emphasis"><em>gateway padrão da rede</em></span>.
+Através do gateway padrão é possível especificar um computador (normalmente
+outro gateway) que os pacotes de rede serão enviados caso o endereço não
+confira com os da tabela de roteamento.  Para especificar o computador
+192.168.1.1 como <span class="emphasis"><em>gateway padrão</em></span> usamos:
+</p>
+<pre class="screen">
+route add default gw 192.168.1.1 eth0
+</pre>
+<p>
+O <span class="emphasis"><em>gateway padrão</em></span> pode ser visualizado através do comando
+<code class="literal">route -n</code> e verificando o campo <code class="literal">gateway</code>.
+A opção <code class="literal">gw</code> acima, especifica que o próximo argumento é um
+endereço IP (de uma rede já acessível através das tabelas de roteamento).
+</p>
+<p>
+O computador <span class="emphasis"><em>gateway</em></span> está conectado a duas ou mais redes
+ao mesmo tempo.  Quando seus dados precisam ser enviados para computadores fora
+da rede, eles são enviados através do computador <span class="emphasis"><em>gateway</em></span> e
+o <span class="emphasis"><em>gateway</em></span> os encaminham ao endereço de destino.  Desta
+forma, a resposta do servidor também é enviada através do
+<span class="emphasis"><em>gateway</em></span> para seu computador (é o caso de uma típica
+conexão com a Internet).
+</p>
+<p>
+A nossa configuração ficaria assim:
+</p>
+<pre class="screen">
+route add -net 192.168.1.0 eth0
+route add default gw 192.168.1.1 eth0
+</pre>
+<p>
+Para mais detalhes, veja a página de manual do <span class="command"><strong>route</strong></span> ou o
+<span class="emphasis"><em>NET3-4-HOWTO</em></span>.
+</p>
+</div>
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s04.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch04s06.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Interface de rede </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Resolvedor de nomes (DNS)</td></tr></table></div></body></html>

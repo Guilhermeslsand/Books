@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Programas de configuração</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch07.html" title="Capítulo 7. A distribuição Debian GNU/Linux" /><link rel="prev" href="ch07s04.html" title="Como obter a Debian" /><link rel="next" href="ch07s06.html" title="Arquivos de inicialização" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Programas de configuração</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch07s04.html">Anterior</a> </td><th width="60%" align="center">Capítulo 7. A distribuição Debian GNU/Linux</th><td width="20%" align="right"> <a accesskey="n" href="ch07s06.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch07.html">A distribuição Debian GNU/Linux</a></span> &gt; <span class="breadcrumb-node">Programas de configuração</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="deb-prgnconfig"></a>Programas de configuração</h2></div></div></div>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<span class="command"><strong>aptitude</strong></span> - Seleciona pacote para instalação/desinstalação
+</p>
+</li><li class="listitem">
+<p>
+<span class="command"><strong>pppconfig</strong></span> - Configura o computador para se conectar a
+Internet usando conexão discada.  Após isto, use <code class="literal">pon</code> para se
+conectar a Internet, <code class="literal">poff</code> para se desconectar e
+<code class="literal">plog</code> para monitorar a conexão.
+</p>
+</li><li class="listitem">
+<p>
+<span class="command"><strong>pppoeconf</strong></span> - Configura o computador para conectar a internet
+usando ADSL
+</p>
+</li><li class="listitem">
+<p>
+<span class="command"><strong>modconf</strong></span> - Permite selecionar os módulos que serão
+automaticamente carregados na inicialização do sistema.  Se requerido pelos
+módulos os parâmetros I/O, IRQ e DMA também podem ser especificados.
+</p>
+</li><li class="listitem">
+<p>
+<span class="command"><strong>shadowconfig</strong></span> - Permite ativar ou desativar o suporte a
+senhas ocultas (shadow password).  Com as senhas ocultas ativadas, as senhas
+criptografadas dos usuários e grupos são armazenadas nos arquivos
+<code class="filename">shadow</code> e <code class="filename">gshadow</code> respectivamente, que
+somente podem ser acessadas pelo usuário root.
+</p>
+<p>
+Isto aumenta consideravelmente a segurança do sistema pois os arquivos
+<code class="filename">passwd</code> e <code class="filename">group</code> contém dados de
+usuários que devem ter permissão de leitura de todos os usuários do sistema.
+</p>
+</li><li class="listitem">
+<p>
+<span class="command"><strong>tasksel</strong></span> - Permite selecionar/modificar de forma fácil a
+instalação de pacotes em seu sistema através da função que sua máquina terá ou
+do seu perfil de usuário.
+</p>
+</li><li class="listitem">
+<p>
+<span class="command"><strong>tzconfig</strong></span> - Permite modificar/selecionar o fuso-horário usado
+na distribuição.
+</p>
+</li></ul></div>
+<p>
+Além destes, a Debian conta com o sistema de configuração baseado no
+<code class="literal">dpkg-reconfigure</code> que permite configurar de forma fácil e
+rápida aspecto de pacotes: <code class="literal">dpkg-reconfigure xserver-xorg</code>.
+</p>
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch07s04.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch07.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch07s06.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Como obter a Debian </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Arquivos de inicialização</td></tr></table></div></body></html>

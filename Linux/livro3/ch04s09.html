@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Outros arquivos de configuração relacionados com a rede</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch04.html" title="Capítulo 4. Rede" /><link rel="prev" href="ch04s08.html" title="Segurança da Rede e controle de Acesso" /><link rel="next" href="ch04s10.html" title="Camadas de Rede" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Outros arquivos de configuração relacionados com a rede</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s08.html">Anterior</a> </td><th width="60%" align="center">Capítulo 4. Rede</th><td width="20%" align="right"> <a accesskey="n" href="ch04s10.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch04.html">Rede</a></span> &gt; <span class="breadcrumb-node">Outros arquivos de configuração relacionados com a rede</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="rede-outros"></a>Outros arquivos de configuração relacionados com a rede</h2></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-outros-services"></a>/etc/services</h3></div></div></div>
+<p>
+O arquivo <code class="filename">/etc/services</code> é um banco de dados simples que
+associa um nome amigável a humanos a uma porta de serviço amigável a máquinas.
+É um arquivo texto de formato muito simples, cada linha representa um item no
+banco de dados.  Cada item é dividido em três campos separados por qualquer
+número de espaços em branco (tab ou espaços).  Os campos são:
+</p>
+<pre class="screen">
+  nome      porta/protocolo        apelido     # comentário
+</pre>
+<div class="variablelist"><dl class="variablelist"><dt><span class="term">name</span></dt><dd>
+<p>
+Uma palavra simples que representa o nome do serviço sendo descrito.
+</p>
+</dd><dt><span class="term">porta/protocolo</span></dt><dd>
+<p>
+Este campo é dividido em dois sub-campos.
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="literal">porta</code> - Um número que especifica o número da porta em que o
+serviço estará disponível.  Muitos dos serviços comuns tem designados um número
+de serviço.  Estes estão descritos no RFC-1340.
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">protocolo</code> - Este sub-campo pode ser ajustado para
+<span class="emphasis"><em>tcp</em></span> ou <span class="emphasis"><em>udp</em></span>.  É importante notar que o
+item <span class="emphasis"><em>18/tcp</em></span> é muito diferente do item
+<span class="emphasis"><em>18/udp</em></span> e que não existe razão técnica porque o mesmo
+serviço precisa existir em ambos.  Normalmente o senso comum prevalece e que
+somente se um serviço esta disponível em ambos os protocolos
+<span class="emphasis"><em>tcp</em></span> e <span class="emphasis"><em>udp</em></span>, você precisará especificar
+ambos.
+</p>
+</li></ul></div>
+</dd><dt><span class="term">apelidos</span></dt><dd>
+<p>
+Outros nomes podem ser usados para se referir a entrada deste serviço.
+</p>
+</dd><dt><span class="term">comentário</span></dt><dd>
+<p>
+Qualquer texto aparecendo em uma linha após um caracter "#" é ignorado e
+tratado como comentário.
+</p>
+</dd></dl></div>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-outros-protocols"></a>/etc/protocols</h3></div></div></div>
+<p>
+O arquivo <code class="filename">/etc/protocols</code> é um banco de dados que mapeia
+números de identificação de protocolos novamente em nomes de protocolos.  Isto
+é usado por programadores para permiti-los especificar protocolos por nomes em
+seus programas e também por alguns programas tal como
+<span class="emphasis"><em>tcpdump</em></span> permitindo-os mostrar <span class="emphasis"><em>nomes</em></span>
+ao invés de <span class="emphasis"><em>números</em></span> em sua saída.  A sintaxe geral deste
+arquivo é:
+</p>
+<pre class="screen">
+   nomeprotocolo  número  apelidos
+</pre>
+</div>
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s08.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch04s10.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Segurança da Rede e controle de Acesso </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Camadas de Rede</td></tr></table></div></body></html>

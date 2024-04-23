@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Conectando dois computadores usando a porta paralela</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch05.html" title="Capítulo 5. Configurações especiais de Rede" /><link rel="prev" href="ch05s02.html" title="Bridge" /><link rel="next" href="ch05s04.html" title="Conectando dois computadores usando a porta serial" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Conectando dois computadores usando a porta paralela</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch05s02.html">Anterior</a> </td><th width="60%" align="center">Capítulo 5. Configurações especiais de Rede</th><td width="20%" align="right"> <a accesskey="n" href="ch05s04.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch05.html">Configurações especiais de Rede</a></span> &gt; <span class="breadcrumb-node">Conectando dois computadores usando a porta paralela</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="cfgs-plip"></a>Conectando dois computadores usando a porta paralela</h2></div></div></div>
+<p>
+O <span class="command"><strong>Linux</strong></span> é bastante poderoso quando se trata de métodos para
+se conectar duas ou mais máquinas em rede.  Uma brincadeira que é levada a
+sério é que qualquer coisa que ligue uma máquina a outra possui um controlador
+desenvolvido por alguém para fazer uma rede :)
+</p>
+<p>
+Usando o <code class="filename">plip</code> (<span class="emphasis"><em>Parallel Line Internet
+Protocol</em></span>) permite <code class="literal">criar</code> uma interface de rede
+para a porta paralela que utiliza todos os recursos de uma rede normal.  Esta
+interface será identificada por <code class="filename">plip?</code>, onde
+<code class="literal">?</code> é o número da porta paralela, recém configurada.
+</p>
+<p>
+A rede via porta paralela pode atingir até 1Mb/s e mesmo esta velocidade
+parecer aparentemente baixa apresenta diversas vantagens por sua escalabilidade
+e pode lhe salvar em muitas situações de problemas.  Algumas características
+deste tipo de rede:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+Pode ser configurado em qualquer máquina, pois sempre haverá uma porta
+paralela.
+</p>
+</li><li class="listitem">
+<p>
+É útil para fazer instalação de <span class="command"><strong>Linux</strong></span> em máquinas sem
+CD-ROM.  No momento da instalação é preciso somente alternar para um console,
+executar os passos descritos aqui e continuar com o processo de instalação
+normal :)
+</p>
+</li><li class="listitem">
+<p>
+É uma boa solução quando as duas máquinas estão próximas
+</p>
+</li><li class="listitem">
+<p>
+O custo para montagem desta rede é extremamente baixo, bastando um cabo Lap
+Link Paralelo que custa no máximo R$20,00 o de 1,5M ou se gosta de eletrônica,
+montar seu próprio cabo usando o esquema que descrevo em <a class="xref" href="ch05s03.html#cfgs-plip-cabo" title="Construindo um cabo LapLink Paralelo">“Construindo um cabo LapLink Paralelo”</a>.
+</p>
+</li><li class="listitem">
+<p>
+Você poderá fazer qualquer coisa que faria em uma rede normal (incluindo
+MASQUERADING, roteamento entre redes, etc) sendo bastante interessante para
+testes práticos dos exemplos do Foca Linux Avançado ;-)
+</p>
+</li><li class="listitem">
+<p>
+Ficará admirado com as capacidade de rede existente no <span class="command"><strong>Linux</strong></span>
+e feliz por ter colocado mais uma configuração em funcionamento :)
+</p>
+</li></ul></div>
+<p>
+Agora, os contras da conexão via porta paralela:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+A porta paralela não estará disponível para ser usada em impressoras, conexão
+de câmeras.
+</p>
+</li><li class="listitem">
+<p>
+O cabo não pode ter mais de 4,5 metros.  Acima dessa comprimento, você pode
+colocar sua controladora em risco além da perda de sinal.  Por segurança, o
+tamanho recomendável é 2,5 metros.
+</p>
+</li><li class="listitem">
+<p>
+Quando toda a banda do cabo é utilizada, algumas CPUs se tornam extremamente
+lentas.
+</p>
+</li></ul></div>
+<p>
+Para configurar uma conexão via cabo paralelo (plip) entre duas máquinas, vamos
+assumir que a primeira máquina terá o IP 192.168.1.1 e a segunda máquina
+192.168.1.2:
+</p>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+<p>
+Conecte o cabo Lap Link em cada uma das portas de impressora.  Caso saiba fazer
+conexões eletrônicas ou goste do assunto, veja <a class="xref" href="ch05s03.html#cfgs-plip-cabo" title="Construindo um cabo LapLink Paralelo">“Construindo um cabo LapLink Paralelo”</a>.
+</p>
+</li><li class="listitem">
+<p>
+Verifique se o seu kernel está compilado com o suporte a rede
+<code class="filename">plip</code>.  Caso não esteja, a configuração da interface
+<code class="filename">plip</code> falhará no passo do <span class="command"><strong>ifconfig</strong></span>.
+</p>
+</li><li class="listitem">
+<p>
+Se o sistema executa algum daemon de impressão, interrompa antes de usar a
+porta paralela.  Alguns tipos de serviços de impressão interferem no
+funcionamento do <code class="filename">plip</code>.
+</p>
+</li><li class="listitem">
+<p>
+Configure o módulo <code class="filename">parport_pc</code> passando o parâmetro
+<code class="literal">irq=7</code> (a IRQ que sua porta de impressora utiliza).  Esta
+configuração é necessária pois em algumas máquinas isso faz que o
+<code class="filename">plip</code> não funcione ou aconteçam somente timeouts de
+transmissão.
+</p>
+</li><li class="listitem">
+<p>
+Execute o comando <code class="literal">ifconfig plip0 192.168.1.1</code>.  Verifique se
+a interface foi ativada com o comando <code class="literal">ifconfig plip0</code>.
+</p>
+</li><li class="listitem">
+<p>
+Nesse ponto a interface está ativa, mas a nossa máquina não conhece nada sobre
+a rede ou como alcançar a máquina 192.168.1.2.  Como a conexão é ponto a ponto,
+precisamos adicionar uma rota direta para esta máquina com o comando:
+<code class="literal">route add -host 192.168.1.2 plip0</code>.
+</p>
+<p>
+Este comando diz para criar uma rota com o destino
+<code class="literal">192.168.1.2</code> usando a interface <code class="filename">plip0</code>.
+</p>
+</li><li class="listitem">
+<p>
+Configure a outra máquina seguindo os passos acima, apenas invertendo os 2
+endereços IPs usados.
+</p>
+</li></ol></div>
+<p>
+Pronto, agora verifique se cada uma das máquinas se comunica com a outra usando
+o comando <code class="literal">ping 192.168.1.x</code>.  Se ocorrer um erro de timeout
+na transmissão, leia atentamente os passos acima e refaça a configuração em
+ambas as máquinas.  Ainda não funcionando, verifique se existe um firewall
+bloqueando os pacotes da nova interface e se o cabo Lap Link está em bom
+estado, o problema pode estar ai.
+</p>
+<p>
+O número máximo de interfaces <code class="filename">plip?</code> está limitado ao
+número máximo suportado pela máquina.  O padrão em sistemas padrão IBM/PC é de
+3 (<code class="filename">plip0</code>, <code class="filename">plip1</code>,
+<code class="filename">plip2</code>).
+</p>
+<p>
+Para desativar uma rede plip, utilize o comando <code class="literal">ifconfig plip0
+down</code>, remova o módulo <code class="filename">plip</code> (<code class="literal">rmmod
+plip</code>).  Após isto, a porta paralela será liberada para uso por outros
+aplicativos.
+</p>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="cfgs-plip-cabo"></a>Construindo um cabo LapLink Paralelo</h3></div></div></div>
+<p>
+Se você tem experiência com eletrônica, poderá construir seu próprio cabo
+LapLink Paralelo para fazer os testes desta seção.  Os materiais necessários
+são:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="literal">2</code> Conectores DB25 macho
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">2</code> Capas para os conectores acima.
+</p>
+</li><li class="listitem">
+<p>
+Fio para ligação dos conectores (15 ligações).  No meu caso utilizei 2 metros
+de um rolo de cabo SCSI de 50 vias para fazer as ligações, que é uma boa
+alternativa para manter o cabo bonito e os fios juntos.
+</p>
+</li></ul></div>
+<p>
+Este é o conector macho DB25 (a tomada que liga no computador) visto por trás
+(minha namorada já disse que não sou bom em arte ASCII).  Bom, não custa tentar
+de novo:
+</p>
+<pre class="screen">
+  -------------------------------
+13  \ o o o o o o o o o o o o o / 1
+25  \ o o o o o o o o o o o o / 14
+     -------------------------
+</pre>
+<p>
+A figura acima mostra a posição dos pinos como referência para a soldagem dos
+terminais.  A tabela abaixo mostra a ligação dos fios nos cabos das 2 pontas do
+cabo:
+</p>
+<pre class="screen">
++---------+---------+
+| Ponta 1 | Ponta 2 |
++---------+---------+
+|    1    |     1   |
+|    2    |    15   |
+|    3    |    13   |
+|    4    |    12   |
+|    5    |    10   |
+|    6    |    11   |
+|   10    |     5   |
+|   11    |     6   |
+|   12    |     4   |
+|   13    |     3   |
+|   14    |    14   |
+|   15    |     2   |
+|   16    |    16   |
+|   17    |    17   |
+|   25    |    25   |
++---------+---------+
+</pre>
+</div>
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch05s02.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch05.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch05s04.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Bridge </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Conectando dois computadores usando a porta serial</td></tr></table></div></body></html>

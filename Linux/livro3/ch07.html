@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Capítulo 7. A distribuição Debian GNU/Linux</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="index.html" title="Guia Foca Linux" /><link rel="prev" href="ch06s05.html" title="Configurando um servidor de logs" /><link rel="next" href="ch07s02.html" title="Pacotes existentes na Debian" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Capítulo 7. A distribuição Debian GNU/Linux</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch06s05.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch07s02.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-node">A distribuição Debian GNU/Linux</span></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="deb"></a>Capítulo 7. A distribuição Debian GNU/Linux</h1></div></div></div><div class="toc"><p><strong>Índice</strong></p><dl class="toc"><dt><span class="section"><a href="ch07.html#deb-carac">Porque usar a Debian?</a></span></dt><dt><span class="section"><a href="ch07s02.html">Pacotes existentes na Debian</a></span></dt><dt><span class="section"><a href="ch07s03.html">O que é sid/testing/frozen/stable?</a></span></dt><dt><span class="section"><a href="ch07s04.html">Como obter a Debian</a></span></dt><dt><span class="section"><a href="ch07s05.html">Programas de configuração</a></span></dt><dt><span class="section"><a href="ch07s06.html">Arquivos de inicialização</a></span></dt><dt><span class="section"><a href="ch07s07.html">Níveis de Execução</a></span></dt><dd><dl><dt><span class="section"><a href="ch07s07.html#deb-runlevels-e">Entendendo o funcionamento dos níveis de execução do sistema (runlevels)</a></span></dt></dl></dd><dt><span class="section"><a href="ch07s08.html">Rede no sistema Debian</a></span></dt><dt><span class="section"><a href="ch07s09.html">Bug tracking system</a></span></dt><dt><span class="section"><a href="ch07s10.html">Onde encontrar a Debian para Download?</a></span></dt><dt><span class="section"><a href="ch07s11.html">Lista de pacotes para uma instalação rápida e manual</a></span></dt><dd><dl><dt><span class="section"><a href="ch07s11.html#s20.11.1">Pacotes Básicos (Altamente Recomendado)</a></span></dt><dt><span class="section"><a href="ch07s11.html#s20.11.2">Compilação do Kernel e programas em linguagem C</a></span></dt><dt><span class="section"><a href="ch07s11.html#s20.11.3">X11 (básico)</a></span></dt><dt><span class="section"><a href="ch07s11.html#s20.11.4">Window Managers para o X</a></span></dt><dt><span class="section"><a href="ch07s11.html#s20.11.5">Impressão (texto e gráfico com sistema de spool)</a></span></dt><dt><span class="section"><a href="ch07s11.html#s20.11.6">Som (mixer, mp3, Midi, wav, CD-Player)</a></span></dt><dt><span class="section"><a href="ch07s11.html#s20.11.7">Programas de Internet (clientes)</a></span></dt><dt><span class="section"><a href="ch07s11.html#s20.11.8">Acessórios</a></span></dt><dt><span class="section"><a href="ch07s11.html#s20.11.9">Rede</a></span></dt></dl></dd></dl></div>
+<p>
+Este capítulo traz algumas características sobre a distribuição <span class="command"><strong>Debian
+GNU/Linux</strong></span>, programas de configuração e particularidades.  A maioria
+dos trechos aqui descritos, também se aplicam a distribuições baseadas na
+<span class="command"><strong>Debian</strong></span>, como o <span class="emphasis"><em>Kurumin</em></span> e o
+<span class="emphasis"><em>Ubuntu</em></span>.
+</p>
+<p>
+Você deve estar se perguntando <code class="literal">mas porque um capítulo falando sobre a
+distribuição Debian se eu uso outra?</code>.  Bem, a partir da versão
+<span class="emphasis"><em>Intermediário</em></span> do <span class="emphasis"><em>Foca Linux</em></span> existem
+algumas partes que são especificas de algumas distribuições Linux e que não se
+aplicam a outras, como a localização dos arquivos de configuração, nomes dos
+programas de configuração e outros detalhes específicos e esta versão é a
+baseada na <span class="command"><strong>Debian</strong></span>.  Pegue na página do Foca Linux (
+    <a class="ulink" href="http://www.guiafoca.org" target="_top">http://www.guiafoca.org</a>) uma versão
+Intermediário /Avançado do guia específico para sua distribuição.
+</p>
+
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="deb-carac"></a>Porque usar a Debian?</h2></div></div></div>
+<p>
+A <span class="command"><strong>Debian</strong></span> é a distribuição que mais cresce no mundo, cada
+versão é somente lançada após rigorosos testes de segurança e correção de
+falhas fazendo desta a mais segura e confiável dentre todas as outras
+distribuições Linux.  É reconhecida como a mais segura, maior e atualizada mais
+freqüentemente entre as outras distribuições <span class="command"><strong>Linux</strong></span>, além de
+ser a única sem fins comerciais.
+</p>
+<p>
+É a única que adota o estilo de desenvolvimento aberto e não é mantida por uma
+empresa comercial (note que o endereço do WebSite da <span class="command"><strong>Debian</strong></span>
+termina com <code class="filename">.org</code>), ao invés disso é mantida por
+programadores, hackers e especialistas de segurança espalhados ao redor do
+mundo, seguindo o estilo de desenvolvimento do Linux.  Possui suporte a mais de
+12 arquiteturas e 15 sub-arquiteturas (entre elas, Intel x86, Alpha, VMS,
+Sparc, Macintosh (m68k), Power Pc, ARM, etc).
+</p>
+<p>
+Suas atualizações são constantes e não é necessário adquirir um novo CD para
+fazer upgrades.  Meu sistema é atualizado semanalmente e de forma segura
+através de 2 simples comandos.  Veja <a class="xref" href="">???</a> as instruções
+de como fazer isto.
+</p>
+<p>
+Cada pacote da distribuição é mantida por uma pessoa, o que garante uma boa
+qualidade, implementações de novos recursos e rápida correção de falhas.
+Qualquer pessoa com bons conhecimentos no sistema e inglês pode se tornar um
+<span class="emphasis"><em>Debian Developer</em></span>, para detalhes consulte a lista de
+discussão <span class="emphasis"><em>debian-user-portuguese</em></span> (veja <a class="xref" href="ch21s13.html#ajuda-listas" title="Listas de discussão">“Listas de discussão”</a>) ou veja a página oficial da
+<span class="command"><strong>Debian</strong></span>: <a class="ulink" href="http://www.debian.org/" target="_top">http://www.debian.org/</a>.
+</p>
+<p>
+A distribuição apresenta compatibilidade com outros sistemas a partir da
+instalação até a seleção de programas e execução do sistema, sua instalação
+está até mesmo disponível desde computadores 386 que utilizam unidades de
+disquetes de 5 1/4 polegadas até para computadores UDMA66, instalando através
+de DVD e pen drives.  Com a Debian é possível iniciar a instalação usando um
+pen drive e continuar usando a internet.
+</p>
+<p>
+É a distribuição mais indicada para uso em servidores devido ao seu desempenho,
+segurança e programas úteis de gerenciamento e monitoração da rede,
+recomendados por especialistas que participam de seu desenvolvimento.
+</p>
+<p>
+Não existem versões separadas da Debian para servidores, uso pessoal, etc, ao
+invés disso a distribuição usa perfis de usuário (dependendo da função do
+usuário) e perfis de computador (dependendo do que deseja fazer), podendo ser
+selecionado mais de um perfil de usuário/computador.
+</p>
+<p>
+Os perfis selecionam automaticamente os pacotes mais úteis para a instalação.
+Os pacotes existentes em cada perfil foram escolhidos através de debates entre
+usuários que trabalham ativamente naquela área, resultando em uma seleção de
+pacotes de alta produtividade.
+</p>
+<p>
+Para os usuários avançados e exigentes, também é possível selecionar os pacotes
+individualmente via <span class="command"><strong>dselect</strong></span>, o que resultará em uma
+instalação somente com pacotes úteis e melhor configurada.
+</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch06s05.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch07s02.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Configurando um servidor de logs </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Pacotes existentes na Debian</td></tr></table></div></body></html>

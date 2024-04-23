@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Listando as placas e outros hardwares em um computador</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch03.html" title="Capítulo 3. Hardware" /><link rel="prev" href="ch03s04.html" title="Hardwares configuráveis por jumpers, dip-switches, jumperless e Plug-and-Play." /><link rel="next" href="ch03s06.html" title="Conflitos de hardware" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Listando as placas e outros hardwares em um computador</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s04.html">Anterior</a> </td><th width="60%" align="center">Capítulo 3. Hardware</th><td width="20%" align="right"> <a accesskey="n" href="ch03s06.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch03.html">Hardware</a></span> &gt; <span class="breadcrumb-node">Listando as placas e outros hardwares em um computador</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="hardw-findhw"></a>Listando as placas e outros hardwares em um computador</h2></div></div></div>
+<p>
+Administradores e técnicos ao configurar uma máquina precisarão saber quais os
+hardwares ela possui, periféricos e até mesmo a revisão de dispositivos e clock
+para configurar as coisas e ver a necessidade de atualizações de dispositivos
+atuais.
+</p>
+<p>
+Dispositivos PCI/AMR/CNR podem ser listados executando o comando <code class="literal">cat
+/proc/pci</code>.  Outra forma de listar tais dispositivos é usando o
+<span class="command"><strong>lspci</strong></span>, se você precisa de mais detalhes como o mapeamento de
+memória, use <code class="literal">lspci -vv</code>.
+</p>
+<p>
+O mapeamento de memória de dispositivos podem ser mostrados com o comando
+<code class="literal">cat /proc/ioports</code>, ou usando o comando
+<span class="command"><strong>lsdev</strong></span>.
+</p>
+<p>
+O barramento USB e dispositivos conectados a ele podem ser listados com o
+comando <span class="command"><strong>lsusb</strong></span> ou com <code class="literal">cat
+/proc/bus/usb/devices</code>.
+</p>
+<p>
+Hardwares disponíveis na máquina, como placa mãe, clock multiplicador, discos,
+placas diversas, versões e números seriais de dispositivos podem ser mostrados
+através do comando <span class="command"><strong>lshw</strong></span>.  Use <code class="literal">lshw -html</code>
+para produzir a listagem em formato HTML, bem interessante para relatórios :-)
+</p>
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s04.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s06.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Hardwares configuráveis por jumpers, dip-switches, jumperless e Plug-and-Play. </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Conflitos de hardware</td></tr></table></div></body></html>

@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Resolvedor de nomes (DNS)</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Guia Foca Linux" /><link rel="up" href="ch04.html" title="Capítulo 4. Rede" /><link rel="prev" href="ch04s05.html" title="Roteamento" /><link rel="next" href="ch04s07.html" title="Serviços de Rede" /></head><body text="black" link="#0000FF" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Resolvedor de nomes (DNS)</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s05.html">Anterior</a> </td><th width="60%" align="center">Capítulo 4. Rede</th><td width="20%" align="right"> <a accesskey="n" href="ch04s07.html">Próximo</a></td></tr></table><hr /></div><div xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format" class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">Guia Foca Linux</a></span> &gt; <span class="breadcrumb-link"><a href="ch04.html">Rede</a></span> &gt; <span class="breadcrumb-node">Resolvedor de nomes (DNS)</span></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="rede-dns"></a>Resolvedor de nomes (DNS)</h2></div></div></div>
+<p>
+<span class="emphasis"><em>DNS</em></span> significa Domain Name System (sistema de nomes de
+domínio).  O <span class="emphasis"><em>DNS</em></span> converte os nomes de máquinas para
+endereços IPs que todas as máquinas da Internet possuem.  Ele faz o mapeamento
+do nome para o endereço e do endereço para o nome e algumas outras coisas.  Um
+mapeamento é simplesmente uma associação entre duas coisas, neste caso um nome
+de computador, como www.cipsga.org.br, e o endereço IP desta máquina (ou
+endereços) como 200.245.157.9.
+</p>
+<p>
+O <span class="emphasis"><em>DNS</em></span> foi criado com o objetivo de tornar as coisas mais
+fáceis para o usuário, permitindo assim, a identificação de computadores na
+Internet ou redes locais através de nomes (é como se tivéssemos apenas que
+decorar o nome da pessoa ao invés de um número de telefone).  A parte
+responsável por traduzir os nomes como <code class="literal">www.nome.com.br</code> em um
+endereço IP é chamada de <span class="emphasis"><em>resolvedor de nomes</em></span>.
+</p>
+<p>
+O <span class="emphasis"><em>resolvedor de nomes</em></span> pode ser um banco de dados local
+(controlador por um arquivo ou programa) que converte automaticamente os nomes
+em endereços IP ou através de <span class="emphasis"><em>servidores DNS</em></span> que fazem a
+busca em um banco de dados na Internet e retornam o endereço IP do computador
+desejado.  Um servidor DNS mais difundido na Internet é o
+<span class="command"><strong>bind</strong></span>.
+</p>
+<p>
+Através do DNS é necessário apenas decorar o endereço sem precisar se preocupar
+com o endereço IP (alguns usuários simplesmente não sabem que isto existe...).
+Se desejar mais detalhes sobre <span class="emphasis"><em>DNS</em></span>, veja o documento
+DNS-HOWTO.
+</p>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-dns-oque"></a>O que é um nome?</h3></div></div></div>
+<p>
+Você deve estar acostumado com o uso dos nomes de computadores na Internet, mas
+pode não entender como eles são organizados.  Os nomes de domínio na Internet
+são uma estrutura hierárquica, ou seja, eles tem uma estrutura semelhante aos
+diretórios de seu sistema.
+</p>
+<p>
+Um <span class="emphasis"><em>domínio</em></span> é uma família ou grupo de nomes.  Um domínio
+pode ser colocado em um <span class="emphasis"><em>sub-domínio</em></span>.  Um <span class="emphasis"><em>domínio
+principal</em></span> é um domínio que não é um sub-domínio.  Os domínios
+principais são especificados na RFC-920.  Alguns exemplos de domínios
+principais comuns são:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="literal">COM</code> - Organizações Comerciais
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">EDU</code> - Organizações Educacionais
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">GOV</code> - Organizações Governamentais
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">MIL</code> - Organizações Militares
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">ORG</code> - Outras Organizações
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">NET</code> - Organizações relacionadas com a Internet
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">Identificador do País</code> - São duas letras que representam um
+país em particular.
+</p>
+</li></ul></div>
+<p>
+Cada um dos domínios principais tem sub-domínios.  Os domínios principais
+baseados no nome do país são freqüentemente divididos em sub-domínios baseado
+nos domínios <code class="literal">.com</code>, <code class="literal">.edu</code>,
+<code class="literal">.gov</code>, <code class="literal">.mil</code> e <code class="literal">.org</code>.
+Assim, por exemplo, você pode finaliza-lo com: <code class="literal">com.au</code> e
+<code class="literal">gov.au</code> para organizações comerciais e governamentais na
+Austrália; note que isto não é uma regra geral, as organizações de domínio
+atuais dependem da autoridade na escolha de nomes de cada domínio.  Quando o
+endereço não especifica o domínio principal, como o endereço
+<code class="literal">www.unicamp.br</code>, isto quer dizer que é uma organização
+acadêmica.
+</p>
+<p>
+O próximo nível da divisão representa o nome da organização.  Subdomínios
+futuros variam em natureza, freqüentemente o próximo nível do sub-domínio é
+baseado na estrutura departamental da organização mas ela pode ser baseada em
+qualquer critério considerado razoável e significantes pelos administradores de
+rede para a organização.
+</p>
+<p>
+A porção mais a esquerda do nome é sempre o nome único da máquina chamado
+<span class="emphasis"><em>hostname</em></span>, a porção do nome a direita do hostname é chamado
+<span class="emphasis"><em>nome de domínio</em></span> e o nome completo é chamado <span class="emphasis"><em>nome
+do domínio completamente qualificado</em></span> (<span class="emphasis"><em>Fully Qualified
+Domain Name</em></span>).
+</p>
+<p>
+Usando o computador <code class="literal">www.debian.org.br</code> como exemplo:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p>
+<code class="literal">br</code> - País onde o computador se encontra
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">org</code> - Domínio principal
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">debian</code> - Nome de Domínio
+</p>
+</li><li class="listitem">
+<p>
+<code class="literal">www</code> - Nome do computador
+</p>
+</li></ul></div>
+<p>
+A localização do computador <code class="literal">www.debian.org.br</code> através de
+servidores DNS na Internet obedece exatamente a seqüência de procura acima.  Os
+administradores do domínio <code class="literal">debian.org.br</code> podem cadastrar
+quantos sub-domínios e computadores quiserem (como
+<code class="literal">www.non-us.debian.org.br</code> ou
+<code class="literal">cvs.debian.org.br</code>).
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-dns-a"></a>Arquivos de configuração usados na resolução de nomes</h3></div></div></div>
+<p>
+Abaixo a descrição dos arquivos usados no processo de resolver um nome no
+sistema <span class="command"><strong>GNU/Linux</strong></span>.
+</p>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="rede-dns-a-resolv"></a>/etc/resolv.conf</h4></div></div></div>
+<p>
+O <code class="filename">/etc/resolv.conf</code> é o arquivo de configuração principal
+do código do resolvedor de nomes.  Seu formato é um arquivo texto simples com
+um parâmetro por linha e o endereço de servidores DNS externos são
+especificados nele.  Existem três palavras chaves normalmente usadas que são:
+</p>
+<div class="variablelist"><dl class="variablelist"><dt><span class="term">domain</span></dt><dd>
+<p>
+Especifica o nome do domínio local.
+</p>
+</dd><dt><span class="term">search</span></dt><dd>
+<p>
+Especifica uma lista de nomes de domínio alternativos ao procurar por um
+computador, separados por espaços.  A linha search pode conter no máximo 6
+domínios ou 256 caracteres.
+</p>
+</dd><dt><span class="term">nameserver</span></dt><dd>
+<p>
+Especifica o endereço IP de um servidor de nomes de domínio para resolução de
+nomes.  Pode ser usado várias vezes.
+</p>
+</dd></dl></div>
+<p>
+Como exemplo, o <code class="filename">/etc/resolv.conf</code> se parece com isto:
+</p>
+<pre class="screen">
+domain maths.wu.edu.au
+search maths.wu.edu.au wu.edu.au
+nameserver 192.168.10.1
+nameserver 192.168.12.1
+</pre>
+<p>
+Este exemplo especifica que o nome de domínio a adicionar ao nome não
+qualificado (i.e.  hostnames sem o domínio) é
+<code class="literal">maths.wu.edu.au</code> e que se o computador não for encontrado
+naquele domínio então a procura segue para o domínio
+<code class="literal">wu.edu.au</code> diretamente.  Duas linhas de nomes de servidores
+foram especificadas, cada uma pode ser chamada pelo código resolvedor de nomes
+para resolver o nome.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="rede-dns-a-hostconf"></a>/etc/host.conf</h4></div></div></div>
+<p>
+O arquivo <code class="filename">/etc/host.conf</code> é o local onde é possível
+configurar alguns ítens que gerenciam o código do resolvedor de nomes.  O
+formato deste arquivo é descrito em detalhes na página de manual resolv+.  Em
+quase todas as situações, o exemplo seguinte funcionará:
+</p>
+<pre class="screen">
+order hosts,bind
+multi on
+</pre>
+<p>
+Este arquivo de configuração diz ao resolvedor de nomes para checar o arquivo
+<code class="filename">/etc/hosts</code> (parâmetro <code class="literal">hosts</code>) antes de
+tentar verificar um <span class="emphasis"><em>servidor de nomes</em></span> (parâmetro
+<code class="literal">bind</code>) e retornar um endereço IP válido para o computador
+procurado e <span class="emphasis"><em>multi on</em></span> retornará todos os endereços IP
+resolvidos no arquivo <code class="filename">/etc/hosts</code> ao invés do primeiro.
+</p>
+<p>
+Os seguintes parâmetros podem ser adicionados para evitar ataques de IP
+spoofing:
+</p>
+<pre class="screen">
+nospoof on
+spoofalert on
+</pre>
+<p>
+O parâmetro <span class="emphasis"><em>nospoof on</em></span> ativa a resolução reversa do nome
+da biblioteca resolv (para checar se o endereço pertence realmente àquele nome)
+e o <span class="emphasis"><em>spoofalert on</em></span> registra falhas desta operação no
+<span class="command"><strong>syslog</strong></span>.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="rede-dns-a-hosts"></a>/etc/hosts</h4></div></div></div>
+<p>
+O arquivo <code class="filename">/etc/hosts</code> faz o relacionamento entre um nome de
+computador e endereço IP local.  Recomendado para IPs constantemente acessados
+e para colocação de endereços de virtual hosts (quando deseja referir pelo nome
+ao invés de IP).  A inclusão de um computador neste arquivo dispenda a consulta
+de um servidor de nomes para obter um endereço IP, sendo muito útil para
+máquinas que são acessadas frequentemente.  A desvantagem de fazer isto é que
+você mesmo precisará manter este arquivo atualizado e se o endereço IP de algum
+computador for modificado, esta alteração deverá ser feita em cada um dos
+arquivos <code class="filename">hosts</code> das máquinas da rede.  Em um sistema bem
+gerenciado, os únicos endereços de computadores que aparecerão neste arquivo
+serão da interface loopback e os nomes de computadores.
+</p>
+<pre class="screen">
+# /etc/hosts
+127.0.0.1      localhost loopback
+192.168.0.1    maquina.dominio.com.br
+</pre>
+<p>
+Você pode especificar mais que um nome de computador por linha como demonstrada
+pela primeira linha, a que identifica a interface loopback.  Certifique-se de
+que a entrada do nome de domínio neste arquivo aponta para a interface de rede
+e não para a interface loopback, ou terá problema com o comportamento de alguns
+serviços.
+</p>
+<p>
+<span class="strong"><strong>OBS:</strong></span> Caso encontre problemas de lentidão
+para resolver nomes e até para executar os aplicativos (como o
+<span class="command"><strong>mc</strong></span>, etc), verifique se existem erros neste arquivo de
+configuração.
+</p>
+<p>
+Estes sintomas se confundem com erros de memória ou outro erro qualquer de
+configuração de hardware, e somem quando a interface de rede é desativada (a
+com o IP não loopback).  Isto é causados somente pela má configuração do
+arquivo <code class="filename">/etc/hosts</code>.  O bom funcionamento do
+<span class="command"><strong>Unix</strong></span> depende da boa atenção do administrador de sistemas
+para configurar os detalhes de seu servidor.
+</p>
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="rede-dns-a-networks"></a>/etc/networks</h4></div></div></div>
+<p>
+O arquivo <code class="filename">/etc/networks</code> tem uma função similar ao arquivo
+<code class="filename">/etc/hosts</code>.  Ele contém um banco de dados simples de nomes
+de redes contra endereços de redes.  Seu formato se difere por dois campos por
+linha e seus campos são identificados como:
+</p>
+<pre class="screen">
+ Nome_da_Rede      Endereço_da_Rede
+</pre>
+<p>
+Abaixo um exemplo de como se parece este arquivo:
+</p>
+<pre class="screen">
+loopnet    127.0.0.0
+localnet   192.168.1.0
+amprnet    44.0.0.0
+</pre>
+<p>
+Quando usar comandos como <code class="literal">route</code>, se um destino é uma rede e
+esta rede se encontra no arquivo <code class="filename">/etc/networks</code>, então o
+comando <code class="literal">route</code> mostrará o <span class="emphasis"><em>nome da rede</em></span>
+ao invés de seu endereço.
+</p>
+</div>
+
+</div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="rede-dns-servdns"></a>Executando um servidor de nomes</h3></div></div></div>
+<p>
+Se você planeja executar um servidor de nomes, você pode fazer isto facilmente.
+Por favor veja o documento <code class="literal">DNS-HOWTO</code> e quaisquer documentos
+incluídos em sua versão do BIND (Berkeley Internet Name Domain).
+</p>
+</div>
+
+</div><HR xmlns="" xmlns:fo="http://www.w3.org/1999/XSL/Format"></HR><p class="copyright">Copyright © 1999-2020 - Gleydson Mazioli da Silva</p><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s05.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ch04s07.html">Próximo</a></td></tr><tr><td width="40%" align="left" valign="top">Roteamento </td><td width="20%" align="center"><a accesskey="h" href="index.html">Voltar ao Índice</a></td><td width="40%" align="right" valign="top"> Serviços de Rede</td></tr></table></div></body></html>
